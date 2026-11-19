@@ -1,18 +1,6 @@
-const CACHE='tunggiang-congno-pwa-2.0.4-1';
-const ASSETS=['./','./index.html','./safety.js','./recovery.js','./excel.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener('message',e=>{if(e.data?.type==='SKIP_WAITING')self.skipWaiting()});
-self.addEventListener('activate',e=>e.waitUntil(Promise.all([
- caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tunggiang-congno-')&&k!==CACHE).map(k=>caches.delete(k)))),
- self.clients.claim()
-])));
-self.addEventListener('fetch',e=>{
- if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin)return;
- const url=new URL(e.request.url);
- if(!ASSETS.some(a=>new URL(a,self.registration.scope).pathname===url.pathname))return;
- e.respondWith((async()=>{
-  const cache=await caches.open(CACHE);
-  try{const fresh=await fetch(e.request,{cache:'no-store'});if(fresh.ok)await cache.put(e.request,fresh.clone());return fresh}
-  catch(err){const fallback=await cache.match(e.request,{ignoreSearch:true});if(fallback)return fallback;throw err}
- })());
-});
+const CACHE='tunggiang-congno-pwa-2.0.4-install-2';
+const ASSETS=['/','/index.html','/safety.js','/recovery.js','/excel.js','/manifest.webmanifest','/icons/icon-192.png','/icons/icon-512.png','/icons/icon-maskable-512.png'];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS);})()));
+self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});
+self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('tunggiang-congno-')&&k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin||!ASSETS.includes(url.pathname))return;event.respondWith((async()=>{const cache=await caches.open(CACHE);try{const response=await fetch(event.request,{cache:'no-store'});if(response.ok)await cache.put(event.request,response.clone());return response}catch(error){const saved=await cache.match(event.request,{ignoreSearch:true});if(saved)return saved;throw error}})())});
