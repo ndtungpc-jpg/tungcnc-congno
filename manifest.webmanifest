@@ -1,1 +1,27 @@
-{"name": "Tùng Giang CNC - Công nợ", "short_name": "Tùng Giang CNC", "start_url": "./", "display": "standalone", "background_color": "#f3f5f9", "theme_color": "#102b45", "lang": "vi"}
+{
+  "name": "Tùng Giang CNC - Công nợ",
+  "short_name": "Tùng Giang CNC",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3f5f9",
+  "theme_color": "#102b45",
+  "lang": "vi",
+  "id": "./",
+  "description": "Quản lý công nợ khách hàng và nhà cung cấp - Tùng Giang CNC",
+  "scope": "./",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
