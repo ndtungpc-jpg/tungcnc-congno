@@ -42,8 +42,8 @@ async function commit(action='edit'){
  if(saving||!ready)return false;saving=true;
  try{
   const candidate=TGSafety.normalize(state),at=new Date().toISOString();
-  candidate.audit.push(...TGSafety.changes(committed,candidate,{id,at,device:deviceId}));
-  if(action==='import')candidate.audit.push({id:id(),at,device:deviceId,action:'import',kind:'backup',recordId:'',before:null,after:null});
+  if(action!=='import')candidate.audit.push(...TGSafety.changes(committed,candidate,{id,at,device:deviceId}));
+  if(action==='import')candidate.audit.push({id:id(),at,device:deviceId,action:'import',kind:'backup',recordId:'',before:null,after:{summary:'Nhập / phục hồi JSON',partners:candidate.partners.length,orders:candidate.orders.length,payments:candidate.payments.length}});
   const oldIssues=new Set(TGSafety.issues(committed));const newIssues=TGSafety.issues(candidate).filter(x=>!oldIssues.has(x));if(newIssues.length)throw Error(newIssues.join('; '));
   candidate.revision=committed.revision+1;await save(candidate);
   state=candidate;committed=structuredClone(candidate);render();toast('Đã lưu trên thiết bị này');return true;
@@ -187,9 +187,25 @@ function jsid(s){return Array.from(String(s??'')).map(c=>{const n=c.codePointAt(
 const kindLabel={partners:'Đối tác',orders:'Đơn hàng',payments:'Thu / Chi',backup:'Sao lưu'};
 const actionLabel={create:'Tạo',update:'Sửa',cancel:'Hủy đơn',delete:'Chuyển thùng rác',restore:'Khôi phục',import:'Nhập / Phục hồi JSON'};
 function trashView(){return `<div class="panel"><h2>Thùng rác (${state.trash.length})</h2><p class="hint">Không tự xóa vĩnh viễn. Khôi phục đối tác → đơn → thanh toán. Kiểm tra số dư sau khôi phục.</p>${table(['Thời điểm xóa','Loại','Nội dung','Thao tác'],[...state.trash].reverse().map(t=>`<tr><td>${esc(new Date(t.deletedAt).toLocaleString('vi-VN'))}</td><td>${kindLabel[t.kind]}</td><td>${esc(t.record.name||t.record.code||t.record.note||t.record.id)}<div class="muted">${t.record.amount==null?'':money(t.record.amount)}</div></td><td><button class="smallbtn" onclick="restoreTrash('${jsid(t.id)}')">Khôi phục</button></td></tr>`).join(''))}</div>`}
-let auditLimit=100;
-function auditView(){return `<div class="panel"><h2>Nhật ký thay đổi (${state.audit.length})</h2><p class="hint">Ghi từ bản 2.0, gồm giá trị trước/sau và mã phiên làm việc. Chưa xác định người sửa khi chưa có đăng nhập. Nhật ký cục bộ có thể bị sửa qua tệp JSON, chưa phải bằng chứng kiểm toán.</p>${table(['Thời điểm','Thao tác','Loại / Mã','Chi tiết'],[...state.audit].reverse().slice(0,auditLimit).map(a=>`<tr><td>${esc(new Date(a.at).toLocaleString('vi-VN'))}</td><td>${esc(actionLabel[a.action]||a.action)}</td><td>${esc(kindLabel[a.kind]||a.kind)}<div class="muted">${esc(a.recordId)}</div></td><td><button class="smallbtn" onclick="auditDetail('${jsid(a.id)}')">Trước / Sau</button></td></tr>`).join(''))}${state.audit.length>auditLimit?'<button class="btn" onclick="auditLimit+=100;render()">Xem thêm 100</button>':''}</div>`}
-function auditDetail(aid){const a=state.audit.find(x=>x.id===aid);if(!a)return;modal('Chi tiết thay đổi',`<p>Mã phiên: ${esc(a.device||'Không có')}</p><h3>Trước</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.before,null,2))}</pre><h3>Sau</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.after,null,2))}</pre><button class="btn" onclick="closeModal()">Đóng</button>`)}
+let auditLimit=100,auditFilter='activity';
+function auditIsLegacy(a){return /^legacy[-_]/i.test(String(a.recordId||''))||/^legacy[-_]/i.test(String(a.before?.id||a.after?.id||''))}
+function auditRows(){
+ const all=state.audit||[];
+ // Các bản nhập cũ thường ghi hàng trăm bản ghi cùng thời điểm với sự kiện nhập JSON.
+ const imports=new Set(all.filter(a=>a.action==='import').map(a=>a.at));
+ const legacy=all.filter(a=>auditIsLegacy(a));
+ const batches=new Map();
+ for(const a of all){if(a.action==='import')continue;if(!auditIsLegacy(a)&&!imports.has(a.at))continue;
+  const key=a.at||'unknown';if(!batches.has(key))batches.set(key,[]);batches.get(key).push(a);
+ }
+ const suppressed=new Set([...batches.values()].flat().map(a=>a.id));
+ const synthetic=[...batches].filter(([at,items])=>!all.some(a=>a.action==='import'&&a.at===at)).map(([at,items])=>({id:'summary:'+at,at,action:'import',kind:'backup',recordId:'',before:null,after:{summary:'Dữ liệu nhập cũ',records:items.length},synthetic:true}));
+ const visible=all.filter(a=>!suppressed.has(a.id)).concat(synthetic);
+ return visible.filter(a=>auditFilter==='all'||(auditFilter==='imports'?a.action==='import':a.action!=='import')).sort((a,b)=>String(b.at||'').localeCompare(String(a.at||'')));
+}
+function setAuditFilter(value){auditFilter=value;auditLimit=100;render()}
+function auditView(){const rows=auditRows();return `<div class="panel"><h2>Nhật ký thay đổi (${rows.length})</h2><p class="hint">Mặc định chỉ hiện thao tác thực tế. Dữ liệu nhập JSON cũ được gom theo đợt, không xóa nhật ký gốc. Chưa xác định người sửa khi chưa có đăng nhập; nhật ký cục bộ không phải bằng chứng kiểm toán.</p><label class="field" style="max-width:280px;margin:10px 0">Hiển thị<select onchange="setAuditFilter(this.value)"><option value="activity" ${auditFilter==='activity'?'selected':''}>Hoạt động thực tế</option><option value="imports" ${auditFilter==='imports'?'selected':''}>Lịch sử nhập JSON</option><option value="all" ${auditFilter==='all'?'selected':''}>Tất cả (đã gom đợt nhập)</option></select></label>${table(['Thời điểm','Thao tác','Loại / Mã','Chi tiết'],rows.slice(0,auditLimit).map(a=>`<tr><td>${esc(a.at?new Date(a.at).toLocaleString('vi-VN'):'Không rõ')}</td><td>${esc(actionLabel[a.action]||a.action)}</td><td>${esc(kindLabel[a.kind]||a.kind)}<div class="muted">${esc(a.recordId||a.after?.summary||'')}</div></td><td><button class="smallbtn" onclick="auditDetail('${jsid(a.id)}')">Trước / Sau</button></td></tr>`).join(''))}${rows.length>auditLimit?'<button class="btn" onclick="auditLimit+=100;render()">Xem thêm 100</button>':''}</div>`}
+function auditDetail(aid){const a=state.audit.find(x=>x.id===aid)||auditRows().find(x=>x.id===aid);if(!a)return;modal('Chi tiết thay đổi',`<p>Mã phiên: ${esc(a.device||'Không có')}</p><h3>Trước</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.before,null,2))}</pre><h3>Sau</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.after,null,2))}</pre><button class="btn" onclick="closeModal()">Đóng</button>`)}
 function safetySettings(){const warnings=TGSafety.issues(state);return `<div class="panel"><h2>Kiểm tra và phục hồi</h2><p>Chế độ lưu: <b>${esc(storageMode)}</b>. Phiên bản dữ liệu: 2. Lần ghi: ${state.revision}.</p><p>${warnings.length?esc(warnings.join('; ')):'Không phát hiện đơn vượt thanh toán, đơn hủy có thanh toán hoặc trùng mã đơn.'}</p><p class="hint">Bản sao JSON 2.0 chứa cả thùng rác, nhật ký và các bản trước nhập. JSON cũ phiên bản 1 vẫn nhập được. Không dùng bản ứng dụng cũ để sửa dữ liệu 2.0.</p>${table(['Trước lần nhập','Thao tác'],[...state.recovery].reverse().map(r=>`<tr><td>${esc(new Date(r.at).toLocaleString('vi-VN'))}</td><td><button class="smallbtn" onclick="restoreRecovery('${jsid(r.id)}')">Phục hồi bản này</button></td></tr>`).join(''))}</div><div class="panel"><h2>Đồng bộ 2–3 thiết bị</h2><p>Chưa kích hoạt. Bản này chỉ lưu trên thiết bị; chưa có kết nối hay chuyển dữ liệu lên Supabase. Xem tài liệu thiết kế đi kèm trước khi triển khai thử.</p></div>`}
 
 function excelFile(name,rows,options={}){try{const bytes=TGExcel.encode([{name:options.sheetName||'Công nợ',rows,...options}]);download(name,bytes,TGExcel.mime);toast('Đã tạo tệp Excel .xlsx')}catch(err){alert('Chưa xuất được Excel: '+err.message)}}
