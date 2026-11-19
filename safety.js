@@ -22,6 +22,10 @@ function validate(s){
    if(k!=='partners'&&(typeof r.amount!=='number'||!Number.isFinite(r.amount)||r.amount<0||(k==='payments'&&r.amount===0)))throw Error('Số tiền không hợp lệ');
    for(const f of ['date','created','due'])if(r[f]&&(!/^\d{4}-\d{2}-\d{2}$/.test(r[f])||new Date(r[f]).toISOString().slice(0,10)!==r[f]))throw Error('Ngày không hợp lệ');
    for(const f of ['code','title','phone','note','method'])if(r[f]!=null&&typeof r[f]!=='string')throw Error('Trường văn bản không hợp lệ: '+f);
+   if(k==='orders'){
+    if(r.unit!=null&&typeof r.unit!=='string')throw Error('Đơn vị tính không hợp lệ');
+    for(const f of ['unitPrice','quantity','widthMm','heightMm','basisQuantity'])if(r[f]!=null&&(typeof r[f]!=='number'||!Number.isFinite(r[f])||r[f]<0))throw Error('Chi tiết đơn không hợp lệ: '+f);
+   }
   }
  }
  for(const o of s.orders)if(!maps.partners.has(o.partnerId))throw Error('Đơn mất liên kết đối tác: '+o.id);
