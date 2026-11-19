@@ -1,4 +1,4 @@
-const CACHE='tunggiang-congno-2.0.5';
+const CACHE='tunggiang-congno-2.0.6';
 const ASSETS=['/','/index.html','/safety.js','/recovery.js','/excel.js','/manifest.webmanifest','/icons/icon-192.png','/icons/icon-512.png','/icons/icon-maskable-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS);})()));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});

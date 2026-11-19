@@ -20,7 +20,7 @@ td,th,.compactrow{border-bottom-color:#343d46}
 .warn{background:#403424;color:#f0ce92;border-color:#725a35}
 #updateNotice{background:#283541!important;color:#e3edf6!important;border-color:#566575!important}
 #storageNotice{background:#403424!important;color:#f0ce92!important;border-color:#725a35!important}
-</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.5</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
+</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.6</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
 'use strict';const DBNAME='tunggiang-congno-v2',STORE='state';const MIGRATION={partners:[],orders:[],payments:[]};let db,state={partners:[],orders:[],payments:[]},current='dashboard',filter='';const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat('vi-VN').format(Math.round(Number(n)||0))+'đ',today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')},date=s=>s?new Date(s+'T00:00:00').toLocaleDateString('vi-VN'):'—',id=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=v=>Math.max(0,Number(v)||0),partner=i=>state.partners.find(x=>x.id===i),order=i=>state.orders.find(x=>x.id===i),paid=i=>state.payments.filter(x=>x.orderId===i).reduce((a,x)=>a+x.amount,0),balance=o=>o.cancelled?0:o.amount-paid(o.id),due=o=>balance(o)>0&&o.due&&o.due<today(),total=(type)=>state.orders.filter(o=>partner(o.partnerId)?.type===type).reduce((a,o)=>a+balance(o),0);
 function toast(s){$('#toast').textContent=s;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',2600)}
 let storageMode='indexeddb';
@@ -108,56 +108,57 @@ function exportCustomerImage(pid,mode){
  const pt=partner(pid);if(!pt)return alert('Không tìm thấy khách hàng');
  const all=state.orders.filter(o=>o.partnerId===pid&&!o.cancelled).sort((a,b)=>(a.created||'').localeCompare(b.created||''));
  const rows=mode==='debt'?all.filter(o=>balance(o)>0):all;
- const title=mode==='debt'?'BẢNG ĐỐI CHIẾU CÔNG NỢ':'BẢNG THỐNG KÊ ĐƠN HÀNG';
- const w=1160,pad=48,rowH=64,top=235,bottom=top+56+Math.max(rows.length,1)*rowH,h=bottom+160;
- if(h>30000)return alert('Quá nhiều đơn để xuất một ảnh. Hãy sử dụng Excel.');
+ const debt=mode==='debt',title=debt?'BẢNG ĐỐI CHIẾU CÔNG NỢ':'BẢNG THỐNG KÊ ĐƠN HÀNG';
+ const w=1600,pad=45,rowH=56,top=206,headH=54,bottom=top+headH+Math.max(rows.length,1)*rowH,h=bottom+132;
+ if(h>30000)return alert('Danh sách quá dài để xuất một ảnh. Vui lòng xuất Excel.');
  const cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');
  if(!c)return alert('Trình duyệt không hỗ trợ xuất ảnh');
  c.fillStyle='#fff';c.fillRect(0,0,w,h);
- const txt=(v,x,y,size=20,bold=false,color='#26313c',max=1000)=>{c.font=(bold?'bold ':'')+size+'px Arial,sans-serif';c.fillStyle=color;c.fillText(String(v??''),x,y,max)};
- const moneyText=v=>money(v);
- c.fillStyle='#323c46';c.fillRect(0,0,w,14);
- txt('TÙNG GIANG CNC',pad,68,30,true);
- txt(title,pad,120,32,true);
- txt('Khách hàng: '+pt.name,pad,167,24,false,'#26313c',1050);
- txt('Ngày lập: '+date(today()),pad,205,20,false,'#667481');
- c.fillStyle='#eef1f4';c.fillRect(pad,top,w-2*pad,56);
- const xs=[pad+14,pad+95,pad+280,pad+730,pad+916];
- const heads=mode==='debt'?['STT','Ngày / Mã đơn','Nội dung','Giá trị / Đã trả','Còn nợ']:['STT','Ngày / Mã đơn','Nội dung','Giá trị đơn','Trạng thái'];
- heads.forEach((v,i)=>txt(v,xs[i],top+37,18,true));
- if(!rows.length)txt('Không có đơn hàng phù hợp',pad+15,top+98,20);
- rows.forEach((o,i)=>{
-  const y=top+56+i*rowH;
-  if(i%2){c.fillStyle='#f7f9fa';c.fillRect(pad,y,w-2*pad,rowH)}
-  txt(i+1,xs[0],y+38,19);
-  txt(date(o.created),xs[1],y+25,18);
-  txt(o.code||'',xs[1],y+49,16,false,'#697581',165);
-  txt(o.title||'',xs[2],y+38,19,false,'#26313c',430);
-  if(mode==='debt'){
-   txt(moneyText(o.amount),xs[3],y+25,18,false,'#26313c',170);
-   txt('Đã trả: '+moneyText(paid(o.id)),xs[3],y+49,15,false,'#687582',175);
-   txt(moneyText(balance(o)),xs[4],y+38,19,true,'#26313c',185);
-  }else{
-   txt(moneyText(o.amount),xs[3],y+38,19,false,'#26313c',175);
-   txt(balance(o)>0?'Còn nợ: '+moneyText(balance(o)):'Đã thanh toán',xs[4],y+38,17,false,'#26313c',180);
-  }
-  c.strokeStyle='#dce2e7';c.beginPath();c.moveTo(pad,y+rowH);c.lineTo(w-pad,y+rowH);c.stroke();
- });
- if(mode==='debt'){
-  txt('TỔNG CÒN NỢ',pad,bottom+58,24,true);
-  c.textAlign='right';txt(moneyText(rows.reduce((t,o)=>t+balance(o),0)),w-pad,bottom+58,29,true);c.textAlign='left';
- }else{
-  txt('TỔNG GIÁ TRỊ ĐƠN HÀNG',pad,bottom+58,22,true);
-  c.textAlign='right';txt(moneyText(rows.reduce((t,o)=>t+o.amount,0)),w-pad,bottom+58,27,true);txt('Tổng còn nợ: '+moneyText(rows.reduce((t,o)=>t+balance(o),0)),w-pad,bottom+95,20);c.textAlign='left';
+ const txt=(v,x,y,size=20,bold=false,color='#27313b',max=1000,align='left')=>{c.font=(bold?'bold ':'')+size+'px Arial,sans-serif';c.fillStyle=color;c.textAlign=align;c.fillText(String(v??''),x,y,max);c.textAlign='left'};
+ const line=y=>{c.strokeStyle='#dce2e7';c.beginPath();c.moveTo(pad,y+.5);c.lineTo(w-pad,y+.5);c.stroke()};
+ const amt=v=>v==null||v===''?'—':money(v);
+ c.fillStyle='#343c45';c.fillRect(0,0,w,10);
+ txt('TÙNG GIANG CNC',pad,51,25,true);
+ txt(title,pad,101,32,true);
+ txt('Khách hàng: '+pt.name,pad,145,23,true,'#303b45',w-2*pad);
+ txt('Ngày lập: '+date(today()),pad,180,18,false,'#65717d');
+ // Right-aligned numeric columns, no order code and no status column.
+ const cols=debt?[
+  ['STT',pad+12,'left',60],['Ngày',pad+92,'left',120],['Hạng mục',pad+235,'left',355],
+  ['Khối lượng',pad+685,'right',145],['ĐVT',pad+710,'left',75],['Đơn giá',pad+1050,'right',170],
+  ['Thành tiền',pad+1220,'right',160],['Đã trả',pad+1375,'right',150],['Còn nợ',w-pad-12,'right',150]
+ ]:[
+  ['STT',pad+12,'left',60],['Ngày',pad+94,'left',120],['Hạng mục',pad+242,'left',540],
+  ['Khối lượng',pad+950,'right',155],['ĐVT',pad+984,'left',100],['Đơn giá',pad+1270,'right',190],
+  ['Thành tiền',w-pad-12,'right',205]
+ ];
+ // Debt layout has tighter columns: use dedicated coordinates for legibility.
+ if(debt){
+  cols[2][3]=350;cols[3][1]=835;cols[3][3]=115;cols[4][1]=858;
+  cols[5][1]=1065;cols[5][3]=145;cols[6][1]=1235;cols[6][3]=155;
+  cols[7][1]=1390;cols[7][3]=135;cols[8][3]=145;
  }
- txt('Tùng Giang CNC · Bảng thông tin gửi khách hàng',pad,h-28,17,false,'#79838e');
+ c.fillStyle='#edf1f4';c.fillRect(pad,top,w-pad*2,headH);
+ cols.forEach(col=>txt(col[0],col[1],top+35,18,true,'#26323d',col[3],col[2]));
+ if(!rows.length)txt('Không có đơn hàng phù hợp',pad+12,top+headH+37,20);
+ rows.forEach((o,i)=>{
+  const y=top+headH+i*rowH;
+  if(i%2){c.fillStyle='#f7f9fb';c.fillRect(pad,y,w-pad*2,rowH)}
+  const vals=debt?[i+1,date(o.created),o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount),money(paid(o.id)),money(balance(o))]:[i+1,date(o.created),o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount)];
+  vals.forEach((v,j)=>txt(v==null?'—':v,cols[j][1],y+36,18,j===vals.length-1,'#303b45',cols[j][3],cols[j][2]));
+  line(y+rowH);
+ });
+ line(bottom+7);
+ txt(debt?'TỔNG CÒN NỢ':'TỔNG GIÁ TRỊ ĐƠN HÀNG',pad,bottom+54,23,true);
+ txt(money(rows.reduce((sum,o)=>sum+(debt?balance(o):o.amount),0)),w-pad,bottom+54,28,true,'#26323d',450,'right');
+ if(!debt)txt('Tổng còn nợ: '+money(rows.reduce((sum,o)=>sum+balance(o),0)),w-pad,bottom+87,19,false,'#65717d',550,'right');
+ txt('Tùng Giang CNC · Bảng thông tin gửi khách hàng',pad,h-20,16,false,'#77838d');
  cv.toBlob(blob=>{
   if(!blob)return alert('Không tạo được ảnh');
-  const name=(mode==='debt'?'DoiChieuCongNo_':'ThongKeDonHang_')+pt.name.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'_'+today()+'.png';
+  const name=(debt?'DoiChieuCongNo_':'ThongKeDonHang_')+pt.name.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'_'+today()+'.png';
   const file=new File([blob],name,{type:'image/png'});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){
-   navigator.share({files:[file],title}).catch(e=>{if(e.name!=='AbortError')download(name,blob,'image/png')});
-  }else download(name,blob,'image/png');
+  if(navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title}).catch(e=>{if(e.name!=='AbortError')download(name,blob,'image/png')});
+  else download(name,blob,'image/png');
  },'image/png');
 }
 
