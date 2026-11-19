@@ -20,7 +20,7 @@ td,th,.compactrow{border-bottom-color:#343d46}
 .warn{background:#403424;color:#f0ce92;border-color:#725a35}
 #updateNotice{background:#283541!important;color:#e3edf6!important;border-color:#566575!important}
 #storageNotice{background:#403424!important;color:#f0ce92!important;border-color:#725a35!important}
-</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.6</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
+</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.7</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
 'use strict';const DBNAME='tunggiang-congno-v2',STORE='state';const MIGRATION={partners:[],orders:[],payments:[]};let db,state={partners:[],orders:[],payments:[]},current='dashboard',filter='';const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat('vi-VN').format(Math.round(Number(n)||0))+'đ',today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')},date=s=>s?new Date(s+'T00:00:00').toLocaleDateString('vi-VN'):'—',id=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=v=>Math.max(0,Number(v)||0),partner=i=>state.partners.find(x=>x.id===i),order=i=>state.orders.find(x=>x.id===i),paid=i=>state.payments.filter(x=>x.orderId===i).reduce((a,x)=>a+x.amount,0),balance=o=>o.cancelled?0:o.amount-paid(o.id),due=o=>balance(o)>0&&o.due&&o.due<today(),total=(type)=>state.orders.filter(o=>partner(o.partnerId)?.type===type).reduce((a,o)=>a+balance(o),0);
 function toast(s){$('#toast').textContent=s;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',2600)}
 let storageMode='indexeddb';
@@ -108,6 +108,8 @@ function exportCustomerImage(pid,mode){
  const pt=partner(pid);if(!pt)return alert('Không tìm thấy khách hàng');
  const all=state.orders.filter(o=>o.partnerId===pid&&!o.cancelled).sort((a,b)=>(a.created||'').localeCompare(b.created||''));
  const rows=mode==='debt'?all.filter(o=>balance(o)>0):all;
+ // Each date is shown only once, at the start of its group. Financial rows stay separate.
+ const dateGroups=rows.map((o,i)=>i===0||String(o.created||'')!==String(rows[i-1].created||''));
  const debt=mode==='debt',title=debt?'BẢNG ĐỐI CHIẾU CÔNG NỢ':'BẢNG THỐNG KÊ ĐƠN HÀNG';
  const w=1600,pad=45,rowH=56,top=206,headH=54,bottom=top+headH+Math.max(rows.length,1)*rowH,h=bottom+132;
  if(h>30000)return alert('Danh sách quá dài để xuất một ảnh. Vui lòng xuất Excel.');
@@ -144,7 +146,8 @@ function exportCustomerImage(pid,mode){
  rows.forEach((o,i)=>{
   const y=top+headH+i*rowH;
   if(i%2){c.fillStyle='#f7f9fb';c.fillRect(pad,y,w-pad*2,rowH)}
-  const vals=debt?[i+1,date(o.created),o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount),money(paid(o.id)),money(balance(o))]:[i+1,date(o.created),o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount)];
+  if(i>0&&dateGroups[i]){c.strokeStyle='#8996a2';c.lineWidth=2;c.beginPath();c.moveTo(pad,y+.5);c.lineTo(w-pad,y+.5);c.stroke();c.lineWidth=1;}
+  const vals=debt?[i+1,dateGroups[i]?date(o.created):'',o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount),money(paid(o.id)),money(balance(o))]:[i+1,dateGroups[i]?date(o.created):'',o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount)];
   vals.forEach((v,j)=>txt(v==null?'—':v,cols[j][1],y+36,18,j===vals.length-1,'#303b45',cols[j][3],cols[j][2]));
   line(y+rowH);
  });
@@ -338,11 +341,32 @@ function orderDetailCells(o){return `<td class="line-material">${esc(o.material|
 init().then(render).catch(err=>{document.getElementById('content').textContent='Không thể khởi động ứng dụng: '+err.message;console.error(err)});
 </script><script>
 let waitingAppWorker=null;
+const APP_VERSION='2.0.7';
+let remoteAppVersion=null;
+let versionCheckBusy=false;
+async function checkAppVersion(){
+ if(versionCheckBusy||!navigator.onLine)return;
+ versionCheckBusy=true;
+ try{
+  const response=await fetch('/version.json?t='+Date.now(),{cache:'no-store'});
+  if(!response.ok)return;
+  const info=await response.json();
+  if(info.version&&info.version!==APP_VERSION){
+   remoteAppVersion=info.version;
+   const notice=document.getElementById('updateNotice');
+   notice.firstChild.textContent='Có phiên bản mới '+info.version+'. ';
+   notice.style.display='block';
+  }
+ }catch(err){console.warn('Không kiểm tra được phiên bản',err)}
+ finally{versionCheckBusy=false}
+}
+
 function showAppUpdate(worker){waitingAppWorker=worker;document.getElementById('updateNotice').style.display='block'}
 function applyAppUpdate(){
  if(typeof saving!=='undefined'&&saving){alert('Đang lưu dữ liệu. Vui lòng thử lại sau.');return}
  if(waitingAppWorker){waitingAppWorker.postMessage({type:'SKIP_WAITING'});return}
- location.reload();
+ // Refresh assets without clearing IndexedDB, localStorage or accounting data.
+ location.replace('/?updated='+Date.now());
 }
 if('serviceWorker' in navigator&&location.protocol==='https:'){
  let reloading=false;
@@ -355,4 +379,10 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){
   setInterval(check,15*60*1000);
  }).catch(console.warn);
 }
+</script><script>
+// Independent update detection, including browsers without an active Service Worker.
+window.addEventListener('pageshow',checkAppVersion);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkAppVersion()});
+window.addEventListener('online',checkAppVersion);
+setInterval(checkAppVersion,60*1000);
 </script></body></html>
