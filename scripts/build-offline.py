@@ -15,6 +15,7 @@ html=re.sub(r'<link rel="stylesheet" href="\./workshop.css">',lambda m:'<style>'
 # Remove online update detection and SW registration in the standalone artifact.
 html=re.sub(r'<script>\s*let waitingAppWorker=null;[\s\S]*?</script>','',html)
 html=re.sub(r'<script>\s*// Independent update detection[\s\S]*?</script>','',html)
+html=html.replace('tg-ui-session-v219-r2','tg-offline-ui-session-v219-r2')
 html=html.replace('tg-theme-v219','tg-offline-theme-v219').replace('tg-backup-download-v219','tg-offline-backup-download-v219')
 html=html.replace("DBNAME='tunggiang-congno-v2'","DBNAME='tunggiang-offline-test-v219'")
 html=html.replace("STORAGE_KEY='tunggiang-congno-offline-v2'","STORAGE_KEY='tg-offline-test-v219-state'")
