@@ -24,3 +24,7 @@ Không tìm thấy nhánh/commit/báo cáo kiểm thử v2.1.6 trên GitHub; Tru
 
 ## Giới hạn
 Chưa có bản sao dữ liệu thật từ phiên bản đầu; chỉ kiểm thử cấu trúc cũ bằng dữ liệu giả. Chưa kiểm thử Android/Samsung thật, cài PWA thật, ngoại tuyến thật hoặc cập nhật PWA đã cài. Chưa đồng bộ nhiều thiết bị. Kho công nợ và hộp thư có bản sao lưu riêng. Không đổi main khi chưa được chấp thuận.
+
+## Lỗi phát hiện trên trình duyệt và đã sửa
+- Biểu mẫu NCC bị hàm cũ trong inline script ghi đè khi tải trang: bỏ định nghĩa cũ dư thừa, chỉ còn một bộ xử lý mới. Bổ sung kiểm tra thứ tự script theo HTML thực tế.
+- Cảnh báo kho rỗng còn hiển thị sau khi khôi phục thành công: chỉ ẩn thông báo rỗng khi đã có dữ liệu; giữ các cảnh báo lỗi lưu khác.
