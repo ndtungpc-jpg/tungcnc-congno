@@ -1,9 +1,9 @@
 {
   "name": "Tùng Giang CNC - Công nợ",
-  "short_name": "Tùng Giang CNC",
+  "short_name": "TG Công Nợ",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f3f5f9",
+  "background_color": "#102b45",
   "theme_color": "#102b45",
   "lang": "vi",
   "id": "/",
