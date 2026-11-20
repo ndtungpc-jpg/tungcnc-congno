@@ -30,3 +30,6 @@ File:// trên Android có thể giới hạn IndexedDB/Web Locks/Web Crypto, Sha
 ## Điều kiện đưa vào xưởng
 Chỉ sẵn sàng thử có kiểm soát bằng dữ liệu giả. Chưa nghiệm thu Samsung/PWA thật, offline thật hoặc dữ liệu lịch sử thật. JSON không mã hóa, chưa có đăng nhập/phân quyền/đồng bộ. Không thay main/production trước xác nhận.
 Cuối ngày xuất JSON tại Thêm → Quản lý dữ liệu → Sao lưu JSON; giữ thêm bản ở nơi an toàn. Hộp thư chờ có bản sao riêng. Định kỳ kiểm tra file chỉ đọc và phục hồi trên kho thử riêng.
+
+## Kiểm thử Cloudflare thực tế
+Bản fbbd7db: xác nhận menu 4 mục và ba thao tác chính trong Quản lý dữ liệu. Tạo đơn nhanh 123.456, kiểm tra toàn vẹn phân tích đúng kho (1 đối tác/1 đơn/0 giao dịch, 0 lỗi). Xuất JSON có nhật ký. Xem trước rồi hủy: toàn bộ state xuất lại khớp trước đó. Xác nhận phục hồi file giả: sau tải lại và xuất JSON, partners/orders/payments khớp từng bản ghi nguồn; kho trước nhập vẫn có trong recovery; audit 9/recovery 1; 2 đối tác, 2 đơn, 2 giao dịch; phải thu 3.000.000/phải trả 750.000; 0 lỗi/cảnh báo. Đã sửa đoạn mô tả thùng rác/bản phục hồi bị lặp trong màn xem trước, không thay đường ghi dữ liệu.
