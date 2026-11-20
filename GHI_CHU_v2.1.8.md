@@ -11,7 +11,7 @@
 2. Nút Thu nợ/Gửi nhắc trong ZIP dẫn danh sách công nợ: chuyển trực tiếp Trung tâm thu nợ, không tự gửi.
 3. Báo cáo trước thực nghiệm trong ZIP chỉ đọc state trong bộ nhớ, chưa kiểm tra đầy đủ dữ liệu: đọc kho thực qua currentIntegrityReport, phát hiện ID/link/money/chi tiết sai và không hiển thị số 0 giả khi không thể tính số dư.
 4. Các biểu mẫu cũ đóng trước khi lưu bền vững: chỉ đóng sau commit thành công. Lỗi ghi giữ nội dung nhập, không phát thông báo lưu thành công.
-5. Bổ sung xác nhận bỏ nội dung form chưa lưu khi đóng và cảnh báo trước tải lại/đóng trang. Không tự lưu bản nháp vào dữ liệu công nợ.
+5. Bổ sung xác nhận bỏ nội dung form chưa lưu khi đóng và cảnh báo trước tải lại/đóng trang. Các thao tác nút thêm/xóa/nhân bản hạng mục và kích thước cũng được đánh dấu chưa lưu. Không tự lưu bản nháp vào dữ liệu công nợ.
 6. Phiếu nhập NCC có chọn cốt/mặt phủ, dùng trường material hiện có; giữ số lượng, đơn giá hoặc tổng tiền trực tiếp. Không đổi schema/di chuyển dữ liệu cũ.
 7. Thu gọn ràng buộc chiều rộng màn hình nhỏ, giữ bảng cuộn trong vùng riêng và nút tối thiểu 44px; cần kiểm thử Samsung thật trước nghiệm thu thiết bị.
 8. Đồng bộ nhãn, version.json và cache SW thành 2.1.8; thêm trial-readiness.js vào precache. Giữ manifest/logo TG/CSP.
@@ -42,3 +42,6 @@
 - Chưa có thiết bị Samsung/Android thật: chưa xác nhận bàn phím, Share Sheet Zalo/SMS, cài PWA, đóng/mở PWA, cập nhật PWA đang cài hoặc offline thật. SW chỉ có kiểm thử mô phỏng.
 - JSON và kho trình duyệt chưa mã hóa; chưa đăng nhập/phân quyền/đồng bộ nhiều thiết bị. Giữ giới hạn trong báo cáo bảo mật v2.1.7.
 - Website thử có origin/kho riêng, không lấy dữ liệu thật của production. Không thay main hoặc triển khai production nếu chưa được người dùng xác nhận.
+
+## Kiểm thử trình duyệt Cloudflare
+Trên bản staging e9557b8: nút Đơn nhanh ở Tổng quan mở đúng 3 ô; thử đóng form đã nhập, hủy bỏ xác nhận thì giữ nguyên nội dung; lưu tạo đúng đơn 3.000.000. Thu hai đợt 500.000 và 600.000, tải lại còn 1.900.000. Nút Trung tâm thu nợ mở đúng trang. Đơn chi tiết mở đủ hạng mục/kích thước/vật liệu. Phiếu NCC chọn MDF/Melamine, 2 tấm × 550.000 lưu 1.100.000. Kiểm tra trước thực nghiệm: 1 khách, 1 NCC, 2 đơn/phiếu, 2 giao dịch, 0 lỗi/cảnh báo. Sao lưu ngay tải JSON có đủ 2 đối tác, 2 đơn và 2 giao dịch; tổng thu 1.100.000. Đây là dữ liệu giả, không phải kho người dùng.
