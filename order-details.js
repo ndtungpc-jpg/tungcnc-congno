@@ -48,7 +48,7 @@ async function submitDetailedOrder(e){
   const rows=detailDraft.items.map((x,i)=>({...structuredClone(x),index:i+1,name:x.name.trim(),unitPrice:Number(x.unitPrice),unit:x.type==='manual'?x.unit:DETAIL_TYPES[x.type][1],quantity:detailQty(x),amount:detailQty(x)*Number(x.unitPrice),sizes:x.sizes.map(z=>({...z,count:Number(z.count),widthMm:z.widthMm===''?'':Number(z.widthMm),heightMm:z.heightMm===''?'':Number(z.heightMm)}))}));
   const record={...old,...(old?.quoteTransferId?{quoteOriginalItems:old.quoteOriginalItems||structuredClone(old.quoteItems),quoteOriginalTotals:old.quoteOriginalTotals||structuredClone(old.quoteTotals)}:{}),id:detailEditingId||id(),partnerId:pt.id,code,title:rows.map(x=>x.name).slice(0,2).join(' · ')+(rows.length>2?'…':''),amount,created,due,note:String(f.get('note')||''),quoteItems:rows,quoteTotals:totals,detailSchemaVersion:1,updatedAt:now};
   if(old)state.orders=state.orders.map(o=>o.id===old.id?record:o);else state.orders.push(record);
-  closeModal();if(!await commit())state=before;else{detailSnapshot=JSON.stringify(state);toast('Đã lưu đơn hàng chi tiết')}
+  if(!await commit())state=before;else{closeModal(true);detailSnapshot=JSON.stringify(state);toast('Đã lưu đơn hàng chi tiết')}
  }catch(err){state=before;alert('Chưa lưu đơn; dữ liệu cũ được giữ nguyên. '+err.message)}
 }
 function detailedOrderRows(o){
