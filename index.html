@@ -20,7 +20,7 @@ td,th,.compactrow{border-bottom-color:#343d46}
 .warn{background:#403424;color:#f0ce92;border-color:#725a35}
 #updateNotice{background:#283541!important;color:#e3edf6!important;border-color:#566575!important}
 #storageNotice{background:#403424!important;color:#f0ce92!important;border-color:#725a35!important}
-</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.7</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
+</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ · An toàn dữ liệu 2.0.8</small></div></header><main class="wrap"><div class="toolbar"><nav class="tabs"><button data-tab="dashboard" class="active" onclick="tab('dashboard')">Tổng quan</button><button data-tab="customers" onclick="tab('customers')">Khách hàng</button><button data-tab="suppliers" onclick="tab('suppliers')">Nhà cung cấp</button><button data-tab="orders" onclick="tab('orders')">Đơn hàng</button><button data-tab="payments" onclick="tab('payments')">Thu / Chi</button><button data-tab="trash" onclick="tab('trash')">Thùng rác</button><button data-tab="audit" onclick="tab('audit')">Nhật ký</button><button data-tab="settings" onclick="tab('settings')">Quản lý dữ liệu</button></nav><div class="actions"><button class="btn primary" onclick="formOrder()">+ Đơn khách</button><button class="btn" onclick="formSupplierOrder()">+ Nhập nợ NCC</button><button class="btn primary" onclick="formCustomerReceipt()">+ Thu khách</button><button class="btn" onclick="formSupplierPay()">+ Trả NCC</button></div></div><section id="updateNotice" role="status" style="display:none;background:#e8f3ff;color:#153a5c;border:1px solid #9fc6e8;padding:12px;border-radius:10px;margin:10px 0">Có phiên bản ứng dụng mới. <button class="btn primary" onclick="applyAppUpdate()">Cập nhật giao diện</button> <button class="btn" onclick="document.getElementById('updateNotice').style.display='none'">Để sau</button><div class="muted">Dữ liệu công nợ trên thiết bị không bị xóa.</div></section><section id="storageNotice" style="display:none;background:#fff1c7;color:#6d4700;border:1px solid #dfc88a;padding:12px;border-radius:10px;margin:10px 0"></section><section id="content"></section></main><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div><div id="toast"></div><input id="importFile" class="file" type="file" accept="application/json,.json" onchange="importData(event)"><script src="./safety.js"></script><script src="./recovery.js"></script><script src="./excel.js"></script><script>
 'use strict';const DBNAME='tunggiang-congno-v2',STORE='state';const MIGRATION={partners:[],orders:[],payments:[]};let db,state={partners:[],orders:[],payments:[]},current='dashboard',filter='';const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat('vi-VN').format(Math.round(Number(n)||0))+'đ',today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')},date=s=>s?new Date(s+'T00:00:00').toLocaleDateString('vi-VN'):'—',id=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=v=>Math.max(0,Number(v)||0),partner=i=>state.partners.find(x=>x.id===i),order=i=>state.orders.find(x=>x.id===i),paid=i=>state.payments.filter(x=>x.orderId===i).reduce((a,x)=>a+x.amount,0),balance=o=>o.cancelled?0:o.amount-paid(o.id),due=o=>balance(o)>0&&o.due&&o.due<today(),total=(type)=>state.orders.filter(o=>partner(o.partnerId)?.type===type).reduce((a,o)=>a+balance(o),0);
 function toast(s){$('#toast').textContent=s;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',2600)}
 let storageMode='indexeddb';
@@ -85,7 +85,7 @@ if(current==='supplier-detail'){html=supplierDetailView(selectedCustomer)}
 if(current==='received-month'){const ps=state.payments.filter(p=>!String(p.id).startsWith('legacy-')&&p.date?.slice(0,7)===today().slice(0,7)&&partner(order(p.orderId)?.partnerId)?.type==='customer').sort((a,b)=>b.date.localeCompare(a.date));html=`<div class="panel"><div class="split"><h2>Đã thu tháng ${today().slice(0,7)}</h2><button class="btn" onclick="tab('dashboard')">← Tổng quan</button></div>${table(['Khách hàng','Ngày','Đơn hàng','Số tiền'],ps.map(p=>{const o=order(p.orderId),pt=partner(o?.partnerId);return `<tr><td><button class="customer-link" onclick="openCustomer('${jsid(pt.id)}')">${esc(pt.name)}</button></td><td>${date(p.date)}</td><td>${esc(o?.title)}</td><td>${money(p.amount)}</td></tr>`}).join(''))}</div>`}
 if(current==='overdue'){const os=state.orders.filter(o=>partner(o.partnerId)?.type==='customer'&&due(o)).sort((a,b)=>a.due.localeCompare(b.due));html=`<div class="panel"><div class="split"><h2>Khách nợ quá hạn (${os.length} đơn)</h2><button class="btn" onclick="tab('dashboard')">← Tổng quan</button></div>${table(['Khách hàng','Hạn thanh toán','Đơn','Còn nợ'],os.map(o=>`<tr><td><button class="customer-link" onclick="openCustomer('${jsid(o.partnerId)}')">${esc(partner(o.partnerId)?.name)}</button></td><td>${date(o.due)}</td><td>${esc(o.title)}</td><td class="red">${money(balance(o))}</td></tr>`).join(''))}<p class="hint">Đơn chưa có hạn thanh toán không được tự coi là quá hạn.</p></div>`}
 if(current==='orders'){html=`<div class="panel"><div class="split"><h2>Danh sách đơn hàng (${state.orders.length})</h2><input class="search" placeholder="Tìm mã đơn, tên khách..." value="${esc(filter)}" oninput="search(this.value)"></div>${ordersTable(state.orders.filter(o=>(o.code+' '+o.title+' '+(partner(o.partnerId)?.name||'')).toLowerCase().includes(filter.toLowerCase())))}</div>`}
-if(current==='payments'){const ps=state.payments.filter(p=>!String(p.id||'').startsWith('legacy-')||p.updatedAt).sort((a,b)=>b.date.localeCompare(a.date));html=`<div class="panel"><h2>Lịch sử thu / chi (${ps.length})</h2><p class="hint">Ẩn giao dịch nhập từ Excel gốc; dữ liệu vẫn được giữ để tính công nợ.</p>${table(['Ngày','Đối tác / Đơn','Hình thức','Số tiền','Thao tác'],ps.map(p=>{const o=order(p.orderId),pt=partner(o?.partnerId);return `<tr><td>${date(p.date)}</td><td><b>${esc(pt?.name||'Đã xóa')}</b><div class="muted">${esc(o?.code)} · ${esc(p.note)}</div></td><td>${esc(p.method)}</td><td class="${pt?.type==='customer'?'green':'red'}"><b>${pt?.type==='customer'?'+':'−'}${money(p.amount)}</b></td><td><button class="smallbtn" onclick="formPayment('${jsid(p.id)}')">Sửa</button><button class="smallbtn danger" onclick="removePayment('${jsid(p.id)}')">Xóa</button></td></tr>`}).join(''))}</div>`}
+if(current==='payments'){const editedPaymentIds=new Set(auditRows('activity').filter(a=>a.kind==='payments').map(a=>a.recordId));const ps=state.payments.filter(p=>!String(p.id||'').startsWith('legacy-')||editedPaymentIds.has(p.id)).sort((a,b)=>b.date.localeCompare(a.date));html=`<div class="panel"><h2>Lịch sử thu / chi (${ps.length})</h2><p class="hint">Ẩn giao dịch nhập từ Excel gốc; dữ liệu vẫn được giữ để tính công nợ.</p>${table(['Ngày','Đối tác / Đơn','Hình thức','Số tiền','Thao tác'],ps.map(p=>{const o=order(p.orderId),pt=partner(o?.partnerId);return `<tr><td>${date(p.date)}</td><td><b>${esc(pt?.name||'Đã xóa')}</b><div class="muted">${esc(o?.code)} · ${esc(p.note)}</div></td><td>${esc(p.method)}</td><td class="${pt?.type==='customer'?'green':'red'}"><b>${pt?.type==='customer'?'+':'−'}${money(p.amount)}</b></td><td><button class="smallbtn" onclick="formPayment('${jsid(p.id)}')">Sửa</button><button class="smallbtn danger" onclick="removePayment('${jsid(p.id)}')">Xóa</button></td></tr>`}).join(''))}</div>`}
 if(current==='settings'){html=`<div class="panel"><h2>Lưu trữ và sao lưu dữ liệu</h2><button class="btn primary" onclick="scanLegacyData()">Tìm dữ liệu cũ / Kho trước cập nhật</button><p>Dữ liệu được lưu bằng <b>IndexedDB trên trình duyệt của thiết bị này</b>, vẫn tồn tại sau khi đóng ứng dụng và có thể dùng ngoại tuyến. Không tự đồng bộ giữa các thiết bị.</p><div class="actions"><button class="btn primary" onclick="exportData()">Xuất bản sao JSON</button><button class="btn" onclick="$('#importFile').click()">Khôi phục từ JSON</button><button class="btn" onclick="$('#importFile').click()">Bổ sung ĐVT / đơn giá</button><button class="btn" onclick="exportExcel()">Xuất Excel (.xlsx)</button><button class="btn" onclick="exportCSV()">CSV (tùy chọn)</button></div><div class="warn"><b>Quan trọng:</b> Xóa dữ liệu trình duyệt, dùng chế độ ẩn danh hoặc đổi thiết bị có thể làm mất dữ liệu. Hãy xuất bản sao JSON định kỳ và lưu lên Google Drive hoặc nơi an toàn. Nhập bản sao sẽ thay dữ liệu đang hoạt động, có giữ bản phục hồi trước nhập. Thùng rác không tự xóa.</div><p class="muted">Hiện có ${state.partners.length} đối tác, ${state.orders.length} đơn hàng, ${state.payments.length} giao dịch. Không có dữ liệu mẫu tự động.</p></div>`}if(current==='settings')html+=safetySettings();$('#content').innerHTML=html}
 function debtCustomers(){return state.partners.filter(p=>p.type==='customer').map(p=>({...p,open:state.orders.filter(o=>o.partnerId===p.id&&balance(o)>0)})).filter(p=>p.open.length).sort((a,b)=>b.open.reduce((t,o)=>t+balance(o),0)-a.open.reduce((t,o)=>t+balance(o),0))}
 let selectedCustomer=null;
@@ -107,55 +107,75 @@ function exportStatement(pid){const p=partner(pid),os=state.orders.filter(o=>o.p
 function exportCustomerImage(pid,mode){
  const pt=partner(pid);if(!pt)return alert('Không tìm thấy khách hàng');
  const all=state.orders.filter(o=>o.partnerId===pid&&!o.cancelled).sort((a,b)=>(a.created||'').localeCompare(b.created||''));
- const rows=mode==='debt'?all.filter(o=>balance(o)>0):all;
- // Each date is shown only once, at the start of its group. Financial rows stay separate.
- const dateGroups=rows.map((o,i)=>i===0||String(o.created||'')!==String(rows[i-1].created||''));
- const debt=mode==='debt',title=debt?'BẢNG ĐỐI CHIẾU CÔNG NỢ':'BẢNG THỐNG KÊ ĐƠN HÀNG';
- const w=1600,pad=45,rowH=56,top=206,headH=54,bottom=top+headH+Math.max(rows.length,1)*rowH,h=bottom+132;
+ const debt=mode==='debt',rows=debt?all.filter(o=>balance(o)>0):all;
+ const title=debt?'BẢNG ĐỐI CHIẾU CÔNG NỢ':'BẢNG THỐNG KÊ ĐƠN HÀNG';
+ const w=2000,pad=55,top=255,headH=76,rowH=82;
+ const bottom=top+headH+Math.max(rows.length,1)*rowH,h=bottom+175;
  if(h>30000)return alert('Danh sách quá dài để xuất một ảnh. Vui lòng xuất Excel.');
- const cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');
- if(!c)return alert('Trình duyệt không hỗ trợ xuất ảnh');
- c.fillStyle='#fff';c.fillRect(0,0,w,h);
- const txt=(v,x,y,size=20,bold=false,color='#27313b',max=1000,align='left')=>{c.font=(bold?'bold ':'')+size+'px Arial,sans-serif';c.fillStyle=color;c.textAlign=align;c.fillText(String(v??''),x,y,max);c.textAlign='left'};
- const line=y=>{c.strokeStyle='#dce2e7';c.beginPath();c.moveTo(pad,y+.5);c.lineTo(w-pad,y+.5);c.stroke()};
- const amt=v=>v==null||v===''?'—':money(v);
- c.fillStyle='#343c45';c.fillRect(0,0,w,10);
- txt('TÙNG GIANG CNC',pad,51,25,true);
- txt(title,pad,101,32,true);
- txt('Khách hàng: '+pt.name,pad,145,23,true,'#303b45',w-2*pad);
- txt('Ngày lập: '+date(today()),pad,180,18,false,'#65717d');
- // Right-aligned numeric columns, no order code and no status column.
- const cols=debt?[
-  ['STT',pad+12,'left',60],['Ngày',pad+92,'left',120],['Hạng mục',pad+235,'left',355],
-  ['Khối lượng',pad+685,'right',145],['ĐVT',pad+710,'left',75],['Đơn giá',pad+1050,'right',170],
-  ['Thành tiền',pad+1220,'right',160],['Đã trả',pad+1375,'right',150],['Còn nợ',w-pad-12,'right',150]
- ]:[
-  ['STT',pad+12,'left',60],['Ngày',pad+94,'left',120],['Hạng mục',pad+242,'left',540],
-  ['Khối lượng',pad+950,'right',155],['ĐVT',pad+984,'left',100],['Đơn giá',pad+1270,'right',190],
-  ['Thành tiền',w-pad-12,'right',205]
- ];
- // Debt layout has tighter columns: use dedicated coordinates for legibility.
- if(debt){
-  cols[2][3]=350;cols[3][1]=835;cols[3][3]=115;cols[4][1]=858;
-  cols[5][1]=1065;cols[5][3]=145;cols[6][1]=1235;cols[6][3]=155;
-  cols[7][1]=1390;cols[7][3]=135;cols[8][3]=145;
- }
- c.fillStyle='#edf1f4';c.fillRect(pad,top,w-pad*2,headH);
- cols.forEach(col=>txt(col[0],col[1],top+35,18,true,'#26323d',col[3],col[2]));
- if(!rows.length)txt('Không có đơn hàng phù hợp',pad+12,top+headH+37,20);
+ const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+ const c=cv.getContext('2d');if(!c)return alert('Trình duyệt không hỗ trợ xuất ảnh');
+ c.fillStyle='#ffffff';c.fillRect(0,0,w,h);
+ const text=(v,x,y,size=25,bold=false,color='#263442',max=1000,align='left')=>{
+  c.font=(bold?'700 ':'400 ')+size+'px Arial,sans-serif';
+  c.fillStyle=color;c.textAlign=align;c.fillText(String(v??''),x,y,max);c.textAlign='left';
+ };
+ const rule=(y,strong=false)=>{
+  c.strokeStyle=strong?'#a5b4c2':'#e1e7ed';c.lineWidth=strong?2:1;
+  c.beginPath();c.moveTo(pad,y+.5);c.lineTo(w-pad,y+.5);c.stroke();c.lineWidth=1;
+ };
+ const amount=v=>v==null||v===''?'':money(v);
+ const quantity=o=>{const v=o.basisQuantity??o.quantity;return v==null||v===''||Number(v)===0?'':String(v)};
+ const unit=o=>{const v=String(o.unit??'').trim();return v==='-'||v==='—'?'':v};
+ const widths=debt?[72,164,435,165,90,215,250,235,264]:[72,174,595,175,115,295,464];
+ const headers=debt?['STT','Ngày','Hạng mục','Khối lượng','ĐVT','Đơn giá','Thành tiền','Đã trả','Còn nợ']:['STT','Ngày','Hạng mục','Khối lượng','ĐVT','Đơn giá','Thành tiền'];
+ const rightCols=new Set(debt?[3,5,6,7,8]:[3,5,6]);
+ const xPositions=[];let pos=pad;
+ widths.forEach(v=>{xPositions.push(pos);pos+=v});
+ const cell=(v,j,y,bold=false)=>{
+  const x=xPositions[j],width=widths[j],right=rightCols.has(j);
+  const max=width-18;
+  const size=debt?23:25;
+  if(j===2){
+   const value=String(v??'');
+   c.font='400 '+size+'px Arial,sans-serif';
+   if(c.measureText(value).width>max){
+    const words=value.split(/\s+/);let a='',b='';
+    for(const word of words){
+     const candidate=a?a+' '+word:word;
+     if(!a||c.measureText(candidate).width<=max)a=candidate;
+     else b=b?b+' '+word:word;
+    }
+    text(a,x+9,y+30,size,false,'#263442',max);
+    if(b)text(b,x+9,y+60,size,false,'#263442',max);
+    return;
+   }
+  }
+  text(v,right?x+width-10:x+9,y+49,size,bold,'#263442',max,right?'right':'left');
+ };
+ c.fillStyle='#263c52';c.fillRect(0,0,w,12);
+ text('TÙNG GIANG CNC',pad,63,32,true,'#263c52');
+ text(title,pad,119,43,true,'#172d42');
+ text('Khách hàng: '+pt.name,pad,173,32,true,'#263442',w-2*pad);
+ text('Ngày lập: '+date(today()),pad,215,25,false,'#637488');
+ c.fillStyle='#eaf0f5';c.fillRect(pad,top,w-2*pad,headH);
+ headers.forEach((label,j)=>text(label,rightCols.has(j)?xPositions[j]+widths[j]-10:xPositions[j]+9,top+47,23,true,'#263442',widths[j]-18,rightCols.has(j)?'right':'left'));
+ if(!rows.length)text('Không có đơn hàng phù hợp',pad+12,top+headH+49,26);
  rows.forEach((o,i)=>{
   const y=top+headH+i*rowH;
-  if(i%2){c.fillStyle='#f7f9fb';c.fillRect(pad,y,w-pad*2,rowH)}
-  if(i>0&&dateGroups[i]){c.strokeStyle='#8996a2';c.lineWidth=2;c.beginPath();c.moveTo(pad,y+.5);c.lineTo(w-pad,y+.5);c.stroke();c.lineWidth=1;}
-  const vals=debt?[i+1,dateGroups[i]?date(o.created):'',o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount),money(paid(o.id)),money(balance(o))]:[i+1,dateGroups[i]?date(o.created):'',o.title||'—',o.basisQuantity??o.quantity??null,o.unit||'—',amt(o.unitPrice),money(o.amount)];
-  vals.forEach((v,j)=>txt(v==null?'—':v,cols[j][1],y+36,18,j===vals.length-1,'#303b45',cols[j][3],cols[j][2]));
-  line(y+rowH);
+  const newDate=i===0||String(o.created||'')!==String(rows[i-1].created||'');
+  if(i%2){c.fillStyle='#f8fafc';c.fillRect(pad,y,w-2*pad,rowH)}
+  if(i>0&&newDate)rule(y,true);
+  const vals=debt?
+   [i+1,newDate?date(o.created):'',o.title||'',quantity(o),unit(o),amount(o.unitPrice),money(o.amount),money(paid(o.id)),money(balance(o))]:
+   [i+1,newDate?date(o.created):'',o.title||'',quantity(o),unit(o),amount(o.unitPrice),money(o.amount)];
+  vals.forEach((v,j)=>cell(v,j,y,j===vals.length-1));
+  rule(y+rowH);
  });
- line(bottom+7);
- txt(debt?'TỔNG CÒN NỢ':'TỔNG GIÁ TRỊ ĐƠN HÀNG',pad,bottom+54,23,true);
- txt(money(rows.reduce((sum,o)=>sum+(debt?balance(o):o.amount),0)),w-pad,bottom+54,28,true,'#26323d',450,'right');
- if(!debt)txt('Tổng còn nợ: '+money(rows.reduce((sum,o)=>sum+balance(o),0)),w-pad,bottom+87,19,false,'#65717d',550,'right');
- txt('Tùng Giang CNC · Bảng thông tin gửi khách hàng',pad,h-20,16,false,'#77838d');
+ rule(bottom+15,true);
+ text(debt?'TỔNG CÒN NỢ':'TỔNG GIÁ TRỊ ĐƠN HÀNG',pad,bottom+70,30,true);
+ text(money(rows.reduce((sum,o)=>sum+(debt?balance(o):o.amount),0)),w-pad,bottom+70,36,true,'#172d42',620,'right');
+ if(!debt)text('Tổng còn nợ: '+money(rows.reduce((sum,o)=>sum+balance(o),0)),w-pad,bottom+113,26,false,'#637488',700,'right');
+ text('Tùng Giang CNC · Thông tin gửi khách hàng',pad,h-22,21,false,'#788797');
  cv.toBlob(blob=>{
   if(!blob)return alert('Không tạo được ảnh');
   const name=(debt?'DoiChieuCongNo_':'ThongKeDonHang_')+pt.name.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'_'+today()+'.png';
@@ -164,7 +184,6 @@ function exportCustomerImage(pid,mode){
   else download(name,blob,'image/png');
  },'image/png');
 }
-
 function printStatement(pid){const p=partner(pid),os=state.orders.filter(o=>o.partnerId===pid&&balance(o)>0).sort((a,b)=>(a.created||'').localeCompare(b.created||'')),sum=os.reduce((a,o)=>a+balance(o),0);const tr=os.map((o,i)=>`<tr><td>${i+1}</td><td>${date(o.created)}</td><td>${esc(o.code)}</td><td>${esc(o.title)}</td><td class="num">${money(o.amount)}</td><td class="num">${money(paid(o.id))}</td><td class="num">${money(balance(o))}</td></tr>`).join('');const doc=`<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Bảng kê công nợ - ${esc(p.name)}</title><style>body{font:13px Arial,sans-serif;color:#222;padding:24px}h1{text-align:center;font-size:22px;margin:24px 0 8px}p{margin:9px 0}table{border-collapse:collapse;width:100%;margin-top:18px}th,td{border:1px solid #888;padding:7px;text-align:left;vertical-align:top}th{background:#eee}.num{text-align:right;white-space:nowrap}.total{font-size:18px;text-align:right;margin-top:20px}.footnote{margin-top:24px;color:#555}.sign{display:flex;justify-content:space-between;text-align:center;margin-top:35px}@media print{@page{size:A4 landscape;margin:12mm}body{padding:0}}.customer-link{border:0;background:transparent;color:#1263a5;font-weight:700;text-align:left;padding:4px 0;text-decoration:underline;text-underline-offset:3px}.customer-link:hover{color:#0b426f}.detail-grid{margin-top:16px}@media(max-width:650px){.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}.stat.clickable{cursor:pointer;text-align:left;width:100%;font:inherit}.stat.clickable:hover{border-color:#1263a5;box-shadow:0 2px 10px #1263a51c}.suggest{display:block;width:100%;max-height:180px;overflow:auto;border:1px solid #d4deeb;border-radius:9px;background:#fff}.suggest button{display:block;width:100%;text-align:left;background:#fff;border:0;padding:10px;border-bottom:1px solid #eee}.suggest button:hover{background:#eaf4ff}.compactrow{padding:8px 0;border-bottom:1px solid #edf0f4}.sectionheading{display:flex;justify-content:space-between;align-items:center;gap:8px} .btn:focus-visible,.stat:focus-visible{outline:3px solid #5c9ed0}</style><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#102b45"><meta name="mobile-web-app-capable" content="yes"></head><body><b>TÙNG GIANG CNC</b><h1>BẢNG ĐỐI CHIẾU CÔNG NỢ</h1><p><b>Khách hàng:</b> ${esc(p.name)}</p><p><b>Ngày đối chiếu:</b> ${date(today())}</p><table><thead><tr><th>STT</th><th>Ngày đơn</th><th>Mã đơn</th><th>Nội dung</th><th>Giá trị</th><th>Đã trả</th><th>Còn nợ</th></tr></thead><tbody>${tr}</tbody></table><div class="total"><b>TỔNG CÒN NỢ: ${money(sum)}</b></div><p class="footnote">Kính đề nghị quý khách đối chiếu và xác nhận số dư. Nếu có sai lệch, vui lòng phản hồi để kiểm tra.</p></body></html>`;const w=window.open('','_blank');if(!w){alert('Trình duyệt đang chặn cửa sổ in. Hãy cho phép mở cửa sổ bật lên.');return;}w.document.open();w.document.write(doc);w.document.close();w.focus();setTimeout(()=>w.print(),350)}
 function ordersTable(arr){return table(['Mã / Hạng mục','Đối tác',...orderDetailHeaders(),'Giá trị','Đã thanh toán','Còn lại / Hạn','Thao tác'],arr.map(o=>`<tr><td><b>${esc(o.code)}</b><div class="muted">${esc(o.title)} ${o.cancelled?"(ĐÃ HỦY) ":""}${o.risk==="bad"?"⚠ Nợ khó thu hồi":""}</div></td><td>${esc(partner(o.partnerId)?.name||'—')}</td>${orderDetailCells(o)}<td>${money(o.amount)}</td><td>${money(paid(o.id))}</td><td><b class="${due(o)?'red':''}">${money(balance(o))}</b><div class="muted">${date(o.due)} ${due(o)?'· QUÁ HẠN':''}</div></td><td><button class="smallbtn" onclick="formPayment(null,'${jsid(o.id)}')">${partner(o.partnerId)?.type==='supplier'?'Chi':'Thu'}</button><button class="smallbtn" onclick="formOrder('${jsid(o.id)}')">Sửa</button><button class="smallbtn danger" onclick="removeOrder('${jsid(o.id)}')">Xóa</button><button class="smallbtn" onclick="cancelOrder('${jsid(o.id)}')">${o.cancelled?'Đã hủy':'Hủy đơn'}</button></td></tr>`).join(''))}
 function search(v){filter=v;const input=document.activeElement;const pos=input.selectionStart;render();const next=$('.search');next.focus();next.setSelectionRange(pos,pos)}
@@ -228,7 +247,18 @@ async function submitMultiPayment(e){
  for(const o of os){if(left<=0.001)break;const v=Math.min(left,balance(o));state.payments.push({id:id(),orderId:o.id,date:f.get('date'),amount:Math.round(v*100)/100,method:f.get('method'),note:(f.get('note')||'')+' · Phân bổ '+batch,updatedAt:new Date().toISOString()});left-=v;count++}
  closeModal();if(await commit())toast('Đã phân bổ thu tiền vào '+count+' đơn');
 }
-function recentActivity(){const items=[...state.orders.filter(o=>!String(o.id).startsWith('legacy-')||o.updatedAt).map(o=>({time:o.updatedAt||((o.created||'2022-01-01')+'T00:00:00'),kind:'Đơn hàng',pt:partner(o.partnerId),title:o.title,amount:o.amount,click:o.partnerId})),...state.payments.filter(p=>!String(p.id).startsWith('legacy-')||p.updatedAt).map(p=>{const o=order(p.orderId);return {time:p.updatedAt||((p.date||'2022-01-01')+'T12:00:00'),kind:partner(o?.partnerId)?.type==='supplier'?'Chi NCC':'Thu khách',pt:partner(o?.partnerId),title:o?.title||'',amount:p.amount,click:o?.partnerId}})].sort((a,b)=>b.time.localeCompare(a.time)).slice(0,30);return table(['Ngày','Khách / NCC','Cập nhật','Số tiền'],items.map(x=>`<tr><td>${date(x.time.slice(0,10))}</td><td><button class="customer-link" onclick="${x.pt?.type==='supplier'?`openSupplier('${jsid(x.click)}')`:`openCustomer('${jsid(x.click)}')`}">${esc(x.pt?.name)}</button></td><td>${esc(x.kind)}<div class="muted">${esc(x.title)}</div></td><td>${money(x.amount)}</td></tr>`).join(''))}
+function recentActivity(){
+ const items=auditRows('activity').filter(a=>a.kind==='orders'||a.kind==='payments').slice(0,30);
+ return table(['Ngày','Khách / NCC','Cập nhật','Số tiền'],items.map(a=>{
+  const record=a.after||a.before||{};
+  const o=a.kind==='orders'?(order(a.recordId)||record):order(record.orderId);
+  const pt=partner(o?.partnerId);
+  const name=pt?`<button class="customer-link" onclick="${pt.type==='supplier'?`openSupplier('${jsid(pt.id)}')`:`openCustomer('${jsid(pt.id)}')`}">${esc(pt.name)}</button>`:'Đã xóa';
+  const label=(actionLabel[a.action]||a.action)+' · '+(a.kind==='orders'?'Đơn hàng':pt?.type==='supplier'?'Chi NCC':'Thu khách');
+  const title=a.kind==='orders'?(o?.title||''):(o?.title||record.note||'');
+  return `<tr><td>${esc(a.at?new Date(a.at).toLocaleDateString('vi-VN'):'')}</td><td>${name}</td><td>${esc(label)}<div class="muted">${esc(title)}</div></td><td>${money(record.amount??o?.amount??0)}</td></tr>`;
+ }).join(''));
+}
 function openSupplier(pid){selectedCustomer=pid;current='supplier-detail';render()}
 function supplierListView(){const ps=state.partners.filter(p=>p.type==='supplier').map(p=>({...p,amount:state.orders.filter(o=>o.partnerId===p.id).reduce((a,o)=>a+balance(o),0)})).filter(p=>p.amount>0).sort((a,b)=>b.amount-a.amount);return `<div class="panel"><div class="split"><h2>Nhà cung cấp còn nợ (${ps.length})</h2><button class="btn" onclick="tab('dashboard')">← Tổng quan</button></div>${table(['Nhà cung cấp','Còn nợ','Chi tiết'],ps.map(p=>`<tr><td><button class="customer-link" onclick="openSupplier('${jsid(p.id)}')">${esc(p.name)}</button></td><td>${money(p.amount)}</td><td><button class="smallbtn" onclick="openSupplier('${jsid(p.id)}')">Xem</button></td></tr>`).join(''))}</div>`}
 function supplierDetailView(pid){const p=partner(pid);if(!p)return 'Không tìm thấy NCC';const os=state.orders.filter(o=>o.partnerId===pid),month=today().slice(0,7),old=os.filter(o=>(o.created||'').slice(0,7)<month).reduce((a,o)=>a+balance(o),0),newOrders=os.filter(o=>(o.created||'').slice(0,7)===month),newTotal=newOrders.reduce((a,o)=>a+o.amount,0),monthPaid=state.payments.filter(x=>x.date?.slice(0,7)===month&&order(x.orderId)?.partnerId===pid).reduce((a,x)=>a+x.amount,0),totalDebt=os.reduce((a,o)=>a+balance(o),0);return `<div class="panel"><div class="split"><h2>${esc(p.name)}</h2><div class="actions"><button class="btn" onclick="tab('supplier-debts')">← Nhà cung cấp</button><button class="btn primary" onclick="formSupplierPay('${jsid(pid)}')">+ Trả tiền</button><button class="btn" onclick="printSupplier('${jsid(pid)}')">In / Lưu PDF</button></div></div><div class="grid detail-grid"><div class="stat"><span>Dư nợ từ trước tháng ${month}</span><strong>${money(old)}</strong></div><div class="stat"><span>Nhập mới tháng này</span><strong>${money(newTotal)}</strong></div><div class="stat"><span>Đã trả tháng này</span><strong>${money(monthPaid)}</strong></div><div class="stat"><span>Tổng còn nợ</span><strong>${money(totalDebt)}</strong></div></div><h3>Danh sách nhập tháng ${month}</h3>${table(['Ngày','Nội dung',...orderDetailHeaders(),'Giá trị','Còn lại'],newOrders.map(o=>`<tr><td>${date(o.created)}</td><td>${esc(o.title)}</td>${orderDetailCells(o)}<td>${money(o.amount)}</td><td>${money(balance(o))}</td></tr>`).join(''))}<p class="hint">Dư nợ cũ được chuyển tiếp tự động theo số dư, không tạo khoản nợ trùng. Khoản trả NCC được trừ theo các đơn nhập cũ nhất.</p></div>`}
@@ -270,23 +300,41 @@ const kindLabel={partners:'Đối tác',orders:'Đơn hàng',payments:'Thu / Chi
 const actionLabel={create:'Tạo',update:'Sửa',cancel:'Hủy đơn',delete:'Chuyển thùng rác',restore:'Khôi phục',import:'Nhập / Phục hồi JSON'};
 function trashView(){return `<div class="panel"><h2>Thùng rác (${state.trash.length})</h2><p class="hint">Không tự xóa vĩnh viễn. Khôi phục đối tác → đơn → thanh toán. Kiểm tra số dư sau khôi phục.</p>${table(['Thời điểm xóa','Loại','Nội dung','Thao tác'],[...state.trash].reverse().map(t=>`<tr><td>${esc(new Date(t.deletedAt).toLocaleString('vi-VN'))}</td><td>${kindLabel[t.kind]}</td><td>${esc(t.record.name||t.record.code||t.record.note||t.record.id)}<div class="muted">${t.record.amount==null?'':money(t.record.amount)}</div></td><td><button class="smallbtn" onclick="restoreTrash('${jsid(t.id)}')">Khôi phục</button></td></tr>`).join(''))}</div>`}
 let auditLimit=100,auditFilter='activity';
-function auditIsLegacy(a){return /^legacy[-_]/i.test(String(a.recordId||''))||/^legacy[-_]/i.test(String(a.before?.id||a.after?.id||''))}
-function auditRows(){
- const all=state.audit||[];
- // Các bản nhập cũ thường ghi hàng trăm bản ghi cùng thời điểm với sự kiện nhập JSON.
- const imports=new Set(all.filter(a=>a.action==='import').map(a=>a.at));
- const legacy=all.filter(a=>auditIsLegacy(a));
- const batches=new Map();
- for(const a of all){if(a.action==='import')continue;if(!auditIsLegacy(a)&&!imports.has(a.at))continue;
-  const key=a.at||'unknown';if(!batches.has(key))batches.set(key,[]);batches.get(key).push(a);
+function auditRows(mode=auditFilter){
+ const all=state.audit||[], groups=new Map(),hidden=new Set(),summaries=new Map();
+ const mark=(a,label)=>{
+  if(hidden.has(a.id))return;
+  hidden.add(a.id);
+  const key=String(a.at||'')+'|'+label;
+  if(!summaries.has(key))summaries.set(key,{at:a.at,label,records:0});
+  summaries.get(key).records++;
+ };
+ for(const a of all){
+  if(a.action==='import')continue;
+  const key=String(a.at||'')+'|'+String(a.action||'');
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push(a);
  }
- const suppressed=new Set([...batches.values()].flat().map(a=>a.id));
- const synthetic=[...batches].filter(([at,items])=>!all.some(a=>a.action==='import'&&a.at===at)).map(([at,items])=>({id:'summary:'+at,at,action:'import',kind:'backup',recordId:'',before:null,after:{summary:'Dữ liệu nhập cũ',records:items.length},synthetic:true}));
- const visible=all.filter(a=>!suppressed.has(a.id)).concat(synthetic);
- return visible.filter(a=>auditFilter==='all'||(auditFilter==='imports'?a.action==='import':a.action!=='import')).sort((a,b)=>String(b.at||'').localeCompare(String(a.at||'')));
+ for(const items of groups.values()){
+  if(items.length<20)continue;
+  const imported=items.filter(a=>/^legacy[-_]/i.test(String(a.recordId||a.after?.id||a.before?.id||'')));
+  if(imported.length>=20&&imported.length/items.length>=0.8)
+   for(const a of imported)mark(a,'Nhập dữ liệu Excel/JSON cũ');
+ }
+ for(const a of all){
+  if(a.action!=='import'&&(a.preparedFile===true||a.device==='chuẩn hóa tệp'))
+   mark(a,'Chuẩn hóa dữ liệu cũ');
+ }
+ const synthetic=[...summaries.entries()].map(([key,v])=>({
+  id:'summary:'+key,at:v.at,action:'import',kind:'backup',recordId:'',
+  before:null,after:{summary:v.label,records:v.records},synthetic:true
+ }));
+ const visible=all.filter(a=>!hidden.has(a.id)).concat(synthetic);
+ return visible.filter(a=>mode==='all'||(mode==='imports'?a.action==='import':a.action!=='import'))
+  .sort((a,b)=>String(b.at||'').localeCompare(String(a.at||'')));
 }
 function setAuditFilter(value){auditFilter=value;auditLimit=100;render()}
-function auditView(){const rows=auditRows();return `<div class="panel"><h2>Nhật ký thay đổi (${rows.length})</h2><p class="hint">Mặc định chỉ hiện thao tác thực tế. Dữ liệu nhập JSON cũ được gom theo đợt, không xóa nhật ký gốc. Chưa xác định người sửa khi chưa có đăng nhập; nhật ký cục bộ không phải bằng chứng kiểm toán.</p><label class="field" style="max-width:280px;margin:10px 0">Hiển thị<select onchange="setAuditFilter(this.value)"><option value="activity" ${auditFilter==='activity'?'selected':''}>Hoạt động thực tế</option><option value="imports" ${auditFilter==='imports'?'selected':''}>Lịch sử nhập JSON</option><option value="all" ${auditFilter==='all'?'selected':''}>Tất cả (đã gom đợt nhập)</option></select></label>${table(['Thời điểm','Thao tác','Loại / Mã','Chi tiết'],rows.slice(0,auditLimit).map(a=>`<tr><td>${esc(a.at?new Date(a.at).toLocaleString('vi-VN'):'Không rõ')}</td><td>${esc(actionLabel[a.action]||a.action)}</td><td>${esc(kindLabel[a.kind]||a.kind)}<div class="muted">${esc(a.recordId||a.after?.summary||'')}</div></td><td><button class="smallbtn" onclick="auditDetail('${jsid(a.id)}')">Trước / Sau</button></td></tr>`).join(''))}${rows.length>auditLimit?'<button class="btn" onclick="auditLimit+=100;render()">Xem thêm 100</button>':''}</div>`}
+function auditView(){const rows=auditRows();return `<div class="panel"><h2>Nhật ký thay đổi (${rows.length})</h2><p class="hint">Mặc định chỉ hiện thao tác thực tế. Dữ liệu Excel và những bước chuẩn hóa hàng loạt được gom riêng; các chỉnh sửa thực tế sau này vẫn được hiển thị. Không xóa nhật ký gốc. Chưa xác định người sửa khi chưa có đăng nhập; nhật ký cục bộ không phải bằng chứng kiểm toán.</p><label class="field" style="max-width:280px;margin:10px 0">Hiển thị<select onchange="setAuditFilter(this.value)"><option value="activity" ${auditFilter==='activity'?'selected':''}>Hoạt động thực tế</option><option value="imports" ${auditFilter==='imports'?'selected':''}>Lịch sử nhập JSON</option><option value="all" ${auditFilter==='all'?'selected':''}>Tất cả (đã gom đợt nhập)</option></select></label>${table(['Thời điểm','Thao tác','Loại / Mã','Chi tiết'],rows.slice(0,auditLimit).map(a=>`<tr><td>${esc(a.at?new Date(a.at).toLocaleString('vi-VN'):'Không rõ')}</td><td>${esc(actionLabel[a.action]||a.action)}</td><td>${esc(kindLabel[a.kind]||a.kind)}<div class="muted">${esc(a.recordId||a.after?.summary||'')}</div></td><td><button class="smallbtn" onclick="auditDetail('${jsid(a.id)}')">Trước / Sau</button></td></tr>`).join(''))}${rows.length>auditLimit?'<button class="btn" onclick="auditLimit+=100;render()">Xem thêm 100</button>':''}</div>`}
 function auditDetail(aid){const a=state.audit.find(x=>x.id===aid)||auditRows().find(x=>x.id===aid);if(!a)return;modal('Chi tiết thay đổi',`<p>Mã phiên: ${esc(a.device||'Không có')}</p><h3>Trước</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.before,null,2))}</pre><h3>Sau</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify(a.after,null,2))}</pre><button class="btn" onclick="closeModal()">Đóng</button>`)}
 function safetySettings(){const warnings=TGSafety.issues(state);return `<div class="panel"><h2>Kiểm tra và phục hồi</h2><p>Chế độ lưu: <b>${esc(storageMode)}</b>. Phiên bản dữ liệu: 2. Lần ghi: ${state.revision}.</p><p>${warnings.length?esc(warnings.join('; ')):'Không phát hiện đơn vượt thanh toán, đơn hủy có thanh toán hoặc trùng mã đơn.'}</p><p class="hint">Bản sao JSON 2.0 chứa cả thùng rác, nhật ký và các bản trước nhập. JSON cũ phiên bản 1 vẫn nhập được. Không dùng bản ứng dụng cũ để sửa dữ liệu 2.0.</p>${table(['Trước lần nhập','Thao tác'],[...state.recovery].reverse().map(r=>`<tr><td>${esc(new Date(r.at).toLocaleString('vi-VN'))}</td><td><button class="smallbtn" onclick="restoreRecovery('${jsid(r.id)}')">Phục hồi bản này</button></td></tr>`).join(''))}</div><div class="panel"><h2>Đồng bộ 2–3 thiết bị</h2><p>Chưa kích hoạt. Bản này chỉ lưu trên thiết bị; chưa có kết nối hay chuyển dữ liệu lên Supabase. Xem tài liệu thiết kế đi kèm trước khi triển khai thử.</p></div>`}
 
@@ -341,7 +389,7 @@ function orderDetailCells(o){return `<td class="line-material">${esc(o.material|
 init().then(render).catch(err=>{document.getElementById('content').textContent='Không thể khởi động ứng dụng: '+err.message;console.error(err)});
 </script><script>
 let waitingAppWorker=null;
-const APP_VERSION='2.0.7';
+const APP_VERSION='2.0.8';
 let remoteAppVersion=null;
 let versionCheckBusy=false;
 async function checkAppVersion(){
