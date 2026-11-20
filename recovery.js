@@ -50,5 +50,5 @@ async function applyRecoveryCandidate(index){
  const c=recoveryCandidates[index];if(!c?.data)return;
  // Reuse the same snapshot, validation, audit and atomic write path as JSON import.
  const text=JSON.stringify({app:'TungGiang-CongNo',version:2,data:c.data});
- await importData({target:{files:[{size:new Blob([text]).size,text:async()=>text}],value:''}});
+ await importData({target:{files:[new File([text],'KhoPhucHoi_'+index+'.json',{type:'application/json'})],value:''}});
 }
