@@ -1,6 +1,6 @@
 (function(root){'use strict';const C=root.TGSyncCore,enc=new TextEncoder(),clone=x=>structuredClone(x),hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
 class SyncEngine{
- constructor({store,api,origin,canApply=()=>true,onApply=()=>{},onStatus=()=>{},fetcher=fetch,cryptoProvider=crypto}){Object.assign(this,{store,api,origin,canApply,onApply,onStatus,fetcher,crypto:cryptoProvider});this.busy=false;}
+ constructor({store,api,origin,canApply=()=>true,onApply=()=>{},onStatus=()=>{},fetcher=(...args)=>fetch(...args),cryptoProvider=crypto}){Object.assign(this,{store,api,origin,canApply,onApply,onStatus,fetcher,crypto:cryptoProvider});this.busy=false;}
  async sha(s){return hex(await this.crypto.subtle.digest('SHA-256',enc.encode(s)))}
  op(changes,meta){return {schemaVersion:1,operationId:this.crypto.randomUUID(),deviceId:meta.deviceId,occurredAt:new Date().toISOString(),changes}}
  projected(meta){const v={...meta.versions};for(const op of meta.outbox)for(const c of op.changes)v[C.key(c.kind,c.id)]=(v[C.key(c.kind,c.id)]||0)+1;return v}
