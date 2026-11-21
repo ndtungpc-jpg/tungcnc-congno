@@ -58,4 +58,5 @@
  window.addEventListener('pageshow',refresh);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
  setTimeout(refresh,2000);
+ setInterval(()=>{if(!document.hidden)refresh();},60000);
 })();
