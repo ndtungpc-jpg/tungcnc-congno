@@ -3,7 +3,7 @@
 (async()=>{
  const api=window.TG_QUOTE_INBOX_API;
  if(!api)return; // No backend: preserve existing transfer and never report a false success.
- const {createQuoteInbox}=await import('../quote-inbox/client.js');
+ const {createQuoteInbox}=await import('./inbox-client.js');
  const inbox=createQuoteInbox(api);
  let busy=false;
  window.startDirectTransfer=async function(){
