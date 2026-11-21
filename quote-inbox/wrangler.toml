@@ -1,0 +1,14 @@
+name = "tungcnc-quote-inbox-staging"
+main = "worker.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-quote-inbox-staging"
+database_id = "4c5f1ba6-592d-43a6-9d7c-b13fe8cd00fa"
+
+# Secrets (configure in Cloudflare, never commit):
+# INBOX_PASSWORD_SHA256 = SHA-256 of one-time initial enrollment password
+# SESSION_SIGNING_KEY = cryptographically random HMAC key
+# Production origins and staging origins must be reviewed before enabling.
