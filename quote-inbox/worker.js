@@ -34,7 +34,7 @@ export default {async fetch(request,env){
    const raw=await request.text();if(raw.length>250000)return out({error:'Payload too large'},413);
    const payload=JSON.parse(raw);const id=payload?.transferId;
    if(typeof id!=='string'||!/^tgq-v1-[a-f0-9]{64}$/.test(id)||!Array.isArray(payload.items)||payload.items.length>500)return out({error:'Invalid quote'},400);
-   const fingerprint=id.slice('tgq-v1-'.length);
+   const canonical=v=>Array.isArray(v)?'['+v.map(canonical).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}':JSON.stringify(v);\n   const fingerprint=await digest(canonical(payload));
    const inserted=await env.DB.prepare('INSERT OR IGNORE INTO quote_inbox(id,payload,fingerprint) VALUES(?,?,?)').bind(id,raw,fingerprint).run();
    if(inserted.meta.changes===0){const existing=await env.DB.prepare('SELECT fingerprint,status FROM quote_inbox WHERE id=?').bind(id).first();if(!existing)return out({error:'Storage conflict'},409);if(existing.fingerprint!==fingerprint)return out({error:'Transfer ID collision'},409);return out({id,status:existing.status,duplicate:true});}
    return out({id,status:'pending',duplicate:false},201);
