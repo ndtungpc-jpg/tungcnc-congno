@@ -46,3 +46,6 @@ Giữ {amount} và {x}/{X}; có thể dùng {customer}, {deadline}. Mỗi mẫu 
 - Thử gửi Báo Giá Nhanh → xem trước → xác nhận tại Công Nợ → máy khác nhận.
 - Lưu/reset từng mẫu nhắc nợ; thử khóa màn hình, chuyển ứng dụng, chia sẻ file.
 Ghi rõ mẫu máy, Chrome, phiên bản Android, kết quả và lỗi; không đánh dấu đạt khi chưa thử.
+
+## Đã xuất nhắc nợ trong 24 giờ
+Nhãn theo từng khách, chung cho tin nhắn và ảnh. Bấm xuất lại sẽ cảnh báo; vẫn có thể tiếp tục. Mở hồ sơ → Lịch sử nhắc nợ / Xác nhận đã gửi để tra cứu hoặc tự xác nhận. Đã xuất chỉ nghĩa clipboard/share sheet/yêu cầu tải xuống đã được tiếp nhận; không chứng minh khách nhận. Khi offline, cảnh báo chỉ dựa trên lịch sử máy biết; đợi Đã đồng bộ trước khi phối hợp nhắc từ hai máy. Hai thao tác đồng thời vẫn có thể xảy ra trước khi dữ liệu kịp lan.

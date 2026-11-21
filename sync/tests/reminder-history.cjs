@@ -1,0 +1,18 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+let now=Date.parse('2026-11-22T09:30:00+07:00'),allow=true,copies=0,shareAbort=false,request=true,failCopy=false;
+class Clock extends Date{constructor(...a){super(...(a.length?a:[now]));}static now(){return now}}
+const state={partners:[{id:'c',name:'Khách giả lập',type:'customer'},{id:'d',name:'Khách khác',type:'customer'}],orders:[{id:'o',partnerId:'c',amount:12500000}],payments:[]};
+const c={Date:Clock,state:structuredClone(state),saving:false,ready:true,structuredClone,console,setInterval(){},id:()=>require('crypto').randomUUID(),esc:String,jsid:String,partner:pid=>c.state.partners.find(p=>p.id===pid),commit:async()=>true,toast(){},alert(){},confirm:()=>allow,document:{querySelectorAll:()=>[],getElementById:()=>({focus(){},select(){}})},reminderDraftContext:{pid:'c'},currentReminderText:async()=> 'Tin nhắc đã sửa',currentReminderAttachment:()=>({name:'x.png'}),customerDetailView:()=>'',modal(){},closeModal(){},navigator:{clipboard:{writeText:async()=>{if(failCopy)throw Error('permission');copies++;}},share:async()=>{if(shareAbort)throw Object.assign(Error('cancel'),{name:'AbortError'})},canShare:()=>true},exportCustomerImage:async()=>{},reportData:()=>({}),reportName:()=> 'x.png',reportPNG:async()=>new Blob(['x']),download:async()=>({requested:request})};
+vm.createContext(c);vm.runInContext(fs.readFileSync(require('path').resolve(__dirname,'../../reminder-history.js'),'utf8'),c);const H=c.TGReminderHistory;
+(async()=>{
+ await c.copyDebtReminder();assert.equal(c.state.reminderEvents.length,1);const first=c.state.reminderEvents[0];assert.equal(first.kind,'export');assert(H.recent(c.state.reminderEvents,'c'));assert(!H.recent(c.state.reminderEvents,'d'));assert(c.reminderStatusBadge('c').includes('Chưa xác nhận'));
+ allow=false;await c.exportCustomerImage('c','debt');assert.equal(c.state.reminderEvents.length,1);await c.copyDebtReminder();assert.equal(copies,1);
+ allow=true;await c.confirmReminderSent('c',first.id);assert.equal(c.state.reminderEvents.length,2);assert.equal(H.latest(c.state.reminderEvents,'c').at,first.at);assert(c.reminderStatusBadge('c').includes('Đã gửi khách'));
+ assert(H.recent(c.state.reminderEvents,'c',Date.parse(first.at)+86400000-1));assert.equal(H.recent(c.state.reminderEvents,'c',Date.parse(first.at)+86400000),null);now+=86400000;assert(!c.reminderStatusBadge('c').includes('Đã xuất'));assert.equal(c.state.reminderEvents.length,2);
+ shareAbort=true;await c.shareDebtReminder();assert.equal(c.state.reminderEvents.length,2);request=false;await c.exportCustomerImage('c','debt');assert.equal(c.state.reminderEvents.length,2);failCopy=true;await c.copyDebtReminder();assert.equal(c.state.reminderEvents.length,2);
+ request=true;await c.exportCustomerImage('c','debt');assert.equal(c.state.reminderEvents.length,3);assert.equal(c.state.reminderEvents.at(-1).type,'statement-png');
+ now+=86400000;allow=false;c.tgSyncReminderHistory=async()=>[{...first,id:'remote',at:new Date(now-1000).toISOString()}];const n=copies;failCopy=false;await c.copyDebtReminder();assert.equal(copies,n);assert.equal(c.state.reminderEvents.length,3);
+ H.validate(c.state.reminderEvents);assert.throws(()=>H.validate([{id:'bad',partnerId:'c',kind:'sent',exportId:'missing',at:first.at}]));
+ assert.deepEqual(c.state.orders,state.orders);assert.deepEqual(c.state.payments,state.payments);assert.deepEqual(c.state.partners,state.partners);
+ console.log('PASS 24h exact expiry/history retained, per customer, repeated warning/override, manual sent distinct, cancelled/failed export not marked, fresh remote warning, original accounting unchanged');
+})().catch(e=>{console.error(e);process.exit(1)});

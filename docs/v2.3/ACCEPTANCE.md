@@ -71,3 +71,14 @@ Bộ hồi quy VM của workspace cũng đã chạy lại cho exporter/receiver/
 - THẤP: chọn loại bỏ bản ghi khỏi kho hoạt động có thể cần phục hồi thủ công; luôn giữ backup trước thao tác, không tự đảo ngược giao dịch đã lan sang máy khác.
 
 Chưa có bằng chứng mất dữ liệu trong kiểm thử tự động đã chạy. Điều này KHÔNG chứng minh tương thích hoàn toàn hoặc an toàn tuyệt đối. Chưa phát hành production.
+
+## Bổ sung: nhắc nợ 24 giờ (22/11/2026)
+- Nhãn Đã xuất nhắc nợ theo khách, tính 24 giờ trượt từ lần xuất gần nhất; hiển thị tại danh sách khách, trung tâm nhắc nợ và hồ sơ. Hết hạn ẩn nhãn khi render hoặc nhịp cập nhật tối đa 60 giây, lịch sử giữ nguyên.
+- Ghi sự kiện khi clipboard thành công, share sheet tiếp nhận nội dung, hoặc trình duyệt được yêu cầu tải PNG sau xác nhận tên file. Không biết file đã lưu thật/khách đã nhận.
+- Hủy chia sẻ/tải file, lỗi clipboard: không ghi Đã xuất. Lỗi lưu lịch sử sau xuất phải báo rõ, không suy ra chưa xuất nội dung.
+- Cảnh báo dùng chung theo khách cho copy/share/PNG, có quyền tiếp tục. Nếu đồng bộ đã bật, đọc snapshot đã xác thực để kiểm tra sự kiện máy khác kể cả khi đang mở biểu mẫu.
+- Đã gửi khách chỉ là xác nhận thủ công, lưu sự kiện riêng tham chiếu lần xuất; không tự suy ra từ share API.
+- reminderEvents được sao lưu/phục hồi thêm thiếu và đồng bộ như bản ghi riêng, không sửa số dư hay giao dịch. Không đổi schema IndexedDB.
+- PASS: node sync/tests/reminder-history.cjs — biên đúng 24 giờ, lịch sử còn, tách khách, cảnh báo và cho vượt, xuất hủy/lỗi không đánh dấu, xác nhận gửi riêng, kiểm tra lịch sử máy khác, dữ liệu kế toán nguyên vẹn.
+- PASS: sync/tests/sync.cjs — hai loại sự kiện lan A/B/C, tổng công nợ không đổi. Bộ kiểm thử hiện đối soát 24 transaction.
+- CHƯA KIỂM THỬ: UI mới trên thiết bị Android/PWA thật. Mất mạng/hai máy xuất đồng thời trước khi sự kiện được gửi không thể bảo đảm cảnh báo tức thời; không có khóa chặn gửi, đúng yêu cầu không chặn tuyệt đối.
