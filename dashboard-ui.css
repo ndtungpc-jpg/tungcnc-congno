@@ -25,3 +25,7 @@ body>header{align-items:center;gap:12px}
  .recent-order{flex-wrap:wrap}.recent-money{flex:1 1 100%;display:flex!important;justify-content:space-between;text-align:left;gap:12px}
 }
 @media(max-width:380px){body>header{flex-wrap:wrap}#headerSync{margin-left:auto}}
+@media(max-width:650px){
+ #content table.reminder-card-table{min-width:0!important;max-width:100%}
+ #content table.reminder-card-table tbody,#content table.reminder-card-table tr{min-width:0;max-width:100%;width:100%}
+}

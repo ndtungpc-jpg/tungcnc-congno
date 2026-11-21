@@ -116,3 +116,9 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Báo giá chờ vẫn có chuông/Hộp thư; khách quá hạn chuyển vào Thêm → Khách quá hạn.
 - PASS TỰ ĐỘNG: dashboard-ui.cjs kiểm tra top5/tạo/sửa, ngày tạo giữ nguyên, thanh toán không đổi thứ tự, mốc fallback không làm đổi nguồn, các trạng thái header (synced/busy/offline/queue/conflict). android-reminder-ui.cjs kiểm tra 4 ô, thẻ gần đây/mở chi tiết, nhãn/route/modal và menu. Các kết quả này chưa thay thế S24 Ultra.
 - Chưa có nghiệm thu Android/PWA vật lý cho r3; kết quả trình duyệt/viewport sẽ bổ sung sau kiểm tra trực tiếp.
+
+### Trình duyệt Edge kết nối / viewport r3
+- Có viewport capability được hỗ trợ; không dùng DevTools bị chặn ở môi trường cũ.
+- Đã kiểm tra chỉ đọc trên dữ liệu sẵn có: viewport 412×915 hiển thị 5 đơn, bốn ô thống kê, ô tổng tiền dài không tràn; chạm đơn mở modal chi tiết.
+- Phát hiện thật: danh sách thẻ vẫn kế thừa min-width 610px của table cũ, gây tràn trang ở 412/360 dù từng số tiền không tràn. Đã sửa min-width:0 riêng bảng thẻ mobile. Không coi DOM test trước đó là bằng chứng layout đạt.
+- Không tạo/sửa/thu thử trên dữ liệu sẵn có của trình duyệt; các tình huống này dùng dữ liệu giả tự động. Online/offline/queue/busy/conflict của renderer đã kiểm tra tự động, chưa kích hoạt đồng bộ hoặc đổi mạng của thiết bị người dùng để thử.
