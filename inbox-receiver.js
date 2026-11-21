@@ -41,7 +41,8 @@
    active=quote.id;
   }catch(err){alert('Không mở được báo giá: '+err.message);}
  }
- // A confirmed local order must remain authoritative even if remote status update fails.\n const originalConfirm=confirmQuoteTransfer;
+ // A confirmed local order must remain authoritative even if remote status update fails.
+ const originalConfirm=confirmQuoteTransfer;
  confirmQuoteTransfer=async function(){
   const id=active;
   await originalConfirm();
