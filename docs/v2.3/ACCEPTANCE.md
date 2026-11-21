@@ -1,38 +1,73 @@
-# v2.3 staging acceptance — 2026-11-21
+# v2.3 — Báo cáo nghiệm thu staging
+Cập nhật: 22/11/2026 (Việt Nam).
 
-Working staging foundation; NOT production approved or fully accepted. PR7 is draft. Main remains e4d6d39b7110f5fc44302aaaac3d26b42cc5f09f. PR6 head 416b4f55eae495db80586f44e7b35213eea55672 inherited without merging production. Concurrent foundation/audit commits preserved; no force push.
+Trạng thái: Đã triển khai bản kỹ thuật để tiếp tục nghiệm thu; CHƯA nghiệm thu production. PR #7 giữ draft. Không merge main. Chỉ dùng dữ liệu giả trên staging.
 
-## Live Chrome tests — synthetic data, three independent origins
+## Mã nguồn và triển khai
+- Bản nền trước đợt này: c21f51a53243cc73c5c4d0668f9cbf1a3b61d94d.
+- Commit tính năng: 44ff8ad68a9440933b3a29c78b8632819116e753. Commit bổ sung cảnh báo/nghiệm thu xem lịch sử file/PR.
+- Kế thừa PR #6, giữ các commit audit đồng thời; không force push.
+- Worker và D1 đồng bộ riêng: tungcnc-sync-v23-staging. Không dùng bảng hộp thư báo giá.
+- Pages A: https://feature-v2-3-sync-foundation.tungcnc-congno.pages.dev/
+- Pages B: https://v23-b-tungcnc.pages.dev/
+- Pages C: https://v23-c-tungcnc.pages.dev/
+- Báo Giá Nhanh preview: https://feature-v2-3-sync-foundation.baogia-tungcnc.pages.dev/
+- Hai production giữ SHA e4d6d39b7110f5fc44302aaaac3d26b42cc5f09f (Công Nợ) và ec021150698753f66e80f59ae2b0ae7bdab45f23 (Báo Giá Nhanh).
 
-- A: https://feature-v2-3-sync-foundation.tungcnc-congno.pages.dev/
-- B: https://v23-b-tungcnc.pages.dev/
-- C: https://v23-c-tungcnc.pages.dev/
-- Separate Worker/D1: tungcnc-sync-v23-staging.
+## Thay đổi đợt này
+- Kho đã có dữ liệu phải đối chiếu/xác nhận trước lần gửi đầu; lưu bản phục hồi trước bật đồng bộ.
+- Snapshot máy chủ được ký/xác thực; xem trước chỉ đọc, so sánh từng ID, phân trang 40 khác biệt.
+- Cùng ID khác nội dung phải chọn Thiết bị/Máy chủ; không chọn theo thời gian. ID khác vẫn riêng biệt.
+- Cảnh báo tên/SĐT/mã đơn/thanh toán nghi trùng; yêu cầu xác nhận đã đối chiếu. Không tự gộp.
+- Trước áp dụng: kiểm tra lại cả dữ liệu cục bộ và snapshot máy chủ, liên kết và số dư. Nếu đã đổi hoặc kết quả không hợp lệ thì chặn.
+- Lưu bản phục hồi gồm dữ liệu, queue và xung đột trước khi thay lựa chọn; ghi main/metadata/queue nguyên tử.
+- Tiếp nhận chỉ thêm mới được chia đợt theo thứ tự đối tác → đơn → nhóm thanh toán → dữ liệu phụ; không tách nhóm thanh toán. Sửa/xóa liên quan giữ một transaction, quá lớn thì chặn.
+- Lưu từng mẫu nhắc nợ độc lập, chuyển nội dung cá nhân hóa về biến trước xác nhận; khôi phục riêng mẫu gốc; đồng bộ qua reminderTemplates, không thay schema IndexedDB.
+- Các tệp chính: sync/reconcile.js, sync/core.js, sync/engine.js, sync/client.js, sync/worker.js, sync/tests/sync.cjs, fixture giả lập, reminder-defaults.js, smart-reminders.js, restore-safe.js, index.html, sw.js và tài liệu.
 
-PASS: A created a 5,000,000 VND order; B/C received it automatically after device approval. B recorded 1,000,000 dated 2026-10-15; A/B/C showed 4,000,000 receivable and 0 received this month. D1 sequence 2, one payment.
+## Bảng kiểm thử
+PASS tự động nghĩa là đã chạy mã thật trong Node/VM, Worker handler, SQLite và fake IndexedDB; KHÔNG có nghĩa đã kiểm thử Android.
 
-PASS: A changed order to 6,000,000 while B retained an older edit form. B saved 7,000,000. Server/C retained accepted A version (5,000,000 receivable). B retained its local version and original payment (6,000,000 receivable), displayed conflict with outbox 1/cursor 2. D1 sequence 3, one payment. No silent overwrite or discarded change.
+| Nội dung | Kết quả | Bằng chứng/phạm vi |
+|---|---|---|
+| Đơn A → B/C, thanh toán B → A/C | PASS | Chrome ba origin độc lập ở bản nền; kiểm thử tự động chạy lại ở bản mới |
+| Kho đã có dữ liệu: bật không tự gửi, xem trước không ghi | PASS | Tự động, dữ liệu giả theo schema cũ |
+| Đối chiếu NCC, phiếu nhập và thanh toán cũ | PASS | 900.000 giá trị, 300.000 đã trả, 600.000 phải trả giữ đúng |
+| Xung đột tiền, chưa chọn bản thì chặn | PASS | Tự động; giữ cả hai bản và queue trong bản phục hồi |
+| Lỗi transaction hoặc snapshot đổi sau xem trước | PASS | Tự động; dữ liệu hiện tại không bị ghi dở |
+| 2.100 bản ghi tiếp nhận theo đợt | PASS | Tự động; mỗi trạng thái trung gian hợp lệ |
+| Offline, khởi động lại engine, mất ACK, gửi lặp | PASS | Tự động, queue bền vững và không trùng |
+| Báo giá trùng trên hai thiết bị | PASS | Chỉ một đơn được máy chủ chấp nhận; bản cục bộ bị từ chối giữ để đối chiếu |
+| Báo Giá Nhanh → xem trước → xác nhận → đồng bộ | PASS tự động từng phần + fixture nối chuỗi | Exporter/receiver thực chạy VM; fixture đơn được chấp nhận đồng bộ B/C đủ 2 hạng mục, vật liệu, kích thước và tổng 4.301.000; chưa phải luồng live Cloudflare hoàn chỉnh |
+| Lưu/reset mẫu nhắc nợ và biến tự động | PASS | Tự động, từng mẫu riêng, số dư và mẫu khác giữ nguyên |
+| Thanh toán nghi trùng khác ID | PASS | Chặn tiếp nhận nếu chưa xác nhận đối chiếu; loại bản nghi trùng phải chọn rõ, bản gốc vẫn trong backup |
+| Chữ ký, phát lại request, thu hồi thiết bị | PASS | Tự động; thu hồi chặn gửi, local/queue giữ nguyên |
+| Phục hồi vào kho thử nghiệm riêng | PASS | Tự động, bản ghi và số dư khớp |
+| Nhập nhanh/chi tiết, sửa kích thước, lịch sử thanh toán | PASS | Hồi quy VM mã hiện tại, không phải thiết bị vật lý |
+| PDF/PNG/Excel chi tiết, sao lưu/phục hồi thêm thiếu | PASS phạm vi hồi quy | Mã hiện tại; chưa kiểm thử mọi biến thể Excel và chia sẻ file Android |
+| Kiểm tra toàn vẹn chỉ đọc | PASS | 5 bài audit + hồi quy giao diện giả lập |
+| Giao diện đối chiếu mới trên Chrome | CHƯA KIỂM THỬ | Công cụ quan sát trình duyệt bị xét duyệt tự động chặn do hạn mức; không dùng đường vòng |
+| Android/PWA thật, khóa màn hình, chuyển ứng dụng | CHƯA KIỂM THỬ | Không có thiết bị vật lý kết nối |
+| Sao lưu thực tế từ những phiên bản đầu | CHƯA KIỂM THỬ | Chưa có bản ẩn thông tin; dữ liệu giả không thay thế bằng chứng này |
+| Liên thông live Cloudflare toàn chuỗi ở bản mới | CHƯA KIỂM THỬ | Kiểm thử tự động không thay thế live end-to-end |
 
-PASS: A retained queued order/device identity across reload after native-fetch fix, then uploaded successfully.
+## Đối soát và an toàn
+Bộ đồng bộ tự động: 22 transaction được máy chủ chấp nhận, số receipt/log khớp sequence. Mọi bộ dữ liệu đều giả lập. Kiểm tra số dư từng đơn/khách, phải trả NCC và ngày thu cũ; khoản tháng trước không tính vào thu tháng hiện tại ở hồi quy dashboard. Nhập lại/retry không tạo thêm khoản thu.
 
-## Automated tests
+Schema IndexedDB vẫn version 1, store state, main giữ nguyên; bổ sung metadata key tg-sync-v23. Không truy cập dữ liệu business production, không reset IndexedDB/localStorage, không tự chuyển đổi hay ghi đè lịch sử. Private key không xuất trong business JSON. Dữ liệu trên Cloudflare không được mã hóa đầu cuối; file backup JSON đọc được bởi người có file.
 
-Actual Worker handler, transactional SQLite, WebCrypto and three independent fake IndexedDB stores. PASS: pending approval; nonextractable keys; initial backup; full nested order/material/dimensions; backdated payment; lost ACK and repeated push; offline create/restart/reconnect; failed pull transaction preserving main/cursor; deferred apply status; concurrent monetary edits retaining both versions; global quote uniqueness; signed replay denial; revoked device blocked while local queue retained; independent backup restore; log/sequence reconciliation (6 commits).
+## Tái chạy
+Node 24+, cài dependencies trong sync/package.json:
+- node sync/tests/sync.cjs
+- node --test docs/v2.3/debt-integrity-audit.test.mjs
+Bộ hồi quy VM của workspace cũng đã chạy lại cho exporter/receiver/inbox, phân bổ thu tiền, báo cáo, phục hồi, dashboard và đơn chi tiết; không coi đây là kiểm thử trình duyệt thật.
 
-Five debt audit tests PASS: totals, duplicate IDs/quotes, orphan payment, cancelled paid order, overpayment/invalid money and read-only behavior.
+## Rủi ro và quyết định trước production
+- CAO: chưa nghiệm thu UI đối chiếu trên trình duyệt và Android/PWA thật; chưa có dữ liệu lịch sử đã ẩn thông tin.
+- TRUNG BÌNH: backup/nonce/operation log chưa có chính sách lưu trữ lâu dài; bản phục hồi trên máy có thể tăng dung lượng. Không tự xóa backup/receipt để tiết kiệm.
+- TRUNG BÌNH: mỗi lần sửa/xóa tài chính liên quan quá 2.000 thay đổi hoặc 900 KB sẽ chặn; không chia nhỏ tùy tiện. Kho Cloud staging giới hạn 5 MB.
+- TRUNG BÌNH: duyệt thiết bị còn qua Cloudflare D1, không có wizard đăng nhập cá nhân; phải đối chiếu đúng mã. Các thiết bị staging được duyệt dùng chung một không gian thử nghiệm.
+- TRUNG BÌNH: rủi ro XSS cùng origin và người có quyền vào thiết bị/file backup; nonextractable key không ngăn mã độc gọi ký trong trình duyệt đang bị xâm nhập.
+- THẤP: chọn loại bỏ bản ghi khỏi kho hoạt động có thể cần phục hồi thủ công; luôn giữ backup trước thao tác, không tự đảo ngược giao dịch đã lan sang máy khác.
 
-Run with Node 24+ and sync/package.json dependencies: `node sync/tests/sync.cjs`; `node --test docs/v2.3/debt-integrity-audit.test.mjs`.
-
-## Fixes
-
-- Wrapped native fetch to prevent browser Illegal invocation.
-- Deferred remote apply now reports waiting instead of incorrectly reporting synced.
-- Dialog counters identified as snapshot at opening.
-
-## Safety and unfinished acceptance
-
-Accounting IndexedDB name/version/store unchanged. Atomic main+outbox/main+cursor and stale-write checks. Production data not accessed, reset, migrated or overwritten. New metadata key holds backups and nonextractable device keys; business exports exclude keys. Cloud business data is plaintext behind authenticated signed TLS requests, not end-to-end encrypted.
-
-CHUA KIEM THU: physical Android/PWA lifecycle/install/lock-screen; real anonymized historical backups; full inherited business regression; live quote inbox end-to-end on this v2.3 build. Three browser origins are not three physical devices. Offline/revoke/restore fault cases are automated, not all live browser.
-
-Production blockers: conflict adjudication UI (currently block/export both); onboarding multiple already populated devices (conservative conflict, no automatic merge); backup/nonce/log retention; large initial-data chunking; security review and real-device acceptance. Snapshot limit 5MB, push 1MB/2000 changes: excess rejects with queue intact. No production release.
+Chưa có bằng chứng mất dữ liệu trong kiểm thử tự động đã chạy. Điều này KHÔNG chứng minh tương thích hoàn toàn hoặc an toàn tuyệt đối. Chưa phát hành production.
