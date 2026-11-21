@@ -46,7 +46,7 @@
  confirmQuoteTransfer=async function(){
   const id=active;
   await originalConfirm();
-  if(id&&committed.orders.some(o=>o.quoteTransferId===id)){
+  if(id&&state.orders.some(o=>o.quoteTransferId===id)){
    active=null;
    try{await inbox.markImported(id);}catch(err){console.warn('Đơn đã lưu cục bộ nhưng chưa đánh dấu trên máy chủ',err);alert('Đơn đã lưu. Hộp thư chưa cập nhật trạng thái, hãy kiểm tra lại.');}
    await refresh();
