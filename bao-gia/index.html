@@ -172,5 +172,5 @@ window.addEventListener('message',e=>{
  if(m.type==='cancelled'){directSendStatus('Đã hủy xem trước. Chưa xác nhận tạo đơn.');endDirectSession(s);return;}
  if(m.type==='error'){directSendStatus('Công Nợ chưa xác nhận lưu: '+String(m.message||'Lỗi kết nối').slice(0,300));endDirectSession(s);}
 });
-</script><script defer src="./inbox-sender.js"></script><script>if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(e=>console.warn('PWA registration',e));</script></body></html>
+</script><script>if(window.TG_QUOTE_INBOX_API)window.startDirectTransfer=()=>directSendStatus('Hộp thư đang khởi động. Chưa gửi báo giá; hãy thử lại sau.');</script><script defer src="./inbox-sender.js"></script><script>if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(e=>console.warn('PWA registration',e));</script></body></html>
 
