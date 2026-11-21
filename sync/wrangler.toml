@@ -1,0 +1,9 @@
+name = "tungcnc-sync-v23-staging"
+main = "worker.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-sync-v23-staging"
+database_id = "49163cc1-a60d-49b1-9c93-da7a6f939977"
+# No shared password or server signing secret. Each device signs its own requests.
