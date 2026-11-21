@@ -140,3 +140,12 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Chạy lại sync.cjs: 24 transaction đối soát; audit 5/5; các bài nhắc nợ/cảnh báo được giữ.
 - docs/v2.3/ui-r4-readonly.html là trang QA với dữ liệu giả chỉ trong RAM, không gọi init IndexedDB/Worker, commit/save bị chặn. Không phải dữ liệu thật hay seed của ứng dụng. Dùng để kiểm tra hình ảnh/danh sách, không dùng nghiệm thu lưu/sync.
 - Chưa nghiệm thu S24 Ultra vật lý. Bằng chứng trình duyệt và ảnh sau triển khai được cập nhật riêng khi thực hiện.
+
+### UI-R4 — bằng chứng staging ngày 22/11/2026
+- Commit giao diện 4deaeb99bc5022195046bab4fc59b2f40c457ba1; sửa đường dẫn trang QA ở 760c00ccfcfb8c20900099d96f4de0ca6d7d64ae. Chính sách base-uri chặn thẻ base: trang QA chuyển sang đường dẫn tài nguyên tuyệt đối, không nới CSP.
+- Cloudflare Preview đã success: https://d95057ef.tungcnc-congno.pages.dev/ . Trang chụp kiểm thử https://d95057ef.tungcnc-congno.pages.dev/docs/v2.3/ui-r4-readonly (dữ liệu giả RAM; không lưu/sync).
+- PASS TRÌNH DUYỆT DESKTOP: Tổng quan 4 ô/top5; danh sách khách 4 bản ghi; sắp xếp công nợ cao-thấp; lọc quá hạn còn 3; kết hợp tìm không dấu `dung` còn 1; Xóa bộ lọc trả 4. Nhắc nợ Tất cả (4) / Quá hạn (3) chuyển đúng. Số tiền 995.304.321đ và tên dài hiển thị trên desktop; có ảnh Tổng quan và tab Quá hạn sau triển khai.
+- npm test chạy lại toàn bộ 6 bộ: sync (24 atomic commits), reminder-history, android-reminder-ui, dashboard-ui, ui-r4 (1200 dòng), ui-r4-dom đều PASS tự động. Không coi DOM test là nghiệm thu thiết bị.
+- CHƯA KIỂM THỬ trong UI-R4: viewport render thực 360px/412px (công cụ viewport hiện không khả dụng), Samsung S24 Ultra vật lý, PWA offline/update/share sheet; trạng thái engine online/busy/queue/conflict qua mạng thật. Các trạng thái renderer/engine đạt tự động, browser QA chỉ hiển thị Chưa kết nối đúng thực tế.
+- CHƯA XÁC MINH toàn bộ dữ liệu lịch sử từ phiên bản đầu bằng bản sao của chủ xưởng. Không truy cập/sửa dữ liệu kinh doanh thật để chụp ảnh. Không thay đổi schema, API đồng bộ, Worker hoặc D1. Chưa đủ bằng chứng để coi UI-R4 đã nghiệm thu Android hoàn toàn.
+- PR #7 giữ draft; không merge main/production. Cần chủ xưởng nghiệm thu lại Android trước phát hành.
