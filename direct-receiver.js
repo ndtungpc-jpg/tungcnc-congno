@@ -25,6 +25,16 @@ window.addEventListener('message',async e=>{
 });
 const directOriginalConfirm=confirmQuoteTransfer;
 confirmQuoteTransfer=async function(){const c=directConnection;if(!c||pendingQuoteTransfer?.data.transferId!==c.transferId)return directOriginalConfirm();directConfirming=true;try{await directOriginalConfirm();const order=committed.orders.find(o=>o.quoteTransferId===c.transferId);if(order){directReply(c,'saved',{transferId:c.transferId,orderId:order.id});directConnection=null;}else directReply(c,'error',{message:'Chưa lưu được đơn. Hãy kiểm tra lỗi tại Công Nợ.'});}finally{directConfirming=false;}};
+const directOriginalQueue=queuePendingQuoteTransfer;
+queuePendingQuoteTransfer=async function(){
+ const c=directConnection;if(!c||pendingQuoteTransfer?.data.transferId!==c.transferId)return directOriginalQueue();
+ directConfirming=true;
+ try{
+  const saved=await directOriginalQueue();
+  if(saved){directReply(c,'queued',{transferId:c.transferId});directConnection=null;}
+  return saved;
+ }finally{directConfirming=false;}
+};
 const directOriginalClose=closeModal;
 closeModal=function(...args){const result=directOriginalClose(...args);if(result!==false&&!directConfirming&&directConnection){directReply(directConnection,'cancelled',{transferId:directConnection.transferId});directConnection=null;pendingQuoteTransfer=null;}return result;};
 setInterval(directHello,500);window.addEventListener('load',directHello);window.addEventListener('pagehide',()=>{if(directConnection&&!directConfirming)directReply(directConnection,'cancelled',{transferId:directConnection.transferId});});
