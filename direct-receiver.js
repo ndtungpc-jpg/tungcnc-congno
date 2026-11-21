@@ -4,7 +4,7 @@ const TG_DIRECT_SENDERS=[location.origin,'https://test-direct-quote-bridge.tungc
 let directConnection=null,directConfirming=false;
 const receiverNonce=tgNonce(),directOpenedAt=Date.now();
 function directReply(connection,type,extra={}){try{connection.source.postMessage({protocol:TG_DIRECT_PROTOCOL,type,receiverNonce,sourceNonce:connection.sourceNonce,...extra},connection.origin);}catch{}}
-function directHello(){if(!window.opener||directConnection||Date.now()-directOpenedAt>60000)return;for(const origin of TG_DIRECT_SENDERS)if(origin.startsWith('https://')){try{window.opener.postMessage({protocol:TG_DIRECT_PROTOCOL,type:'hello',receiverNonce},origin);}catch{}}}
+function directHello(){if(!ready||saving)return;if(!window.opener||directConnection||Date.now()-directOpenedAt>60000)return;for(const origin of TG_DIRECT_SENDERS)if(origin.startsWith('https://')){try{window.opener.postMessage({protocol:TG_DIRECT_PROTOCOL,type:'hello',receiverNonce},origin);}catch{}}}
 window.addEventListener('message',async e=>{
  if(e.source!==window.opener||!TG_DIRECT_SENDERS.includes(e.origin)||!e.origin.startsWith('https://')||!tgMessageSafe(e.data))return;
  const m=e.data;if(m.type!=='quote'||m.receiverNonce!==receiverNonce||!/^\w{48}$/.test(m.sourceNonce||'')||directConnection)return;
