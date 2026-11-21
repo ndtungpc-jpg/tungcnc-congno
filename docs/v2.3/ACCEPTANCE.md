@@ -96,3 +96,14 @@ Bản trước 9574fb7 không đạt nghiệm thu Android ở bốn điểm dư�
 Thay đổi vị trí launcher không thay engine, queue, protocol, schema hoặc phép tính công nợ. Chỉ thêm loại sự kiện orders-png cho ảnh thống kê, dùng cùng lịch sử theo khách. Tăng SW cache và version staging thành 2.3.0-staging-android-r2 để nhận diện bản mới.
 
 Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM tự động, không layout thật); node sync/tests/reminder-history.cjs; node sync/tests/sync.cjs. Không tuyên bố bốn lỗi đã PASS nghiệm thu vật lý cho tới khi chủ xưởng thử lại trên S24 Ultra.
+
+### Bằng chứng Chromium trực tiếp sau triển khai android-r2
+- Đã mở staging A trên Chromium thật, tải lại/cập nhật giao diện. Nút Đồng bộ và Hộp thư Cloud không còn ở body overlay; trong Thêm, computed position của cả hai là static và parent là cloudToolsMenu.
+- Đã sao chép một tin nhắc cho KH giả lập đồng bộ v2.3; dư nợ trước/sau vẫn 5.000.000. Chỉ thêm sự kiện nhắc nợ, không tạo/sửa đơn hoặc khoản thu.
+- Đã quan sát nhãn ở chi tiết, danh sách Khách hàng, tìm kiếm “giả lập” và danh sách khách còn nợ mở từ Tổng phải thu. Computed font 15px, nền rgb(23,59,80), chữ rgb(255,243,196); nhãn có thời gian gần nhất.
+- Đã mở cảnh báo thật khi bấm Sao chép lần hai; Hủy / Vẫn nhắc lại hiển thị, focus mặc định Hủy. Đã bấm Hủy.
+- Đã mở cảnh báo thật trước PNG Bảng đối chiếu công nợ và PNG Bảng thống kê đơn hàng; Hủy quay về báo cáo, chưa mở bước đặt tên/tải file.
+- Đã mở modal Đồng bộ, các thao tác còn hiển thị và không có launcher nổi che. Chưa tạo thêm xung đột tiền mới chỉ để kiểm tra giao diện.
+- Có lỗi CAS tạm thời “Dữ liệu/đồng bộ đã thay đổi; thử lại”, queue 0. Bấm Thử đồng bộ lại đưa về Đã đồng bộ; không sửa engine để che lỗi.
+- Mô phỏng Android qua DevTools bị chính sách môi trường chặn (“DevTools not allowed on this page”). Không tìm cách vượt chính sách. Viewport Android, keyboard/share sheet và modal xung đột trên S24 Ultra: CHƯA KIỂM CHỨNG.
+- Kết quả desktop không thay thế nghiệm thu Android của chủ xưởng. Các luồng overdue có khách được đánh dấu, share/attachment và thao tác Vẫn nhắc lại đã kiểm tra bằng DOM tự động; chưa chạy đầy đủ tất cả các trường hợp này trên trình duyệt thật trong đợt này.
