@@ -1,7 +1,7 @@
 from pathlib import Path
 import re,base64,sys
 root=Path(__file__).resolve().parents[1]
-output=Path(sys.argv[1]) if len(sys.argv)>1 else root/'TungGiang_CongNo_v2.1.10_OFFLINE.html'
+output=Path(sys.argv[1]) if len(sys.argv)>1 else root/'TungGiang_CongNo_v2.1.11_OFFLINE.html'
 html=(root/'index.html').read_text()
 def inline(m):
  code=(root/m.group(1).removeprefix('./')).read_text()
@@ -24,7 +24,7 @@ html=re.sub(r'<link rel="manifest"[^>]+>','',html)
 for name in ['icon-192.png','icon-512.png','icon-maskable-512.png']:
  data='data:image/png;base64,'+base64.b64encode((root/'icons'/name).read_bytes()).decode()
  html=html.replace('./icons/'+name,data)
-html=html.replace('Sổ công nợ · 2.1.10','OFFLINE THỬ NGHIỆM 2.1.10 · Kho riêng')
+html=html.replace('Sổ công nợ · 2.1.11','OFFLINE THỬ NGHIỆM 2.1.11 · Kho riêng')
 html=html.replace('<main class="wrap">','<main class="wrap"><p class="warn">Bản HTML offline dùng kho thử nghiệm riêng, không đồng bộ website. Sao lưu JSON trước khi đổi tên, di chuyển file hoặc đổi trình duyệt. File:// có thể hạn chế lưu bền vững, chia sẻ, tải file, WebCrypto và PWA; khi lỗi lưu, không tiếp tục nhập dữ liệu thật.</p>')
 assert '<script src=' not in html and 'navigator.serviceWorker.register' not in html
 assert "DBNAME='tunggiang-congno-v2'" not in html
