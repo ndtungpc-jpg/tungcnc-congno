@@ -1,6 +1,6 @@
 // Quote inbox API: dedicated D1 database, no mutation of accounting IndexedDB.
 // Required bindings: DB (D1), INBOX_PASSWORD_SHA256 (secret), SESSION_SIGNING_KEY (secret).
-const ORIGINS = new Set(['https://baogia-tungcnc.pages.dev','https://tungcnc-congno.pages.dev','https://test-direct-quote-bridge.tungcnc-congno.pages.dev']);
+const ORIGINS = new Set(['https://baogia-tungcnc.pages.dev','https://tungcnc-congno.pages.dev','https://test-direct-quote-bridge.tungcnc-congno.pages.dev','https://feature-quote-inbox-async-20.tungcnc-congno.pages.dev','https://feature-quote-inbox-async-20.baogia-tungcnc.pages.dev']);
 const enc = new TextEncoder();
 function hex(bytes){return [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function digest(value){return hex(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(value))));}
