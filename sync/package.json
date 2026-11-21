@@ -1,0 +1,1 @@
+{"name":"tungcnc-sync-v23-staging","private":true,"scripts":{"test":"node tests/sync.cjs"},"devDependencies":{"fake-indexeddb":"6.2.8"},"engines":{"node":">=24"}}
