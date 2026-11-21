@@ -142,6 +142,7 @@ function tab(t){current=t;selectedCustomer=null;filter='';document.querySelector
 function table(head,rows){return `<div class="tablewrap"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${head.length}" class="empty">Chưa có dữ liệu</td></tr>`}</tbody></table></div>`}
 function render(){const notice=document.getElementById('storageNotice');if(recordCount(state)&&notice?.textContent.startsWith('Kho hiện tại chưa có bản ghi.'))notice.style.display='none';updateQuoteInboxBadge();let html='';if(current==='quote-inbox')html=quoteInboxView();if(current==='debt-center')html=debtCenterView();if(current==='recovery-search')html=recoverySearchView();if(current==='trash')html=trashView();if(current==='audit')html=auditView();if(current==='dashboard'){
 const receivable=total('customer'),payable=total('supplier'),
+ customersToCollect=state.partners.filter(p=>p.type==='customer'&&state.orders.filter(o=>o.partnerId===p.id).reduce((a,o)=>a+balance(o),0)>0).length,
  overdueOrders=state.orders.filter(o=>partner(o.partnerId)?.type==='customer'&&due(o)),
  overdue=overdueOrders.reduce((a,o)=>a+balance(o),0),
  overdueCustomers=new Set(overdueOrders.map(o=>o.partnerId)).size,
@@ -150,10 +151,10 @@ const receivable=total('customer'),payable=total('supplier'),
 html=`<div class="pilot-dashboard">
  <div class="pilot-heading"><div><h2>Tổng quan công nợ</h2><p class="muted">Thông tin cập nhật trên thiết bị này</p></div><button class="pilot-bell" onclick="tab('quote-inbox')" aria-label="Báo giá chờ">${lucideIcon('bell')} <span id="quoteInboxCount" aria-live="polite">${inboxCount===null?'!':inboxCount||''}</span></button></div>
  <div class="grid pilot-stats">
-  <button class="stat clickable" onclick="tab('collections')"><span>Còn phải thu ›</span><strong>${money(receivable)}</strong></button>
-  <button class="stat clickable" onclick="tab('received-month')"><span>Đã thu tháng này ›</span><strong>${money(received)}</strong></button>
-  <button class="stat clickable" onclick="tab('overdue')"><span>Quá hạn ›</span><strong class="red">${money(overdue)}</strong></button>
-  <button class="stat clickable" onclick="tab('supplier-debts')"><span>Phải trả NCC ›</span><strong>${money(payable)}</strong></button>
+  <button class="stat clickable" onclick="tab('collections')"><span>Tổng phải thu</span><strong>${money(receivable)}</strong></button>
+  <button class="stat clickable" onclick="tab('collections')"><span>Khách cần thu nợ</span><strong>${customersToCollect}</strong></button>
+  <button class="stat clickable" onclick="tab('received-month')"><span>Đã thu tháng này</span><strong>${money(received)}</strong></button>
+  <button class="stat clickable" onclick="tab('supplier-debts')"><span>Nợ nhà cung cấp</span><strong>${money(payable)}</strong></button>
  </div>
  <div class="panel pilot-todo"><h2>Cần xử lý</h2>
   <button class="pilot-todo-row" onclick="tab('quote-inbox')"><span>${lucideIcon('file-text')}</span><span><b>Báo giá chờ tiếp nhận</b><small>Xem và xác nhận báo giá mới</small></span><strong id="pilotQuoteTodo">${inboxCount===null?'Lỗi':inboxCount}</strong></button>
