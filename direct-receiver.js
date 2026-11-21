@@ -15,7 +15,7 @@ window.addEventListener('message',async e=>{
   const digest=await tgQuoteDigest(m.payload);if(m.payload.transferId!=='tgq-v1-'+digest)throw Error('Mã chuyển không khớp dấu vân tay nội dung');
   const data=validateQuoteTransfer(m.payload),fp=await quoteFingerprint(data);
   const old=committed.orders.find(o=>o.quoteTransferId===data.transferId||o.quoteDirectFingerprint===digest||(data.source.quoteCode&&normalizeName(o.quoteSourceCode)===normalizeName(data.source.quoteCode)));
-  if(old){directReply(c,'duplicate',{transferId:data.transferId,orderId:old.id});directConnection=null;return;}
+  if(old){directReply(c,'duplicate',{transferId:data.transferId,orderId:old.id});directConnection=null;alert('Báo giá này đã được nhập vào Công Nợ. Không tạo thêm đơn trùng. Vui lòng mở đơn đã có để đối chiếu.');return;}
   // File is an in-memory adapter; no JSON download, inbox write or accounting write.
   if(directConnection!==c||pendingQuoteTransfer||document.querySelector('#modal.open'))throw Error('Biểu mẫu đã thay đổi trong khi kết nối. Hãy chuyển lại.');
   await previewQuoteTransfer({target:{files:[new File([JSON.stringify(m.payload)],'direct-quote.json',{type:'application/json'})],value:''}});
