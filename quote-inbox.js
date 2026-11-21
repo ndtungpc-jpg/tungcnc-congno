@@ -67,7 +67,7 @@ async function restoreQuoteInbox(backup){
 }
 window.addEventListener('storage',e=>{if(e.key===QUOTE_INBOX_KEY&&ready){updateQuoteInboxBadge();if(current==='quote-inbox')render()}});
 function formQuickOrder(){
- modal('Tạo đơn nhanh',`<form onsubmit="submitQuickOrder(event)"><div class="fields"><label class="field wide">Tên khách hàng<input name="customerName" id="quickCustomer" required oninput="suggestPartners('quickCustomer','quickSuggest','customer')"><span id="quickSuggest" class="suggest"></span></label><label class="field wide">Nội dung<input name="title" required></label><label class="field">Số tiền (VNĐ)<input name="amount" type="number" min="0" step="1" required></label></div><p class="hint">Tự ghi ngày hôm nay; có thể sửa đơn hoặc ghi nhận thu tiền sau.</p>${foot()}</form>`);
+ modal('Tạo đơn nhanh',`<form onsubmit="submitQuickOrder(event)"><div class="fields"><label class="field wide">Tên khách hàng<input name="customerName" id="quickCustomer" required oninput="suggestPartners('quickCustomer','quickSuggest','customer')"><span id="quickSuggest" class="suggest"></span></label><label class="field wide">Nội dung<input name="title" required></label><label class="field">Số tiền (VNĐ)<input data-money name="amount" type="number" min="0" step="1" required></label></div><p class="hint">Tự ghi ngày hôm nay; có thể sửa đơn hoặc ghi nhận thu tiền sau.</p>${foot()}</form>`);
 }
 async function submitQuickOrder(e){
  e.preventDefault();if(!ready||saving)return;const before=structuredClone(state);
