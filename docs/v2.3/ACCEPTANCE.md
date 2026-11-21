@@ -107,3 +107,12 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Có lỗi CAS tạm thời “Dữ liệu/đồng bộ đã thay đổi; thử lại”, queue 0. Bấm Thử đồng bộ lại đưa về Đã đồng bộ; không sửa engine để che lỗi.
 - Mô phỏng Android qua DevTools bị chính sách môi trường chặn (“DevTools not allowed on this page”). Không tìm cách vượt chính sách. Viewport Android, keyboard/share sheet và modal xung đột trên S24 Ultra: CHƯA KIỂM CHỨNG.
 - Kết quả desktop không thay thế nghiệm thu Android của chủ xưởng. Các luồng overdue có khách được đánh dấu, share/attachment và thao tác Vẫn nhắc lại đã kiểm tra bằng DOM tự động; chưa chạy đầy đủ tất cả các trường hợp này trên trình duyệt thật trong đợt này.
+
+## Tổng quan / nhãn gọn / trạng thái header — dashboard-r3
+- Header đồng bộ là nút normal-flow, dùng callback onStatus và metadata/outbox thật của engine; có chữ, tooltip, aria-label và số thao tác. Offline chỉ đổi cách hiển thị; không sửa protocol hoặc queue. Quản lý thiết bị/Hộp thư Cloud vẫn tại Thêm.
+- Đơn hàng gần đây: 5 đơn khách, sắp theo updatedAt/createdAt và nhật ký orders thực (create/update/cancel/restore). Không dùng thời gian nhận sync/reload; không dùng nhật ký payments để đẩy đơn lên. Tiền còn nợ vẫn dùng balance hiện có, đơn hủy hiển thị 0 và dấu Đã hủy.
+- Dữ liệu cũ chỉ có created dạng ngày: dùng ngày để xếp, ghi rõ chưa có giờ; không bổ sung hay ghi đè thời gian gốc. Trường hợp không có mốc nào ghi Chưa có thời gian cập nhật. Bốn ô công nợ giữ nguyên.
+- Nhãn gọn Đã nhắc · HH:mm, chạm mở lịch sử đầy đủ/đã gửi; cảnh báo 24h không đổi. Bảng có danh sách khách chuyển dạng thẻ ở <=650px, số tiền không cắt bằng ellipsis.
+- Báo giá chờ vẫn có chuông/Hộp thư; khách quá hạn chuyển vào Thêm → Khách quá hạn.
+- PASS TỰ ĐỘNG: dashboard-ui.cjs kiểm tra top5/tạo/sửa, ngày tạo giữ nguyên, thanh toán không đổi thứ tự, mốc fallback không làm đổi nguồn, các trạng thái header (synced/busy/offline/queue/conflict). android-reminder-ui.cjs kiểm tra 4 ô, thẻ gần đây/mở chi tiết, nhãn/route/modal và menu. Các kết quả này chưa thay thế S24 Ultra.
+- Chưa có nghiệm thu Android/PWA vật lý cho r3; kết quả trình duyệt/viewport sẽ bổ sung sau kiểm tra trực tiếp.
