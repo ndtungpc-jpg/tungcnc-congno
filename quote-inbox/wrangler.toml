@@ -1,0 +1,12 @@
+name = "tungcnc-quote-inbox-staging"
+main = "worker.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-quote-inbox-staging"
+database_id = "4c5f1ba6-592d-43a6-9d7c-b13fe8cd00fa"
+
+# Device credentials are generated on devices; approval/revocation is in staging D1.
+# No shared password or signing key required. Do not bind production resources.

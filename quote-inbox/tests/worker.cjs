@@ -1,0 +1,25 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),{DatabaseSync}=require('node:sqlite');
+const db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('quote-inbox/schema.sql','utf8'));db.exec(fs.readFileSync('quote-inbox/schema-device.sql','utf8'));
+const DB={prepare(sql){return {bind(...p){return {async first(){return db.prepare(sql).get(...p)||null},async all(){return {results:db.prepare(sql).all(...p)}},async run(){return {meta:{changes:Number(db.prepare(sql).run(...p).changes)}}}}},async all(){return {results:db.prepare(sql).all()}}}}};
+const ctx={crypto:require('crypto').webcrypto,TextEncoder,URL,Response,Set,Date};vm.createContext(ctx);vm.runInContext(fs.readFileSync('quote-inbox/worker.js','utf8').replace('export default','globalThis.worker='),ctx);const worker=ctx.worker;
+const sendOrigin='https://feature-quote-inbox-async-20.baogia-tungcnc.pages.dev',recvOrigin='https://feature-quote-inbox-async-20.tungcnc-congno.pages.dev';const tokens=Array.from({length:3},()=>require('crypto').randomBytes(32).toString('hex'));
+async function call(path,method='GET',body,token,origin=recvOrigin){const r=await worker.fetch(new Request('https://test'+path,{method,headers:{Origin:origin,...(token?{Authorization:'Bearer '+token}:{})},body:body===undefined?undefined:JSON.stringify(body)}),{DB});return {status:r.status,data:await r.json()}}
+const quote=()=>({format:'tungcnc-quote-to-debt',schemaVersion:1,source:{app:'BaoGiaNhanh',quoteCode:'BG-ASYNC-TEST',quoteDate:'2026-11-21'},customer:{name:'Khách giả lập',phone:'0900000001'},items:[{name:'Vách',type:'m2',core:'MDF',finish:'Veneer Gõ',unit:'m²',quantity:2,unitPrice:500000,amount:1000000,sizes:[{widthMm:1000,heightMm:2000,count:1,description:''}]}],totals:{subtotal:1000000,discount:100000,shipping:50000,vatPercent:10,vatAmount:95000,grandTotal:1045000},note:''});
+async function hash(q){q.transferId='tgq-v1-'+await vm.runInContext('digest',ctx)(vm.runInContext('canonical',ctx)({source:q.source,customer:q.customer,items:q.items,totals:q.totals,note:q.note}));return q}
+(async()=>{
+assert.equal((await call('/api/quotes')).status,401);assert.equal((await call('/api/quotes','GET',undefined,undefined,'https://evil.example')).status,403);
+for(let i=0;i<3;i++){const origin=i?recvOrigin:sendOrigin;let r=await call('/api/devices/register','POST',{token:tokens[i],label:'Synthetic '+i},null,origin);assert.equal(r.status,201);assert.equal((await call('/api/quotes','GET',undefined,tokens[i],origin)).status,403);db.prepare("UPDATE inbox_devices SET status='approved' WHERE id=?").run(r.data.id)}
+console.log('PASS pending enrollment blocked, explicit approval, role and origin isolation');
+let q=await hash(quote());assert.equal((await call('/api/quotes','POST',q,tokens[0],sendOrigin)).status,201);assert.equal((await call('/api/quotes','POST',q,tokens[0],sendOrigin)).data.duplicate,true);assert.equal(db.prepare('SELECT count(*) n FROM quote_inbox').get().n,1);
+assert.equal((await call('/api/quotes','POST',q,tokens[1])).status,403);assert.equal((await call('/api/quotes','GET',undefined,tokens[0],sendOrigin)).status,403);assert.equal((await call('/api/quotes','GET',undefined,tokens[1],sendOrigin)).status,401);
+let invalid=structuredClone(q);invalid.totals.grandTotal=1;await hash(invalid);assert.equal((await call('/api/quotes','POST',invalid,tokens[0],sendOrigin)).status,400);
+invalid=structuredClone(q);invalid.items[0].sizes[0].widthMm=3;await hash(invalid);assert.equal((await call('/api/quotes','POST',invalid,tokens[0],sendOrigin)).status,400);console.log('PASS full detail/totals, content fingerprint, repeated send and malformed amount/dimensions');
+assert.equal((await call('/api/quotes/'+q.transferId,'PATCH',{status:'imported',orderId:'o'},tokens[1])).status,409);
+const claims=await Promise.all([call('/api/quotes/'+q.transferId+'/claim','POST',{},tokens[1]),call('/api/quotes/'+q.transferId+'/claim','POST',{},tokens[2])]);assert.equal(claims.filter(r=>r.status===200).length,1);assert.equal(claims.filter(r=>r.status===409).length,1);
+assert.equal((await call('/api/quotes/'+q.transferId,'PATCH',{status:'dismissed'},tokens[2])).status,409);
+assert.equal((await call('/api/quotes/'+q.transferId+'/claim','POST',{},tokens[1])).status,200);
+assert.equal((await call('/api/quotes/'+q.transferId,'PATCH',{status:'imported',orderId:'o'},tokens[1])).status,200);assert.equal((await call('/api/quotes/'+q.transferId,'PATCH',{status:'imported',orderId:'o'},tokens[1])).data.duplicate,true);
+let revised=quote();revised.note='Đổi nội dung';await hash(revised);assert.equal((await call('/api/quotes','POST',revised,tokens[0],sendOrigin)).status,201);assert.equal((await call('/api/quotes/'+revised.transferId+'/claim','POST',{},tokens[1])).status,409);
+console.log('PASS competing devices, claim retries, lost ack retry, revision/code lock, no unclaimed import');
+await call('/api/device/revoke','POST',{},tokens[1]);assert.equal((await call('/api/quotes','GET',undefined,tokens[1])).status,401);console.log('PASS immediate per-device revocation');
+})().catch(e=>{console.error(e);process.exit(1)});
