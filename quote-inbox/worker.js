@@ -4,7 +4,7 @@ const ORIGINS = new Set(['https://baogia-tungcnc.pages.dev','https://tungcnc-con
 const enc = new TextEncoder();
 function hex(bytes){return [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function digest(value){return hex(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(value))));}
-function b64(bytes){return btoa(String.fromCharCode(...bytes)).replace(/=/g,'').replace(/\\+/g,'-').replace(/\\//g,'_');}
+function b64(bytes){return btoa(String.fromCharCode(...bytes)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');}
 async function sign(body,key){const k=await crypto.subtle.importKey('raw',enc.encode(key),{name:'HMAC',hash:'SHA-256'},false,['sign']);return b64(new Uint8Array(await crypto.subtle.sign('HMAC',k,enc.encode(body))));}
 async function token(key){const body=b64(enc.encode(JSON.stringify({exp:Date.now()+12*3600_000,scope:'inbox'})));return body+'.'+await sign(body,key);}
 async function validToken(value,key){if(!value||!key)return false;const [body,signature,...rest]=value.split('.');if(!body||!signature||rest.length)return false;const expected=await sign(body,key);if(signature.length!==expected.length)return false;let mismatch=0;for(let i=0;i<signature.length;i++)mismatch|=signature.charCodeAt(i)^expected.charCodeAt(i);if(mismatch)return false;try{const json=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(body.replace(/-/g,'+').replace(/_/g,'/')),x=>x.charCodeAt(0))));return json.scope==='inbox'&&Number.isFinite(json.exp)&&json.exp>Date.now();}catch{return false;}}
@@ -39,7 +39,7 @@ export default {async fetch(request,env){
    if(inserted.meta.changes===0){const existing=await env.DB.prepare('SELECT fingerprint,status FROM quote_inbox WHERE id=?').bind(id).first();if(existing.fingerprint!==fingerprint)return out({error:'Transfer ID collision'},409);return out({id,status:existing.status,duplicate:true});}
    return out({id,status:'pending',duplicate:false},201);
   }
-  const match=path.match(/^\\/api\\/quotes\\/(tgq-v1-[a-f0-9]{64})$/);
+  const match=path.match(/^\/api\/quotes\/(tgq-v1-[a-f0-9]{64})$/);
   if(match&&request.method==='PATCH'){
    const body=await request.json();if(!['imported','dismissed'].includes(body.status))return out({error:'Invalid status'},400);
    const result=await env.DB.prepare("UPDATE quote_inbox SET status=?,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id=? AND status='pending'").bind(body.status,match[1]).run();
