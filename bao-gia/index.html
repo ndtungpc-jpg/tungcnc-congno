@@ -167,6 +167,7 @@ window.addEventListener('message',e=>{
  if(m.type==='saved'&&m.transferId===s.payload?.transferId&&typeof m.orderId==='string'&&m.orderId){
   try{const key='tungcnc_debt_receipts_v1',raw=localStorage.getItem(key),receipts=raw?JSON.parse(raw):{};if(!receipts||Array.isArray(receipts)||typeof receipts!=='object')throw Error('Kho kết quả cũ không đọc được');receipts[m.transferId]={orderId:m.orderId,confirmedAt:new Date().toISOString(),receiverOrigin:s.origin};localStorage.setItem(key,JSON.stringify(receipts));directSendStatus('Công Nợ đã xác nhận lưu đơn cho phiên bản báo giá vừa gửi.');}catch{directSendStatus('Công Nợ đã xác nhận lưu đơn, nhưng chưa lưu được kết quả trên thiết bị này. Không chuyển lại để tạo đơn mới.');}endDirectSession(s);return;
  }
+ if(m.type==='queued'&&m.transferId===s.payload?.transferId){directSendStatus('Đã lưu báo giá vào danh sách chờ của Công Nợ Preview. Chưa tạo đơn hoặc phát sinh công nợ.',true);endDirectSession(s);return;}
  if(m.type==='duplicate'){directSendStatus('Báo giá đã có trong Công Nợ. Hệ thống đã chặn tạo đơn trùng; mở đơn cũ để đối chiếu.',true);endDirectSession(s);return;}
  if(m.type==='cancelled'){directSendStatus('Đã hủy xem trước. Chưa xác nhận tạo đơn.');endDirectSession(s);return;}
  if(m.type==='error'){directSendStatus('Công Nợ chưa xác nhận lưu: '+String(m.message||'Lỗi kết nối').slice(0,300));endDirectSession(s);}
