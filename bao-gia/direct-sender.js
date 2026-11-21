@@ -2,18 +2,18 @@
 // Preview target only. Production origin must be configured with its exact sender allowlist before release.
 const DEBT_TARGET_ORIGIN='https://test-direct-quote-bridge.tungcnc-congno.pages.dev';
 let directSendSession=null;
-function directSendStatus(text){const el=document.getElementById('directTransferStatus');if(el)el.textContent=text;}
+function directSendStatus(text,urgent=false){const el=document.getElementById('directTransferStatus');if(el){el.textContent=text;el.style.fontWeight=urgent?'700':'';el.style.color=urgent?'#a62f45':'';if(urgent)el.scrollIntoView({block:'center',behavior:'smooth'});}if(urgent)alert(text);}
 function endDirectSession(s){if(directSendSession!==s)return;clearTimeout(s.timer);directSendSession=null;}
 async function startDirectTransfer(){
  if(directSendSession)return directSendStatus('Đang chờ lần chuyển trước. Hãy xác nhận hoặc hủy tại Công Nợ.');
- if(location.protocol!=='https:'||!crypto.subtle)return directSendStatus('Bản file/offline chưa có nguồn HTTPS xác thực. Dùng Xuất JSON dự phòng; không có dữ liệu nào được gửi.');
- let payload;try{payload=buildDebtTransfer();}catch(e){return directSendStatus(e.message);}
+ if(location.protocol!=='https:'||!crypto.subtle)return directSendStatus('Bản file/offline chưa có nguồn HTTPS xác thực. Dùng Xuất JSON dự phòng; không có dữ liệu nào được gửi.',true);
+ let payload;try{payload=buildDebtTransfer();}catch(e){return directSendStatus(e.message,true);}
  const s={sourceNonce:tgNonce(),popup:null,payload:null,receiverNonce:null,origin:DEBT_TARGET_ORIGIN,sent:false};directSendSession=s;
  // Open synchronously in the click handler so mobile popup blockers can permit it.
- s.popup=window.open(DEBT_TARGET_ORIGIN+'/','_blank');if(!s.popup){endDirectSession(s);return directSendStatus('Trình duyệt chặn cửa sổ mới. Cho phép mở cửa sổ hoặc dùng JSON dự phòng.');}
+ s.popup=window.open(DEBT_TARGET_ORIGIN+'/','_blank');if(!s.popup){endDirectSession(s);return directSendStatus('Trình duyệt chặn cửa sổ mới. Cho phép mở cửa sổ hoặc dùng JSON dự phòng.',true);}
  directSendStatus('Đang kết nối Công Nợ Preview. Chưa tạo đơn hoặc công nợ.');
  s.timer=setTimeout(()=>{if(directSendSession===s){directSendStatus('Chưa nhận được xác nhận lưu. Kiểm tra tab Công Nợ hoặc dùng JSON dự phòng; chưa đánh dấu đã chuyển.');endDirectSession(s);}},120000);
- try{payload.transferId='tgq-v1-'+await tgQuoteDigest(payload);s.payload=payload;sendDirectPayload(s);}catch(e){directSendStatus('Không chuẩn bị được dữ liệu: '+e.message);endDirectSession(s);}
+ try{payload.transferId='tgq-v1-'+await tgQuoteDigest(payload);s.payload=payload;sendDirectPayload(s);}catch(e){directSendStatus('Không chuẩn bị được dữ liệu: '+e.message,true);endDirectSession(s);}
 }
 function sendDirectPayload(s){if(directSendSession!==s||s.sent||!s.payload||!s.receiverNonce)return;s.sent=true;s.popup.postMessage({protocol:TG_DIRECT_PROTOCOL,type:'quote',receiverNonce:s.receiverNonce,sourceNonce:s.sourceNonce,payload:s.payload},s.origin);}
 window.addEventListener('message',e=>{
