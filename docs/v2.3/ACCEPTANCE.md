@@ -130,3 +130,13 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Kho trình duyệt hiện chưa bật đồng bộ: chỉ kiểm chứng trực tiếp trạng thái Chưa kết nối. Không cấp quyền thiết bị mới hoặc đổi mạng của máy chủ xưởng để tạo trạng thái giả. Các trạng thái khác mới đạt test tự động.
 - Không có nhãn còn hiệu lực trong kho trình duyệt này nên hành vi chạm nhãn r3 chưa kiểm chứng trực tiếp; DOM test và test 24h giữ nguyên cơ chế cảnh báo. Không tự tạo sự kiện trên dữ liệu thật chỉ để lấy ảnh.
 - Chưa kiểm thử phần cứng S24 Ultra, cài PWA, khóa màn hình/chuyển ứng dụng và share sheet trong đợt này. Không đánh dấu PASS vật lý.
+
+## UI-R4 — theo hình 19041.png đã duyệt
+- Lớp hiển thị mới ui-r4.js/css: tông than chì, 4 ô thống kê có màu/icon tương ứng, header đồng bộ nhỏ không có khung lớn; không đổi trạng thái engine.
+- Chuẩn hóa Khách hàng, Nhà cung cấp, Đơn hàng, Khách còn nợ, Công nợ NCC, Trung tâm nhắc nợ và Quá hạn thành hàng gọn. Menu từng dòng giữ sửa/xóa/nhân bản/thu-chi/xuất. Chạm nội dung mở chi tiết.
+- Tìm kiếm không dấu, 8 cách sắp xếp, 3 bộ lọc kết hợp, xóa bộ lọc; lựa chọn chỉ ở bộ nhớ giao diện, không sửa bản ghi/localStorage.
+- Hai tab Nhắc nợ: Tất cả còn nợ / Quá hạn, dùng nguyên due() và balance(). Gỡ liên kết quá hạn khỏi nhóm Đồng bộ/Hộp thư Cloud.
+- PASS tự động: ui-r4.cjs (1.200 dòng, 8 sắp xếp, tổ hợp bộ lọc/tìm kiếm, không mutate); ui-r4-dom.cjs (7 màn hình, giữ hành động, tab, reset, 4 ô/top5, không đổi state).
+- Chạy lại sync.cjs: 24 transaction đối soát; audit 5/5; các bài nhắc nợ/cảnh báo được giữ.
+- docs/v2.3/ui-r4-readonly.html là trang QA với dữ liệu giả chỉ trong RAM, không gọi init IndexedDB/Worker, commit/save bị chặn. Không phải dữ liệu thật hay seed của ứng dụng. Dùng để kiểm tra hình ảnh/danh sách, không dùng nghiệm thu lưu/sync.
+- Chưa nghiệm thu S24 Ultra vật lý. Bằng chứng trình duyệt và ảnh sau triển khai được cập nhật riêng khi thực hiện.
