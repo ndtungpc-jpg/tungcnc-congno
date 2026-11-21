@@ -6,7 +6,7 @@ function hex(bytes){return [...bytes].map(x=>x.toString(16).padStart(2,'0')).joi
 async function digest(value){return hex(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(value))));}
 function b64(bytes){return btoa(String.fromCharCode(...bytes)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');}
 async function sign(body,key){const k=await crypto.subtle.importKey('raw',enc.encode(key),{name:'HMAC',hash:'SHA-256'},false,['sign']);return b64(new Uint8Array(await crypto.subtle.sign('HMAC',k,enc.encode(body))));}
-async function token(key){const body=b64(enc.encode(JSON.stringify({exp:Date.now()+12*3600_000,scope:'inbox'})));return body+'.'+await sign(body,key);}
+async function token(key){const body=b64(enc.encode(JSON.stringify({exp:Date.now()+30*24*3600_000,scope:'inbox'})));return body+'.'+await sign(body,key);}
 async function validToken(value,key){if(!value||!key)return false;const [body,signature,...rest]=value.split('.');if(!body||!signature||rest.length)return false;const expected=await sign(body,key);if(signature.length!==expected.length)return false;let mismatch=0;for(let i=0;i<signature.length;i++)mismatch|=signature.charCodeAt(i)^expected.charCodeAt(i);if(mismatch)return false;try{const json=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(body.replace(/-/g,'+').replace(/_/g,'/')),x=>x.charCodeAt(0))));return json.scope==='inbox'&&Number.isFinite(json.exp)&&json.exp>Date.now();}catch{return false;}}
 function response(data,status=200,headers={}){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...headers}});}
 export default {async fetch(request,env){
@@ -21,7 +21,7 @@ export default {async fetch(request,env){
    const body=await request.json();if(typeof body.password!=='string'||body.password.length>256)return out({error:'Invalid credentials'},401);
    const hash=await digest(body.password);const expected=env.INBOX_PASSWORD_SHA256.toLowerCase();if(hash.length!==expected.length)return out({error:'Invalid credentials'},401);
    let diff=0;for(let i=0;i<hash.length;i++)diff|=hash.charCodeAt(i)^expected.charCodeAt(i);
-   return diff?out({error:'Invalid credentials'},401):out({token:await token(env.SESSION_SIGNING_KEY),expiresIn:43200});
+   return diff?out({error:'Invalid credentials'},401):out({token:await token(env.SESSION_SIGNING_KEY),expiresIn:2592000});
   }
   if(!await validToken((request.headers.get('Authorization')||'').replace(/^Bearer /i,''),env.SESSION_SIGNING_KEY))return out({error:'Unauthorized'},401);
   if(path==='/api/quotes'&&request.method==='GET'){
