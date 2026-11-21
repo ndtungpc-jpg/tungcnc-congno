@@ -35,7 +35,7 @@ export default {async fetch(request,env){
    const payload=JSON.parse(raw);const id=payload?.transferId;
    if(typeof id!=='string'||!/^tgq-v1-[a-f0-9]{64}$/.test(id)||!Array.isArray(payload.items)||payload.items.length>500)return out({error:'Invalid quote'},400);
    const canonical=v=>Array.isArray(v)?'['+v.map(canonical).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}':JSON.stringify(v);
-   const fingerprint=await digest(canonical(payload));
+   const fingerprint=await digest(canonical({source:payload.source,customer:payload.customer,items:payload.items,totals:payload.totals,note:payload.note||''}));
    const expectedId='tgq-v1-'+await digest(canonical({source:payload.source,customer:payload.customer,items:payload.items,totals:payload.totals,note:payload.note||''}));
    if(id!==expectedId)return out({error:'Quote integrity mismatch'},400);
    const inserted=await env.DB.prepare('INSERT OR IGNORE INTO quote_inbox(id,payload,fingerprint) VALUES(?,?,?)').bind(id,raw,fingerprint).run();
