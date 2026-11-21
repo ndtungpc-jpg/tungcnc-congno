@@ -122,3 +122,11 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Đã kiểm tra chỉ đọc trên dữ liệu sẵn có: viewport 412×915 hiển thị 5 đơn, bốn ô thống kê, ô tổng tiền dài không tràn; chạm đơn mở modal chi tiết.
 - Phát hiện thật: danh sách thẻ vẫn kế thừa min-width 610px của table cũ, gây tràn trang ở 412/360 dù từng số tiền không tràn. Đã sửa min-width:0 riêng bảng thẻ mobile. Không coi DOM test trước đó là bằng chứng layout đạt.
 - Không tạo/sửa/thu thử trên dữ liệu sẵn có của trình duyệt; các tình huống này dùng dữ liệu giả tự động. Online/offline/queue/busy/conflict của renderer đã kiểm tra tự động, chưa kích hoạt đồng bộ hoặc đổi mạng của thiết bị người dùng để thử.
+
+### Đo lại sau sửa CSS mobile
+- Edge extension, viewport 360×800: table min-width computed 0px; document scrollWidth <= clientWidth; không có ô tiền trong danh sách thẻ bị tràn.
+- Edge extension, viewport 412×915: không tràn trang/ô tiền; Tổng quan có đúng 4 ô và 5 đơn; header không tràn. Chạm đơn đã mở modal chi tiết.
+- Mục Thêm vẫn có Hộp thư Cloud, quản lý đồng bộ và Khách quá hạn; vị trí các nút computed static.
+- Kho trình duyệt hiện chưa bật đồng bộ: chỉ kiểm chứng trực tiếp trạng thái Chưa kết nối. Không cấp quyền thiết bị mới hoặc đổi mạng của máy chủ xưởng để tạo trạng thái giả. Các trạng thái khác mới đạt test tự động.
+- Không có nhãn còn hiệu lực trong kho trình duyệt này nên hành vi chạm nhãn r3 chưa kiểm chứng trực tiếp; DOM test và test 24h giữ nguyên cơ chế cảnh báo. Không tự tạo sự kiện trên dữ liệu thật chỉ để lấy ảnh.
+- Chưa kiểm thử phần cứng S24 Ultra, cài PWA, khóa màn hình/chuyển ứng dụng và share sheet trong đợt này. Không đánh dấu PASS vật lý.
