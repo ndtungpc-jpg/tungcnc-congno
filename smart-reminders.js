@@ -9,10 +9,10 @@ function reminderAmount(pid){const p=partner(pid);if(!p||p.type!=='customer')ret
 function debtReminderText(pid,templateIndex=0,salutation,deadline='',deadlineKind='response'){
  const p=partner(pid);if(!p||p.type!=='customer')return '';const sum=reminderAmount(pid);if(!Number.isFinite(sum)||sum<=0)return '';
  const item=REMINDER_TEMPLATES[Number(templateIndex)]||REMINDER_TEMPLATES[0],x=reminderSalutation(salutation??p.salutation),when=String(deadline||'').trim();
- let body=item.body;if(deadlineKind==='payment')body=body.replaceAll('trước ngày {deadline}','vào ngày {deadline}');
- let text=body.replaceAll('{amount}',money(sum)).replaceAll('{X}',x).replaceAll('{x}',x.toLocaleLowerCase('vi'));
+ let body=(state.reminderTemplates||[]).find(t=>t.id==='reminder-'+(REMINDER_TEMPLATES.indexOf(item)))?.body||item.body;const sourceBody=body;if(deadlineKind==='payment')body=body.replaceAll('trước ngày {deadline}','vào ngày {deadline}');
+ let text=body.replaceAll('{customer}',p.name).replaceAll('{amount}',money(sum)).replaceAll('{X}',x).replaceAll('{x}',x.toLocaleLowerCase('vi'));
  if(text.includes('{deadline}'))text=text.replaceAll('{deadline}',when||'[ngày cần phản hồi]');
- if(when&&(!item.body.includes('{deadline}')||deadlineKind==='payment'))text+='\n'+(deadlineKind==='payment'?'Ngày hẹn thanh toán: ':'Hạn phản hồi: ')+when+'.';
+ if(when&&(!sourceBody.includes('{deadline}')||deadlineKind==='payment'))text+='\n'+(deadlineKind==='payment'?'Ngày hẹn thanh toán: ':'Hạn phản hồi: ')+when+'.';
  return text;
 }
 function reminderTemplateOptions(){return ['Thông thường','Quá hạn','Khó thu hồi'].map(group=>`<optgroup label="${esc(group)}">${REMINDER_TEMPLATES.map((t,i)=>t.group===group?`<option value="${i}">${esc(t.title)}</option>`:'').join('')}</optgroup>`).join('')}

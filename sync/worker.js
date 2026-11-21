@@ -19,6 +19,7 @@ try{
  if(url.pathname==='/api/device'&&request.method==='GET')return out({id:d.id,status:d.status});
  if(url.pathname==='/api/device/revoke'&&request.method==='POST'){await env.DB.prepare("UPDATE sync_devices SET status='revoked' WHERE id=?").bind(d.id).run();return out({status:'revoked'});}
  if(d.status!=='approved')return out({error:'Device awaits owner approval'},403);
+ if(url.pathname==='/api/sync/snapshot'&&request.method==='GET'){const s=await env.DB.prepare('SELECT version,data,versions FROM sync_state WHERE id=1').first();return out({sequence:s.version,data:JSON.parse(s.data),versions:JSON.parse(s.versions)});}
  if(url.pathname==='/api/sync/status'&&request.method==='GET'){const s=await env.DB.prepare('SELECT version,data FROM sync_state WHERE id=1').first();return out({schemaVersion:1,sequence:s.version,summary:C.summary(JSON.parse(s.data))});}
  if(url.pathname==='/api/sync/pull'&&request.method==='GET'){
  const after=Number(url.searchParams.get('after')||0);if(!Number.isSafeInteger(after)||after<0)return out({error:'Invalid cursor'},400);const rows=await env.DB.prepare('SELECT sequence,body FROM sync_operations WHERE sequence>? ORDER BY sequence LIMIT 30').bind(after).all();return out({operations:rows.results.map(x=>({sequence:x.sequence,...JSON.parse(x.body)})),hasMore:rows.results.length===30});}
