@@ -1,6 +1,6 @@
 'use strict';
 // Exact deployment origins only. No wildcard, null/file origin or arbitrary return URL.
-const TG_DIRECT_SENDERS=[location.origin,'https://test-direct-quote-bridge.tungcnc-congno.pages.dev','https://c28f411b.tungcnc-congno.pages.dev'];
+const TG_DIRECT_SENDERS=[location.origin,'https://test-direct-quote-bridge.tungcnc-congno.pages.dev','https://c28f411b.tungcnc-congno.pages.dev','https://baogia-tungcnc.pages.dev'];
 let directConnection=null,directConfirming=false;
 const receiverNonce=tgNonce(),directOpenedAt=Date.now();
 function directReply(connection,type,extra={}){try{connection.source.postMessage({protocol:TG_DIRECT_PROTOCOL,type,receiverNonce,sourceNonce:connection.sourceNonce,...extra},connection.origin);}catch{}}
