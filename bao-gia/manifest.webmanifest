@@ -1,0 +1,44 @@
+{
+  "id": "./?app=bao-gia-nhanh",
+  "name": "Tùng Giang CNC - Báo Giá Nhanh",
+  "short_name": "TG Báo Giá",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "vi",
+  "background_color": "#171717",
+  "theme_color": "#171717",
+  "description": "Lập báo giá - Tùng Giang CNC",
+  "icons": [
+    {
+      "src": "./icons/bao-gia-nhanh-192.png?v=tg-icons-20261121",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/bao-gia-nhanh-512.png?v=tg-icons-20261121",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/bao-gia-nhanh-1024.png?v=tg-icons-20261121",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/bao-gia-nhanh-maskable-192.png?v=tg-icons-20261121",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/bao-gia-nhanh-maskable-512.png?v=tg-icons-20261121",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
