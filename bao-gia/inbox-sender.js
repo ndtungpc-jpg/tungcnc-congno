@@ -1,26 +1,7 @@
-// v2.1.9 sender adapter. Loaded after legacy sender and replaces popup transport.
-// Set window.TG_QUOTE_INBOX_API to a verified Worker HTTPS URL in deployment config.
 (async()=>{
- const api=window.TG_QUOTE_INBOX_API;
- if(!api)return; // No backend: preserve existing transfer and never report a false success.
- const {createQuoteInbox}=await import('./inbox-client.js');
- const inbox=createQuoteInbox(api);
- let busy=false;
- window.startDirectTransfer=async function(){
-  if(busy)return directSendStatus('Đang gửi báo giá, vui lòng chờ.');
-  if(!navigator.onLine)return directSendStatus('Không có Internet. Chưa chuyển báo giá; hãy thử lại khi có mạng.',true);
-  busy=true;
-  try{
-   const payload=await stableDebtTransfer();
-   if(!inbox.authenticated){
-    const password=prompt('Xác thực thiết bị lần đầu để sử dụng Hộp thư báo giá:');
-    if(!password)return directSendStatus('Chưa xác thực thiết bị. Báo giá chưa được gửi.');
-    await inbox.login(password);
-   }
-   directSendStatus('Đang lưu báo giá vào hộp thư...');
-   const result=await inbox.send(payload);
-   directSendStatus(result.duplicate?'Báo giá này đã có trong hộp thư. Không tạo bản trùng.':'Đã chuyển thành công. Mở Công Nợ để xử lý báo giá chờ.');
-  }catch(err){directSendStatus('Chưa chuyển thành công: '+err.message,true);}
-  finally{busy=false;}
- };
+ if(!window.TG_QUOTE_INBOX_API)return;
+ const {createQuoteInbox}=await import('./inbox-client.js'),inbox=createQuoteInbox(window.TG_QUOTE_INBOX_API);let busy=false;
+ const access=document.createElement('button');access.type='button';access.className='secondary';access.textContent='Thiết bị hộp thư';document.getElementById('directTransferStatus').before(access);
+ access.onclick=async()=>{try{if(!inbox.authenticated){const label=prompt('Tên thiết bị Báo Giá (không nhập mật khẩu):');if(!label)return;const d=await inbox.enroll(label);return alert('Mã thiết bị: '+d.id+'\nTrạng thái: '+d.status+'\nChủ tài khoản Cloudflare duyệt mã này tại D1 staging.');}const d=await inbox.status();if(confirm('Thiết bị '+d.id+' · '+d.status+'\nThu hồi quyền thiết bị này?'))await inbox.logout();}catch(e){alert(e.message)}};
+ window.startDirectTransfer=async()=>{if(busy)return;busy=true;try{if(!navigator.onLine)throw Error('Mất mạng. Giữ nguyên báo giá; gửi lại khi có mạng hoặc xuất JSON.');const payload=await stableDebtTransfer();if(!inbox.authenticated)throw Error('Chọn Thiết bị hộp thư để đăng ký và chờ chủ tài khoản duyệt.');const d=await inbox.status();if(d.status!=='approved')throw Error('Thiết bị chưa được duyệt: '+d.id);directSendStatus('Đang gửi; chưa tạo đơn công nợ.');const r=await inbox.send(payload);directSendStatus((r.duplicate?'Báo giá đã có; không tạo bản trùng. ':'Đã gửi vào hộp thư. ')+'Trạng thái: '+r.status+'. Công Nợ chỉ tạo đơn sau xác nhận.');}catch(e){directSendStatus('Chưa xác nhận gửi: '+e.message,true);}finally{busy=false;}};
 })();

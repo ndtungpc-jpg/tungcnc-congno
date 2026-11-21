@@ -8,7 +8,5 @@ binding = "DB"
 database_name = "tungcnc-quote-inbox-staging"
 database_id = "4c5f1ba6-592d-43a6-9d7c-b13fe8cd00fa"
 
-# Secrets (configure in Cloudflare, never commit):
-# INBOX_PASSWORD_SHA256 = SHA-256 of one-time initial enrollment password
-# SESSION_SIGNING_KEY = cryptographically random HMAC key
-# Production origins and staging origins must be reviewed before enabling.
+# Device credentials are generated on devices; approval/revocation is in staging D1.
+# No shared password or signing key required. Do not bind production resources.

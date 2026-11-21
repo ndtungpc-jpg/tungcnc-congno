@@ -1,62 +1,16 @@
-// Opt-in remote quote inbox receiver. Does not alter existing local quote inbox or IndexedDB.
-// Enable only after a verified Worker URL is supplied via window.TG_QUOTE_INBOX_API.
-(async function(){
- const api=window.TG_QUOTE_INBOX_API;
- if(!api)return;
- const {createQuoteInbox}=await import('./inbox-client.js');
- const inbox=createQuoteInbox(api);
- let pending=[],active=null,loading=false;
- const banner=document.createElement('button');
- banner.type='button';banner.className='btn';banner.style.cssText='position:fixed;right:12px;bottom:16px;z-index:9997;box-shadow:0 3px 14px #0003;display:none';
- banner.onclick=()=>openRemoteInbox();
- document.body.appendChild(banner);
- function show(){banner.style.display='block';banner.textContent='Báo giá chờ ('+pending.length+')';}
- async function refresh(){
-  if(loading||!navigator.onLine||!ready||saving)return;
-  loading=true;
-  try{
-   if(!inbox.authenticated){banner.style.display='block';banner.textContent='Kết nối hộp thư báo giá';return;}
-   const result=await inbox.pending();pending=result.quotes||[];show();
-  }catch(err){console.warn('Không tải được hộp thư báo giá',err);banner.style.display='block';banner.textContent='Hộp thư: thử lại';}
-  finally{loading=false;}
- }
- async function openRemoteInbox(){
-  if(!inbox.authenticated){
-   const pass=prompt('Xác thực thiết bị lần đầu để mở Hộp thư báo giá:');
-   if(!pass)return;
-   try{await inbox.login(pass);}catch(err){alert('Không xác thực được: '+err.message);return;}
-  }
-  await refresh();
-  if(!pending.length)return alert('Không có báo giá chờ.');
-  const options=pending.map((q,i)=>(i+1)+'. '+(q.payload?.customer?.name||'Khách chưa rõ')+' — '+(q.payload?.source?.quoteCode||q.id.slice(0,15))).join('\n');
-  const selected=prompt('Nhập số để xem trước; nhập X kèm số để bỏ qua báo giá (ví dụ X2):\n'+options);
-  if(!selected)return;
-  const dismiss=/^x\s*(\d+)$/i.exec(selected.trim());const index=Number(dismiss?dismiss[1]:selected)-1;if(!Number.isInteger(index)||index<0||index>=pending.length)return alert('Số báo giá không hợp lệ.');
-  if(dismiss){const q=pending[index];if(!confirm('Bỏ qua báo giá '+(q.payload?.source?.quoteCode||q.id)+'? Báo giá sẽ không tạo đơn hàng.'))return;try{await inbox.dismiss(q.id);await refresh();}catch(err){alert('Chưa bỏ qua được: '+err.message);}return;}
-  if(document.querySelector('#modal.open')||pendingQuoteTransfer)return alert('Hãy hoàn tất biểu mẫu đang mở trước.');
-  const quote=pending[index];
-  try{
-   await previewQuoteTransfer({target:{files:[new File([JSON.stringify(quote.payload)],'inbox-quote.json',{type:'application/json'})],value:''}});
-   if(pendingQuoteTransfer?.data?.transferId!==quote.id)throw Error('Không mở được xem trước hoặc báo giá đã nhập.');
-   active=quote.id;
-  }catch(err){alert('Không mở được báo giá: '+err.message);}
- }
- // A confirmed local order must remain authoritative even if remote status update fails.
- const originalConfirm=confirmQuoteTransfer;
- confirmQuoteTransfer=async function(){
-  const id=active;
-  await originalConfirm();
-  if(id&&state.orders.some(o=>o.quoteTransferId===id)){
-   active=null;
-   try{await inbox.markImported(id);}catch(err){console.warn('Đơn đã lưu cục bộ nhưng chưa đánh dấu trên máy chủ',err);alert('Đơn đã lưu. Hộp thư chưa cập nhật trạng thái, hãy kiểm tra lại.');}
-   await refresh();
-  }
- };
- const originalClose=closeModal;
- closeModal=function(...args){const result=originalClose(...args);if(result!==false&&active){active=null;}return result;};
- window.addEventListener('online',refresh);
- window.addEventListener('pageshow',refresh);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
- setTimeout(refresh,2000);
- setInterval(()=>{if(!document.hidden)refresh();},60000);
+(async()=>{
+ if(!window.TG_QUOTE_INBOX_API)return;
+ const {createQuoteInbox}=await import('./inbox-client.js'),inbox=createQuoteInbox(window.TG_QUOTE_INBOX_API);let pending=[],active=null,loading=false,confirming=false;
+ const banner=document.createElement('button');banner.type='button';banner.className='btn';banner.style.cssText='position:fixed;right:12px;bottom:16px;z-index:9997';banner.textContent='Hộp thư Cloud · Kết nối thiết bị';document.body.appendChild(banner);
+ async function refresh(){if(loading||!ready||saving||!inbox.authenticated||!navigator.onLine)return;loading=true;try{const r=await inbox.pending();pending=r.quotes||[];
+ // Reconcile lost remote acknowledgment from durable local records only. No new order/write.
+ for(const q of pending){const o=committed.orders.find(o=>o.quoteTransferId===q.id);if(o&&q.claimedByMe)await inbox.markImported(q.id,o.id);}
+ pending=pending.filter(q=>!committed.orders.some(o=>o.quoteTransferId===q.id));banner.textContent='Hộp thư Cloud · '+pending.length+' chờ';}catch(e){banner.textContent='Hộp thư Cloud · Thử lại';console.warn('Inbox refresh:',e.message)}finally{loading=false;}}
+ async function open(){try{if(!inbox.authenticated){const label=prompt('Tên thiết bị Công Nợ (không nhập mật khẩu):');if(!label)return;const d=await inbox.enroll(label);return alert('Mã thiết bị: '+d.id+'\nChờ chủ tài khoản Cloudflare duyệt tại D1 staging.');}const d=await inbox.status();if(d.status!=='approved')return alert('Thiết bị '+d.id+' · '+d.status);if(document.querySelector('#modal.open')||pendingQuoteTransfer)return alert('Hãy đóng biểu mẫu hiện tại trước.');await refresh();modal('Hộp thư báo giá Cloud · Thử nghiệm',`<p>Chỉ tạo công nợ sau khi xem trước và xác nhận. Đơn đã lưu cục bộ là căn cứ đối soát.</p>${pending.map((q,i)=>`<div class="panel"><b>${esc(q.payload.customer.name)}</b><p>${esc(q.payload.source.quoteCode)} · ${money(q.payload.totals.grandTotal)}${q.claimed?' · Đã khóa tiếp nhận':''}</p><button class="btn" onclick="remoteQuotePreview(${i})">Xem trước</button><button class="btn" onclick="remoteQuoteDismiss(${i})">Từ chối</button></div>`).join('')||'<p>Không có báo giá chờ.</p>'}<button class="btn" onclick="remoteDeviceRevoke()">Thu hồi thiết bị này</button><button class="btn" onclick="closeModal()">Đóng</button>`);}catch(e){alert(e.message)}}banner.onclick=open;
+ window.remoteDeviceRevoke=async()=>{if(confirm('Thu hồi quyền hộp thư của thiết bị này? Dữ liệu công nợ giữ nguyên.')){try{await inbox.logout();closeModal();banner.textContent='Hộp thư Cloud · Kết nối thiết bị';}catch(e){alert(e.message)}}};
+ window.remoteQuoteDismiss=async i=>{const q=pending[i];if(!q||!confirm('Từ chối báo giá này, không tạo đơn?'))return;try{await inbox.dismiss(q.id);closeModal();await open();}catch(e){alert(e.message)}};
+ window.remoteQuotePreview=async i=>{const q=pending[i];if(!q)return;try{if(q.claimed&&!q.claimedByMe)throw Error('Thiết bị khác đã khóa báo giá. Không nhập lại.');if(committed.orders.some(o=>o.quoteTransferId===q.id))throw Error('Đơn đã có. Làm mới để đối soát.');closeModal();await previewQuoteTransfer({target:{files:[new File([JSON.stringify(q.payload)],'inbox-quote.json',{type:'application/json'})],value:''}});if(pendingQuoteTransfer?.data.transferId===q.id)active=q.id;}catch(e){alert(e.message)}};
+ const originalConfirm=confirmQuoteTransfer;confirmQuoteTransfer=async function(){if(!active)return originalConfirm();if(confirming||saving)return;const id=active;confirming=true;try{await inbox.claim(id);await originalConfirm();const o=committed.orders.find(o=>o.quoteTransferId===id);if(o){active=null;try{await inbox.markImported(id,o.id);}catch(e){alert('Đơn đã lưu. Chưa cập nhật Cloud; làm mới để gửi lại trạng thái, không nhập lại.');}await refresh();}else alert('Chưa lưu được đơn. Khóa giữ trên thiết bị này để tránh trùng; thử lại tại thiết bị này.');}catch(e){alert('Chưa tạo đơn: '+e.message);}finally{confirming=false;}};
+ const originalClose=closeModal;closeModal=function(...args){const r=originalClose(...args);if(r!==false&&!confirming)active=null;return r;};
+ window.addEventListener('online',refresh);window.addEventListener('pageshow',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});setInterval(()=>{if(!document.hidden)refresh()},30000);setTimeout(refresh,1500);
 })();
