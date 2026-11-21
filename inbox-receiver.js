@@ -1,7 +1,7 @@
 (async()=>{
  if(!window.TG_QUOTE_INBOX_API)return;
  const {createQuoteInbox}=await import('./inbox-client.js'),inbox=createQuoteInbox(window.TG_QUOTE_INBOX_API);let pending=[],active=null,loading=false,confirming=false;
- const banner=document.createElement('button');banner.type='button';banner.className='btn';banner.style.cssText='position:fixed;right:12px;bottom:16px;z-index:9997';banner.textContent='Hộp thư Cloud · Kết nối thiết bị';document.body.appendChild(banner);
+ const banner=document.createElement('button');banner.type='button';banner.className='btn';banner.id='inboxCloudMenuButton';banner.textContent='Hộp thư Cloud · Kết nối thiết bị';window.tgInboxMenuButton=banner;window.mountCloudToolsMenu?.();
  async function refresh(){if(loading||!ready||saving||!inbox.authenticated||!navigator.onLine)return;loading=true;try{const r=await inbox.pending();pending=r.quotes||[];
  // Reconcile lost remote acknowledgment from durable local records only. No new order/write.
  for(const q of pending){const o=committed.orders.find(o=>o.quoteTransferId===q.id);if(o&&q.claimedByMe)await inbox.markImported(q.id,o.id);}

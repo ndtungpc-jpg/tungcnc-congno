@@ -82,3 +82,17 @@ Chưa có bằng chứng mất dữ liệu trong kiểm thử tự động đã 
 - PASS: node sync/tests/reminder-history.cjs — biên đúng 24 giờ, lịch sử còn, tách khách, cảnh báo và cho vượt, xuất hủy/lỗi không đánh dấu, xác nhận gửi riêng, kiểm tra lịch sử máy khác, dữ liệu kế toán nguyên vẹn.
 - PASS: sync/tests/sync.cjs — hai loại sự kiện lan A/B/C, tổng công nợ không đổi. Bộ kiểm thử hiện đối soát 24 transaction.
 - CHƯA KIỂM THỬ: UI mới trên thiết bị Android/PWA thật. Mất mạng/hai máy xuất đồng thời trước khi sự kiện được gửi không thể bảo đảm cảnh báo tức thời; không có khóa chặn gửi, đúng yêu cầu không chặn tuyệt đối.
+
+## Sửa 4 lỗi Android do chủ xưởng nghiệm thu — android-r2
+Bản trước 9574fb7 không đạt nghiệm thu Android ở bốn điểm dưới đây. Không dùng kết quả tự động trước đó để phủ nhận lỗi thực tế.
+
+| Lỗi | Nguyên nhân | Thay đổi | Bằng chứng hiện có / chưa kiểm chứng |
+|---|---|---|---|
+| Nhãn nhỏ, chìm | Dùng small/hint chung, màu theme không bảo đảm tương phản | Component reminder-badge: nền xanh đậm, viền vàng, chữ trắng/vàng nhạt 15–16px, thời gian gần nhất | Kiểm tra mã/DOM; chưa xác nhận thị giác trên S24 Ultra |
+| Nhãn thiếu tùy đường mở | Chỉ chèn HTML riêng ở customers và debt-center | Một renderer chung chạy sau render và search, bổ sung mọi customer-link; chi tiết khách cùng nguồn reminderEvents | Tự động DOM mã thật: customers, collections, overdue, debt-center, search, profile; chưa nghiệm thu thiết bị |
+| Cảnh báo không rõ / bỏ sót luồng ảnh | native confirm không đặt được nhãn nút; ảnh thống kê gọi nhánh cũ không qua gate | Hộp alertdialog riêng, thời gian gần nhất, Hủy / Vẫn nhắc lại, Escape/focus; chung gate cho copy, share, PNG đối chiếu, PNG thống kê, PNG đính kèm | Tự động DOM chứng minh Hủy không gọi API xuất, nhắc lại cho phép; chưa xác nhận bảng chia sẻ Android |
+| Hai nút nổi che thao tác | sync/client và inbox-receiver tự append button fixed vào body, độc lập điều hướng | Bỏ append body/fixed; giữ nguyên controller/auth, gắn nút vào container normal-flow trong Thêm, tháo khỏi DOM khi rời Thêm | Tự động DOM kiểm tra chuyển màn hình/mount lại và mã nguồn không fixed; modal xung đột và viewport Android thật chưa kiểm chứng |
+
+Thay đổi vị trí launcher không thay engine, queue, protocol, schema hoặc phép tính công nợ. Chỉ thêm loại sự kiện orders-png cho ảnh thống kê, dùng cùng lịch sử theo khách. Tăng SW cache và version staging thành 2.3.0-staging-android-r2 để nhận diện bản mới.
+
+Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM tự động, không layout thật); node sync/tests/reminder-history.cjs; node sync/tests/sync.cjs. Không tuyên bố bốn lỗi đã PASS nghiệm thu vật lý cho tới khi chủ xưởng thử lại trên S24 Ultra.
