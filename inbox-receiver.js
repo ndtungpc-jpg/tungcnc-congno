@@ -31,7 +31,8 @@
   const options=pending.map((q,i)=>(i+1)+'. '+(q.payload?.customer?.name||'Khách chưa rõ')+' — '+(q.payload?.source?.quoteCode||q.id.slice(0,15))).join('\n');
   const selected=prompt('Nhập số để xem trước; nhập X kèm số để bỏ qua báo giá (ví dụ X2):\n'+options);
   if(!selected)return;
-  const dismiss=/^x\s*(\d+)$/i.exec(selected.trim());const index=Number(dismiss?dismiss[1]:selected)-1;if(!Number.isInteger(index)||index<0||index>=pending.length)return alert('Số báo giá không hợp lệ.');\n  if(dismiss){const q=pending[index];if(!confirm('Bỏ qua báo giá '+(q.payload?.source?.quoteCode||q.id)+'? Báo giá sẽ không tạo đơn hàng.'))return;try{await inbox.dismiss(q.id);await refresh();}catch(err){alert('Chưa bỏ qua được: '+err.message);}return;}
+  const dismiss=/^x\s*(\d+)$/i.exec(selected.trim());const index=Number(dismiss?dismiss[1]:selected)-1;if(!Number.isInteger(index)||index<0||index>=pending.length)return alert('Số báo giá không hợp lệ.');
+  if(dismiss){const q=pending[index];if(!confirm('Bỏ qua báo giá '+(q.payload?.source?.quoteCode||q.id)+'? Báo giá sẽ không tạo đơn hàng.'))return;try{await inbox.dismiss(q.id);await refresh();}catch(err){alert('Chưa bỏ qua được: '+err.message);}return;}
   if(document.querySelector('#modal.open')||pendingQuoteTransfer)return alert('Hãy hoàn tất biểu mẫu đang mở trước.');
   const quote=pending[index];
   try{
