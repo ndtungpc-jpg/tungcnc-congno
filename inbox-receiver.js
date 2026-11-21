@@ -10,7 +10,7 @@
  banner.type='button';banner.className='btn';banner.style.cssText='position:fixed;right:12px;bottom:16px;z-index:9997;box-shadow:0 3px 14px #0003;display:none';
  banner.onclick=()=>openRemoteInbox();
  document.body.appendChild(banner);
- function show(){banner.style.display=pending.length?'block':'none';banner.textContent='Báo giá chờ ('+pending.length+')';}
+ function show(){banner.style.display='block';banner.textContent='Báo giá chờ ('+pending.length+')';}
  async function refresh(){
   if(loading||!navigator.onLine||!ready||saving)return;
   loading=true;
@@ -40,7 +40,7 @@
    active=quote.id;
   }catch(err){alert('Không mở được báo giá: '+err.message);}
  }
- const originalConfirm=confirmQuoteTransfer;
+ // A confirmed local order must remain authoritative even if remote status update fails.\n const originalConfirm=confirmQuoteTransfer;
  confirmQuoteTransfer=async function(){
   const id=active;
   await originalConfirm();
