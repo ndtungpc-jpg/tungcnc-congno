@@ -1,62 +1,33 @@
-# TÙNG GIANG CNC — v2.3 Sync Foundation
+# TÙNG GIANG CNC — v2.3 staging implementation
 
-Status: DESIGN ONLY — no sync endpoint, migration or production deployment is authorized by this document.
+The owner's implementation request supersedes the earlier design-only gate. This branch integrates v2.1.9 inbox commits through 416b4f55 without altering main or PR #6. Production remains gated.
 
-## Baseline confirmed from current main
-- The accounting PWA stores a normalized single state snapshot in IndexedDB (DBNAME, STORE, key `main`), with a separate localStorage fallback.
-- `commit()` increments `revision`, generates `audit` changes for ordinary edits and uses compare-and-swap checks before local writes.
-- Core collections include `partners`, `orders`, `payments`, `audit`, `recovery`. Preserve every field, especially quote-related order details.
-- v2.1.9 staging inbox D1 is **not** an accounting sync database. Do not repurpose its schema or credentials.
-- The current `deviceId=id()` is created at runtime, so it is NOT a durable cross-session device identity. Introduce a persistent identity only after safe migration design.
+## Resources and data
+- NEW Worker `tungcnc-sync-v23-staging` and NEW D1 `49163cc1-a60d-49b1-9c93-da7a6f939977`, APAC; no shared inbox tables/credentials.
+- Accounting database name, version 1, `state` store and `main` key stay unchanged. A separate key `tg-sync-v23` in that existing store contains sync metadata, outbox, cursor, nonextractable device key, conflicts and recovery snapshots. No schema upgrade/reset/migration.
+- Opt-in on staging only. Before enabling, atomically persist a complete original accounting backup plus the initial durable queue. Existing localStorage/fallback is untouched. Sync is blocked when durable IndexedDB is unavailable.
+- A local save writes accounting `main` and the immutable queued operation in ONE IndexedDB transaction with revision + content + metadata CAS. No queue can be lost between saving an order and enqueueing it.
 
-## Architecture decision (proposed)
-Offline-first: IndexedDB remains authoritative for the local working copy; a NEW isolated Cloudflare Worker + D1 database stores an append-only server change log, device registry, cursor checkpoints and encrypted backups if encryption is designed and verified. Server-assigned monotonic sequence is the sync cursor. A single client revision number is NOT a global conflict-resolution strategy.
+## Authentication
+Each device creates an ECDSA P-256 private CryptoKey (nonextractable) and public key; owner verifies device ID and approves public key via authenticated D1 console. No passwords, API tokens or shared secrets in frontend/localStorage. Requests sign method/path/query/time/nonce/body SHA-256. Server verifies origin, device status, signature, 2-minute clock window and one-time nonce on every request. Revocation is immediate; queued/local data stays intact.
+XSS can still invoke a nonextractable key from a compromised running origin; this is not an absolute security guarantee. Device clocks must be correct. Review rate/nonce retention before long-running production.
 
-Recommended initial rollout: single-writer pilot with other devices read-only, then explicit multi-writer after conflict handling is proven. Do not silently choose last-write-wins for monetary values.
+Owner approval: inspect `SELECT id,label,origin,status FROM sync_devices;`, compare exact ID with device, then `UPDATE sync_devices SET status='approved' WHERE id='<verified-ID>' AND status='pending';`. Revocation changes status to `revoked`. Do not approve unverified labels. Pilot target is 2–3 devices; do not approve arbitrary registrations.
 
-## Data and protocol contract (proposed)
-Each local change is an immutable operation:
-`{operationId,deviceId,entityType,entityId,action,baseEntityVersion,occurredAt,payload,schemaVersion}`.
-`operationId` must be stable across retries; server enforces unique IDs and an atomic insert + version check. `occurredAt` is for display, not ordering or conflict arbitration.
+## Protocol
+`POST /api/sync/push` accepts a stable operationId, deviceId, schemaVersion1 and atomic changes `{kind,id,baseVersion,payload}`. Collections: partners, orders (including nested items/sizes), payments, audit, trash, Excel import receipts. All other local fields are preserved locally; recovery snapshots are never replicated as ordinary records.
+- Server rechecks every record version, validates full resulting accounting state, payment allocations and global quote IDs/codes, then uses an atomic D1 batch for state CAS + append-only operation receipt.
+- Global server sequence orders transactions, per-record versions detect conflicts. Timestamps do not select winners. A repeated operation ID with a changed body is rejected.
+- Pull is a bounded ordered immutable log. Apply and cursor advancement are in ONE local transaction. Before remote apply preserve a full local backup. Replay is idempotent; owned operations acknowledge queue without overwriting newer local edits.
+- Foreign changes touching queued records or invalidating debt invariants stop with both versions retained for explicit review. Cursor does not skip the conflict. Offline editing remains available, but the UI never reports synced while conflicts/queue remain.
+- Deletes retain server log/tombstone versions and existing business trash/audit. No hard-delete endpoint. No automated deduplication by customer name/phone.
 
-Server:
-- `POST /api/sync/push`: bounded batch, per-operation result (accepted / duplicate / conflict / rejected), server sequence, atomic transaction where required.
-- `GET /api/sync/pull?after=<cursor>`: bounded ordered immutable operations + nextCursor + hasMore.
-- `GET /api/sync/status`: authenticated device status, lag and server schema.
-- Device enrollment / revocation must be independent of v2.1.9 shared credentials. Every request checks active device authorization.
-- Reject unknown schema versions, oversized payloads, malformed money, unrecognized entity IDs and unauthorized roles.
+## UI and operation
+One button shows Đã đồng bộ / Đang đồng bộ / Chờ đồng bộ / Lỗi đồng bộ. It opens enable/device ID, queue/cursor, balances, retry, revoke, and export of review + original backup. No auth key is exported in the business/recovery JSON. Automatic foreground/open/online sync every15 seconds. Remote application pauses while forms or unsaved app state are open.
 
-Local:
-- Dedicated IndexedDB stores `outbox`, `syncMeta`, `syncConflicts`, `syncInbox` (or equivalent separate DB); do not change or delete the current accounting `main` store.
-- In a single local transaction, persist the accounting state change and outgoing operation whenever technically feasible. If split databases prevent atomicity, implement a durable write-ahead/recovery protocol first.
-- Pull into a staging area, validate, apply deterministically, then advance cursor only after the local accounting write succeeds.
-- Do not claim synced when the server has not acknowledged the operation. Retrying must be safe after network timeouts.
+## Limits and release gates
+This is a staging pilot, not production acceptance. Limits: 1MB push, 2000 changed records per transaction, 5MB cloud snapshot; oversized legacy bootstrap remains local and is rejected without truncation. Recovery snapshots/nonce storage currently require retention design before extended deployment. Conflicts retain both versions but require owner review; no automatic monetary overwrite or silent queue discard.
+Three isolated browser origins may simulate three devices; that does not replace physical Android/PWA offline and lifecycle tests. Historical anonymized backups and production debt reconciliation remain required. No production merge or launch yet.
 
-## Accounting conflict policy
-- `payments`: never sum two versions of the same payment or auto-delete an existing payment. Duplicate `operationId` is a no-op; conflicting changes require explicit reconciliation.
-- `orders`: never silently overwrite `amount`, `quoteTotals`, cancellation state or paid allocations.
-- `partners`: propose duplicate matches by name/phone, but do not auto-merge partner IDs.
-- `quoteTransferId`: globally unique order-import key; preserve source fingerprint and v2.1.9 inbox import guarantees.
-- Deletes: tombstones + audit trail, no hard deletion propagated automatically.
-- `recovery` and backups: do not replicate local recovery snapshots as ordinary accounting changes; define a separate retention/encryption policy.
-- Use integer VND where possible; reject unsafe numbers and verify debt invariants after every applied batch.
-
-## Delivery slices
-1. v2.3.0: compatibility audit, fixture generator, migration-free read-only sync prototype, isolated D1.
-2. v2.3.1: device enrollment/revocation, stable device identity, append-only API, idempotency tests.
-3. v2.3.2: local durable outbox, offline queue, pull staging, reconnect and restart recovery.
-4. v2.3.3: single-writer pilot on synthetic data; compare customer/order/payment totals.
-5. v2.3.4: multi-writer conflict review UI, monetary conflict protections, Android PWA testing.
-6. v2.3.5: staged real-data migration with explicit backup/restore drill, rollback and acceptance.
-
-## Mandatory acceptance matrix
-- Two Android devices and one desktop; reload, app close/reopen, offline 24h, reconnect, repeated push, duplicated pull, reordered response, concurrent edits, revoked device, bad schema, partial D1 failure.
-- Same quote imported concurrently on two devices: at most one accepted order.
-- Payment edited concurrently: no silent money loss or duplicate payment.
-- Acknowledge push then crash before local acknowledgment: retry is idempotent.
-- Apply pull then crash before cursor persistence: replay is idempotent.
-- For every test compare partner count, order count, payment count, per-customer debt and global debt to expected fixtures.
-- No production deployment without passing tests, tested backup restoration and explicit release approval.
-
-## Integration gate
-Do not merge or rebase v2.3 onto the v2.1.9 feature branch while Work is editing it. After v2.1.9 acceptance, review merged main, rebase this isolated planning branch and verify actual schema, credentials, quote import and persistence contracts before implementing sync.
+## Rollback
+Disable staging clients or return Pages to pre-sync deployment. The new metadata key and backups must be preserved; never clear the accounting database. Worker rollback does NOT restore D1. Keep operation log/receipts/cursors when rolling code back. Before real-data activation export a user-owned JSON backup and test restore in an independent profile. The initial local backup is available through the sync review export.
