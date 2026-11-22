@@ -71,17 +71,6 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
 .r4-recent .r4-body strong{font-size:14px}
 .r4-empty{padding:20px 10px;font-size:14px}
 .ui-r4 .record-card{padding:10px;margin-bottom:6px;border-radius:10px}
-@media(max-width:400px){
- .r4-row:not(.r4-order){grid-template-columns:minmax(0,1fr) 24px}
- .r4-row:not(.r4-order)>.r4-status{grid-column:1;grid-row:2;padding-left:43px;max-width:none;margin-top:3px}
- .r4-row:not(.r4-order)>.r4-actions{grid-column:2;grid-row:1}
- .r4-row>.r4-actions[open]{grid-column:1/-1;grid-row:auto}
- .r4-order .r4-open{flex-wrap:wrap}
- .r4-order .r4-body{flex:1 1 120px}
- .r4-order .r4-money{flex:1 1 100%;display:flex;justify-content:space-between;flex-wrap:wrap;text-align:left;margin-left:43px}
- .r4-order .r4-money small{font-size:12px}
- .r4-order .r4-chevron{display:none}
-}
 
 .ui-r4 .pilot-stats .stat{position:relative;padding-left:40px}
 .ui-r4 .pilot-stats strong{font-size:clamp(15px,3.9vw,21px)}
@@ -90,3 +79,54 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
 .pilot-stats .stat:nth-child(2) .r4-stat-icon{color:#c6a8fc}
 .pilot-stats .stat:nth-child(3) .r4-stat-icon{color:#7cdf98}
 .pilot-stats .stat:nth-child(4) .r4-stat-icon{color:#ffb078}
+
+/* UI-R4.1: compact two-line rows; preserve the R4 palette and business actions. */
+.ui-r4 header{flex-wrap:nowrap}
+.r4-row{min-height:60px;padding:6px 0;column-gap:5px;grid-template-columns:minmax(0,1fr) auto 28px}
+.r4-avatar{flex-basis:30px;width:30px;height:34px;align-self:center;border-radius:7px}
+.r4-avatar svg{width:22px;height:22px}
+.r4-open{gap:8px;min-height:46px}
+.r4-body{gap:2px;flex:1;min-width:0}
+.r4-body strong{font-size:14px;line-height:1.25;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.r4-body>span:not(.r4-badge){font-size:12px;line-height:1.3}
+.r4-partner-summary{display:flex;flex-wrap:wrap;gap:0 4px}
+.r4-partner-summary b{font-weight:650;white-space:nowrap}
+.r4-status{max-width:110px;min-width:0}
+.r4-badge,.ui-r4 .reminder-badge{font-size:11px!important;min-height:24px;padding:3px 7px;border-radius:14px;white-space:nowrap;line-height:1.25}
+.r4-actions summary{min-width:28px;min-height:46px}
+.r4-row.r4-order{grid-template-columns:minmax(0,1fr) 28px}
+.r4-order .r4-open{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:7px;align-items:center}
+.r4-order .r4-money{margin:0;gap:3px;min-width:0;max-width:100%;flex-shrink:initial}
+.r4-order .r4-money b{font-size:13px}
+.r4-order .r4-money small{font-size:11px}
+.r4-order .r4-body>span:not(.r4-badge){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.r4-order .r4-badge.updated{min-height:18px;padding:1px 6px;font-size:10px!important}
+.r4-order .r4-chevron{display:none}
+.r4-recent{padding:9px!important}
+.r4-recent .recent-order-list{gap:0}
+.r4-recent .r4-row{padding:6px;min-height:66px;border-radius:8px;grid-template-columns:minmax(0,1fr)}
+.r4-recent .r4-body strong{font-size:13px;-webkit-line-clamp:1}
+.r4-recent .r4-open{grid-template-columns:28px minmax(0,1fr) auto;gap:6px}
+.r4-recent .r4-avatar{width:28px;flex-basis:28px;height:33px}
+.r4-recent .r4-money b{font-size:12px}
+.r4-recent .r4-money small{font-size:10px}
+@media(max-width:430px){
+ .ui-r4 .wrap{padding:8px 10px 40px}
+ .r4-rows{padding:0 8px}
+ .r4-row{column-gap:4px}
+ .r4-open{gap:6px}
+ .r4-body strong{font-size:13px}
+ .r4-status{max-width:102px}
+ .r4-body>span:not(.r4-badge){font-size:11px}
+ .r4-body b{font-size:12px}
+ .r4-order .r4-open{grid-template-columns:28px minmax(0,1fr) auto;gap:5px}
+ .r4-order .r4-avatar{width:28px;height:32px}
+ .r4-order .r4-money b{font-size:12px}
+ .r4-order .r4-money small{font-size:10px}
+ .ui-r4 header{padding:12px 10px;gap:6px}
+ .ui-r4 header small{font-size:10px}
+ .ui-r4 #headerSync{max-width:102px;font-size:10px;grid-template-columns:22px auto}
+ .ui-r4 #headerSync b{font-size:11px}
+}
+/* Emergency wrapping only for exceptional values, without clipping money. */
+.r4-money b,.r4-money small{max-width:100%;overflow-wrap:anywhere}
