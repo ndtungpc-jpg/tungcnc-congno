@@ -1,5 +1,9 @@
 # RC1 — Legacy data acceptance
 
+Update: the isolated atomic initial-snapshot path is documented in
+[SAFE-INITIAL-BOOTSTRAP.md](SAFE-INITIAL-BOOTSTRAP.md). Physical PC/S24 acceptance
+remains pending; the old normal-operation limits below still apply.
+
 Scope: minimal staging fix only. No main merge, production deploy, IndexedDB reset,
 migration, rounding, deletion or business data correction.
 

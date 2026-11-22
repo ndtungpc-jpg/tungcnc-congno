@@ -1,0 +1,11 @@
+# Isolated RC1 legacy acceptance ONLY. Existing staging/production bindings unchanged.
+name = "tungcnc-sync-v23-legacy-acceptance"
+main = "worker.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[vars]
+INITIAL_BOOTSTRAP_TARGET = "legacy-acceptance-v23"
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-sync-v23-legacy-acceptance"
+database_id = "f8df0e48-5c48-4c2d-8546-deb95d3b1292"

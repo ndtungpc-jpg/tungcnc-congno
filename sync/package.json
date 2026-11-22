@@ -7,7 +7,8 @@
     "test:backup-recovery": "node tests/backup-independence.cjs",
     "test:storage-policy": "node tests/storage-growth.cjs && node tests/storage-failures.cjs",
     "test:a03-scale": "node experiments/a03/protocol.cjs && node experiments/a03/benchmark.cjs",
-    "test:a03-app-restore": "node experiments/a03/app-restore.cjs"
+    "test:a03-app-restore": "node experiments/a03/app-restore.cjs",
+    "test:initial-bootstrap": "node tests/initial-bootstrap.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "6.2.8",
