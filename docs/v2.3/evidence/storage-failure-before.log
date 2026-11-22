@@ -1,0 +1,14 @@
+AssertionError [ERR_ASSERTION]: Persistent quota must not report synced after unapplied remote operation
++ actual - expected
+
++ 'Đã đồng bộ'
+- 'Lỗi đồng bộ'
+
+    at /workspace/scratch/c365ff6ead59/v23work/sync/tests/storage-failures.cjs:7:511 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'Đã đồng bộ',
+  expected: 'Lỗi đồng bộ',
+  operator: 'strictEqual',
+  diff: 'simple'
+}

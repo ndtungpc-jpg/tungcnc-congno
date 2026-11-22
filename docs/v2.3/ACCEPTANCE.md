@@ -220,3 +220,12 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - PASS tự động: cấu trúc ZIP/CRC/nested XLSX/SHA/snapshot; từ chối archive lỗi/cắt cụt/thiếu file/saiSHA; encoder/verify lỗi không tải; hủy không fallback; actual DOM một dialog/anchor click; JSON riêng giữ nguyên; Python giải nén và openpyxl đọc9sheet/đối soát độc lập; restore/ID/payment hồi quy.
 - Sửa app định danh manifest bị metadata spread ghi đè; không thay JSON phục hồi. Chi tiết: BACKUP-RECOVERY-ACCEPTANCE.md, evidence/android-backup-zip.*.
 - CHƯA KIỂM THỬ S24 Ultra Chrome/Zalo sau vá và Excel native. Không lấy DOM/zipfile/openpyxl thay nghiệm thu Android. Chỉ staging, không main/production.
+
+## STORAGE POLICY / D1 DR / PRODUCTION READINESS — 22/11/2026
+
+- Ba báo cáo mới: STORAGE-POLICY.md, DISASTER-RECOVERY-PLAN.md, PRODUCTION-READINESS.md. **NO-GO production**: A03 checkpoint/retention chưa runtime/all-device ACK, Android/PC và dữ liệu cũ chưa nghiệm thu, prod resources/cutover chưa đủ. Không cleanup/reset/UI redesign/main merge.
+- Read-only: sync D1 file438.272byte,19ops/1.619nonce; inbox57.344byte. Mô hình1.000đơn~1,62MB main,100snapshot~164MB;4.000đơn giả~6,53MB vượt cap5MB. Không suy diễn quota thiết bị thật. Thiết kế retention/pin/checkpoint/backup/ACK, chưa xóa gì.
+- A03-Q01 có bằng chứng: persistent quota chặn receive+error metadata nhưng báo Đã đồng bộ. Chỉ vá engine giữ failure tạm, báo lỗi cả khi DB đóng; không đổi schema/protocol/main/queue. Trước FAIL, sau PASS; quotaIDB/LS và abort2put/reopen/pending PASS mô phỏng, không power-loss vật lý.
+- Diễn tập thật: SQL sync staging319.732byte, SHA2561b9094d4c0e0c65a16a7e2a5d989dfe0ea8f4576964f7de8b53830130ebdfb4c; SQLite đọc độc lập. D1 DR mới0e536fcd-f683-4dc9-9392-bcd11974a914, restore1.658statement/10batch,5bảng/từng dòng khớp. State/log sequence19;41record/9đơn/4payment; phải thu20.927.300/phải trả500.000 giữ nguyên. Không restore đè, không bind Worker sang DR, không xóa D1. SQL/archive giữ riêng ngoài GitHub.
+- Hồi quy ZIP15checks +7suite +3data-safety +5debt PASS; thêm storage-policy. AndroidZIP/Excel thật, backup đời đầu, inboxD1restore, RPO/RTO/retention automation chưa nghiệm thu.
+- Production chỉ đọc: Công Nợmain e4d6d39/version2.1.12-direct-preview; Báo Giá branchtest/direct-quote-bridge ec02115. DB/PWAid/scope tương thích theo nguồn nhưng chưa upgrade thật; allowlist chỉstaging, icon manifest cần giữ đúng khi release. PR7 draft, không production.

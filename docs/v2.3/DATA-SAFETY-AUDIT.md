@@ -205,3 +205,13 @@ Bằng chứng: [manifest build](evidence/staging-worker-build.json), [deploymen
 | Lịch sử nhắc mới | 0 | 0 | PASS — không tạo sự kiện nhắc |
 
 Bản ghi có sẵn được so từng key/nội dung, SHA baseline lưu trong JSON evidence; không chỉ so tổng. Ba thiết bị test đã thu hồi, dữ liệu giả còn nguyên để truy xuất. Các client Node được định danh A/B/C chỉ là thử API, không đại diện thiết bị vật lý.
+
+## STORAGE POLICY / DR / READINESS — 22/11/2026
+
+A03 vẫn Cao/mở: tăng trưởng snapshot và nonce đã đo; checkpoint/retention có thiết kế nhưng không runtime cleanup do chưa đủ all-device ACK/offsite restore/pin proof. Xem STORAGE-POLICY.md.
+
+A03-Q01 chứng minh persistent quota gây engine báo Đã đồng bộ dù receive/error metadata chưa lưu. Vá tối thiểu giữ failure tạm, báo Lỗi đồng bộ cả khi DB đóng; main/cursor/queue giữ nguyên, retry hội tụ. Before FAIL/after PASS mô phỏng, hồi quy7suite/3data-safety/5debt vàZIP15checks PASS. Không coi mô phỏng là power-loss vật lý.
+
+D1 sync staging đã exportSQL319.732byte, SHA2561b9094d4c0e0c65a16a7e2a5d989dfe0ea8f4576964f7de8b53830130ebdfb4c; SQLite độc lập mở được; restore vào D1 mới0e536fcd-f683-4dc9-9392-bcd11974a914 không Worker binding.5bảng/từng dòng/state/log/ID/count/totals khớp; nguồn data/versions/last_op không đổi, sequence19. SQL/file gốc giữ riêng không GitHub. Không restore đè nguồn/production hoặc xóa D1.
+
+Xem DISASTER-RECOVERY-PLAN.md và PRODUCTION-READINESS.md. Kết luận NO-GO: AndroidZIP sau vá/PC/PWA/Excel native/lịch sử đời đầu/inboxD1DR/RPO-RTO/cutover-retention còn thiếu. Giữ PR7 draft; không main/production.

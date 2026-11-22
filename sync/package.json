@@ -4,7 +4,8 @@
   "scripts": {
     "test": "node tests/sync.cjs && node tests/reminder-history.cjs && node tests/android-reminder-ui.cjs && node tests/dashboard-ui.cjs && node tests/ui-r4.cjs && node tests/ui-r4-dom.cjs && node tests/ui-r42.cjs",
     "test:data-safety": "node tests/data-safety-validation.cjs && node tests/data-safety-restore.cjs && node tests/data-safety-sync.cjs",
-    "test:backup-recovery": "node tests/backup-independence.cjs"
+    "test:backup-recovery": "node tests/backup-independence.cjs",
+    "test:storage-policy": "node tests/storage-growth.cjs && node tests/storage-failures.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "6.2.8",
