@@ -1,4 +1,4 @@
-import './safety.js';import './reminder-history.js';import './core.js';
+import './safety.js';import '../reminder-history.js';import './core.js';
 const C=globalThis.TGSyncCore,ORIGINS=new Set(['https://feature-v2-3-sync-foundation.tungcnc-congno.pages.dev','https://v23-b-tungcnc.pages.dev','https://v23-c-tungcnc.pages.dev']);
 const enc=new TextEncoder(),hash=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s))),b=>b.toString(16).padStart(2,'0')).join('');
 function unhex(s){if(typeof s!=='string'||!/^([a-f0-9]{2})+$/.test(s))throw Error('Signature invalid');return Uint8Array.from(s.match(/../g),x=>parseInt(x,16))}

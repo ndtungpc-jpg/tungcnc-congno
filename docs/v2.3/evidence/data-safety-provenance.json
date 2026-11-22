@@ -1,0 +1,18 @@
+{
+  "baseline": "7c3abf36778ebf1302f993b46b821e40603a93ee",
+  "generatedAt": "2026-11-22T04:32:56.681899+00:00",
+  "classification": "automated isolated simulation; not physical Android/PC and not live D1 end-to-end",
+  "productionChanged": false,
+  "files": {
+    "sync/core.js": "224f19f985d7d200850ee83d23d5f3c308cff89e9e7421e426ef63a2998d9d6e",
+    "sync/worker.js": "89218cf4c638e106e4f37270c75d5cd1385d0ce44b8d6c1be9ad5fccd71ed52d",
+    "sync/engine.js": "e2c65d2ff0233b404f8810e167e6e7633beafef8cab6ab96ac1b3de341dd5330",
+    "sync/client.js": "439a41b0b19d4bf860caac4ac71069e2d6253210c00617e271da7df4ed355853",
+    "safety.js": "f531a3986ed2eb31a80604e9313da96b23c137c2646b45ceac41730ef8ee3300",
+    "restore-safe.js": "a5555fd3ac03f6e67fab096ddb78f6e142b0247c9aed75a05f538ce27084d86e",
+    "file-tools.js": "b2ac072dfa7fc854dd1acaf1be64d2726c036f271610fb77b05cd1fb2375f777",
+    "sync/tests/data-safety-sync.cjs": "92710c5797404473a5794872f3daf8a937fab0f010a619f3f1e4d043ee3c554e",
+    "sync/tests/data-safety-restore.cjs": "527d1c051363d0e5490d4d8a3d10beb4075dbc046b647c032fd00c6b763d59fa",
+    "sync/tests/data-safety-validation.cjs": "3c60b53c78f590652b9773089993089cfc5c5cef837543cce45498920eda8e23"
+  }
+}

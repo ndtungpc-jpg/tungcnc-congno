@@ -2,7 +2,8 @@
   "name": "tungcnc-sync-v23-staging",
   "private": true,
   "scripts": {
-    "test": "node tests/sync.cjs && node tests/reminder-history.cjs && node tests/android-reminder-ui.cjs && node tests/dashboard-ui.cjs && node tests/ui-r4.cjs && node tests/ui-r4-dom.cjs && node tests/ui-r42.cjs"
+    "test": "node tests/sync.cjs && node tests/reminder-history.cjs && node tests/android-reminder-ui.cjs && node tests/dashboard-ui.cjs && node tests/ui-r4.cjs && node tests/ui-r4-dom.cjs && node tests/ui-r42.cjs",
+    "test:data-safety": "node tests/data-safety-validation.cjs && node tests/data-safety-restore.cjs && node tests/data-safety-sync.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "6.2.8",

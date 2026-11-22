@@ -181,3 +181,13 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - PDF thực kiểm tra bằng PyMuPDF: ba giá trị12.500.000đ ở thân và tổng kết có mép phải552.712/552.708/552.699pt (sai biệt<0.1pt). Phát hiện inset tổng kết trước đó lệch1mm, đã sửa và đo lại đạt.
 - PASS quan sát Chromium staging https://e2248ad5.tungcnc-congno.pages.dev/docs/v2.3/ui-r4-readonly: mở riêng cả hai PNG; khối lượng, đơn giá, thành tiền và lịch sử300.000 căn phải, tổng10.850.000/300.000/10.550.000 không đổi. Có ảnh chụp sau deploy, dùng dữ liệu giả RAM; không ghi dữ liệu kinh doanh thật.
 - CHƯA NGHIỆM THU Android vật lý/S24 Ultra, PDF/Excel mở trong ứng dụng Android và số tiền cực đại trên thiết bị thật. Không đánh dấu Android PASS dựa trên canvas/DOM/desktop. UI viewer/gesture không sửa trong bản vá này. PR7 draft; không main/production, không schema/IDB/localStorage/D1/protocol change.
+
+
+## DATA SAFETY AUDIT & SYNC ACCEPTANCE — 22/11/2026
+- Báo cáo: [DATA-SAFETY-AUDIT.md](DATA-SAFETY-AUDIT.md); [Checklist Android/PC](RELEASE-ACCEPTANCE-CHECKLIST.md). UI-R4.2.1 giữ nguyên.
+- PASS tự động: actual JSON export/preview/additive restore trong hai kho giả độc lập; kiểm tra đầy đủ partners/orders/payments/audit/trash/recovery/reminderTemplates/reminderEvents/excelImports; các ID và số dư nghiệp vụ giữ nguyên; nhập lại không viết; orphan chặn. Audit và recovery thêm1 đúng thiết kế, không phải nhân đôi nghiệp vụ.
+- PASS tự động: data-safety-sync mở rộng source Worker+SQLite/3 fake IndexedDB với tạo/sửa/xóa/restore đơn và sửa/backdate/hủy/restore payment. So C.records từng thiết bị với cloud mỗi checkpoint; 32 atomic commits, không duplicate khi mấtACK. Các bài conflict/stale preview/replay/revoke/onboarding2100 và lịch sử nhắc vẫn đạt.
+- Phát hiện có bằng chứng: nested quantity âm/unitPrice sai được core cũ chấp nhận. Đã thêm validation không coerce dữ liệu; Worker mô phỏng409, cloud không đổi, local+queue giữ. Sửa đường import reminder-history bị thiếu ở Worker; kiểm tra file import thực. **Chưa deploy Worker live bản vá**; metadata D1 staging đọc-only đúng binding riêng.
+- Hồi quy7 bộ npm test và audit công nợ5/5. JSON evidence và log trong evidence/; bộ mới `npm run test:data-safety`.
+- CHƯA XÁC MINH dữ liệu lịch sử đời đầu; schema1 giả parse thành công không thay bằng chứng đó. Android↔PC/PWA thật, quota/retention lâu dài, Worker live sau vá và disaster recovery D1 còn chưa nghiệm thu.
+- KẾT LUẬN: CHƯA ĐỦ ĐIỀU KIỆN nghiệm thu phát hành/production; tiếp tục test giới hạn bằng dữ liệu giả. Không merge main, không dữ liệu thật, không production. Các rủi ro và cổng phát hành xem báo cáo.
