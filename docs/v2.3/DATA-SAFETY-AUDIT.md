@@ -53,16 +53,16 @@ Không phát hiện mất/sai lệch công nợ trong các ca tự động đã 
 | Đơn/phiếu nhập | 2 | 2 | PASS |
 | Hạng mục/vật tư | 3 | 3 | PASS |
 | Dòng kích thước | 2 | 2 | PASS |
-| Phân bổ thanh toán | 1 | 1 | PASS |
-| Tổng đã thu khách | 0 | 0 | PASS |
-| Còn phải thu | 4,301,000 | 4,301,000 | PASS |
+| Phân bổ thanh toán | 2 | 2 | PASS |
+| Tổng đã thu khách | 1,000,000 | 1,000,000 | PASS |
+| Còn phải thu | 3,301,000 | 3,301,000 | PASS |
 | Đã trả NCC | 300,000 | 300,000 | PASS |
 | Còn phải trả NCC | 500,000 | 500,000 | PASS |
 | Lịch sử nhắc | 1 | 1 | PASS |
 | Mẫu nhắc | 1 | 1 | PASS |
 | Dấu vân tay nhập Excel | 1 | 1 | PASS |
 | Thùng rác | 1 | 1 | PASS |
-| Nhật ký | 6 | 7 | PASS — thêm đúng một bản ghi kỹ thuật |
+| Nhật ký | 7 | 8 | PASS — thêm đúng một bản ghi kỹ thuật |
 | Bản phục hồi | 1 | 2 | PASS — thêm đúng một bản ghi kỹ thuật |
 
 ID/nội dung bản ghi gốc được so trực tiếp; audit cũ vẫn nguyên, thêm đúng audit nhập; recovery thêm đúng snapshot trước nhập. Nhập lại cùng backup không đổi state; orphan bị chặn. Synthetic schema1 parse được mà input không mutate — **không phải bằng chứng dữ liệu đời đầu thật tương thích**.
