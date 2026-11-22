@@ -1,0 +1,48 @@
+{
+  "commit": "8fd16fcedfcb1876dd80005465f1ed6a3b250034",
+  "builder": "esbuild@0.25.12",
+  "sha256": "0388d66bd2b543281e415af2e57779f702e23bb70a963ef0561871b619346f72",
+  "bytes": 39906,
+  "inputs": [
+    {
+      "path": "reminder-history.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e294e3b2cc66e6f17b650a4970d931d56f69ae37",
+      "size": 10041,
+      "url": "https://api.github.com/repos/ndtungpc-jpg/tungcnc-congno/git/blobs/e294e3b2cc66e6f17b650a4970d931d56f69ae37"
+    },
+    {
+      "path": "sync/core.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "09a82df246feeb51e33521383af9d4d432d38a02",
+      "size": 4823,
+      "url": "https://api.github.com/repos/ndtungpc-jpg/tungcnc-congno/git/blobs/09a82df246feeb51e33521383af9d4d432d38a02"
+    },
+    {
+      "path": "sync/safety.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ab59e4f4a8bbbfa53b9d8c011a6e132c4fc9e28",
+      "size": 5991,
+      "url": "https://api.github.com/repos/ndtungpc-jpg/tungcnc-congno/git/blobs/9ab59e4f4a8bbbfa53b9d8c011a6e132c4fc9e28"
+    },
+    {
+      "path": "sync/worker.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36355d1fccc70f143f10f5854e886074ad82071b",
+      "size": 8216,
+      "url": "https://api.github.com/repos/ndtungpc-jpg/tungcnc-congno/git/blobs/36355d1fccc70f143f10f5854e886074ad82071b"
+    },
+    {
+      "path": "sync/wrangler.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d3d8bb987fff2bedda1c12498ec28e89fadead0",
+      "size": 317,
+      "url": "https://api.github.com/repos/ndtungpc-jpg/tungcnc-congno/git/blobs/5d3d8bb987fff2bedda1c12498ec28e89fadead0"
+    }
+  ]
+}

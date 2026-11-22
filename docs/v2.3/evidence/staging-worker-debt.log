@@ -1,0 +1,13 @@
+✔ correct receivables and payables (1.741514ms)
+✔ detect duplicate quote import and payment IDs (0.313128ms)
+✔ flag orphan payment and cancelled order with existing payment (0.29368ms)
+✔ detect overpayment and invalid money (0.290932ms)
+✔ read-only audit never modifies source (0.167972ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.816764
