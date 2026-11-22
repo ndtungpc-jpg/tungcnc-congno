@@ -3,3 +3,4 @@
 @media(max-width:430px){.r42-payment-open{grid-template-columns:24px minmax(0,1fr);gap:5px}.r42-payment-open>.r42-amount{grid-column:2;grid-row:1;justify-self:end}.r42-payment .r4-body{grid-column:2;grid-row:1;padding-top:22px}.r42-payment .r4-body strong{padding-right:0}.r42-payment .r4-body>span{font-size:11px}.r42-direction{width:24px}.r42-pay .r4-heading h2{font-size:19px}}
 #fileSaveDialog{z-index:1400!important}
 @media(max-width:430px){.r42-payment-open{grid-template-columns:24px minmax(0,1fr) auto}.r42-payment-open>.r42-amount{grid-column:3;grid-row:1}.r42-payment .r4-body{grid-column:2;grid-row:1;padding-top:0}.r42-payment .r4-body strong{font-size:13px}.r42-amount{font-size:12px}}
+.ui-r4 #r42PNGViewer .btn.primary,.ui-r4 .r42-report-options>.primary{background:#246399!important;color:#fff!important;border-color:#8cbfee!important}
