@@ -56,7 +56,24 @@ PASS automated: historical fractional order/payment exact full-record transport;
 ACK loss, offline replay, conflict handling, restore; oversized bootstrap leaves
 main/meta/cloud unchanged; invalid money diagnostics; 5 MB no-op cap.
 PASS regressions: npm test; test:data-safety; test:backup-recovery; test:storage-policy.
-NOT YET ACCEPTED: actual PC diagnostic IDs/bytes, real-data isolated two-device
-round trip, physical S24 acceptance and full per-ID comparison.
+PASS actual PC read-only diagnosis: 21 fractional orders and 3 fractional payments;
+119 customers, 619 orders, 46 payments. Exact IDs/values remain on the PC diagnostic
+screen; no private row-level financial data committed to GitHub.
+Local JSON: 5,340,436 bytes including local recovery copies. Actual empty-server
+transport snapshot: 1,647,868 bytes — PASS 5 MB. Bootstrap: 2,223 changes and
+1,827,204 request bytes — FAIL current atomic limits (2,000 changes, client
+900,000 bytes, server 1,000,000 bytes). No splitting, enable, registration, approval
+or bootstrap was performed. Existing staging D1 business state remains untouched.
+NO-GO actual PC -> S24 until an explicit bounded atomic-bootstrap solution and
+isolated real-copy acceptance environment are implemented and tested. Do not
+click through reconciliation on the current shared test D1.
+NOT YET ACCEPTED: real-data isolated two-device round trip, physical S24 acceptance
+and full per-ID comparison. Use `node sync/tests/compare-legacy.cjs PC.json S24.json`
+for offline read-only record/payment comparison (technical recovery copies differ
+by device and are outside the replicated ledger).
 Existing safety checks may reveal additional legacy inconsistencies after money
 validation is fixed; stop and report those IDs, never silently repair business data.
+
+Staging deployed: Pages commit 3a3f75ec149a939b92a4d77654285d3446fcc1d8,
+deployment 257e5f90-d5df-4d93-821d-a7ea291fcb31; Worker deployment
+0000a279923c48068f01532c30184fc6. No production resources changed.
