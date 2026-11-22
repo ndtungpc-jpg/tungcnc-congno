@@ -229,3 +229,12 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - Diễn tập thật: SQL sync staging319.732byte, SHA2561b9094d4c0e0c65a16a7e2a5d989dfe0ea8f4576964f7de8b53830130ebdfb4c; SQLite đọc độc lập. D1 DR mới0e536fcd-f683-4dc9-9392-bcd11974a914, restore1.658statement/10batch,5bảng/từng dòng khớp. State/log sequence19;41record/9đơn/4payment; phải thu20.927.300/phải trả500.000 giữ nguyên. Không restore đè, không bind Worker sang DR, không xóa D1. SQL/archive giữ riêng ngoài GitHub.
 - Hồi quy ZIP15checks +7suite +3data-safety +5debt PASS; thêm storage-policy. AndroidZIP/Excel thật, backup đời đầu, inboxD1restore, RPO/RTO/retention automation chưa nghiệm thu.
 - Production chỉ đọc: Công Nợmain e4d6d39/version2.1.12-direct-preview; Báo Giá branchtest/direct-quote-bridge ec02115. DB/PWAid/scope tương thích theo nguồn nhưng chưa upgrade thật; allowlist chỉstaging, icon manifest cần giữ đúng khi release. PR7 draft, không production.
+
+
+## A03 STORAGE SCALABILITY & SAFE CHECKPOINT — 22/11/2026
+
+- Thiết kế/prototype per-record JSON+SQL, delta/CAS/atomic financial op, chunked immutable checkpoint(<=256KiB), full receipts/quote/log archive, signed ACK và dry-run không executor. Không import vào app/Worker, không thay schema/runtime/UI hoặc staging data. A03 chưa đóng cho production.
+- Đo1.000/3.000/5.000/10.000đơn; source Worker memory/SQLite cap probe trả201/413/413/413. Không phải live onboarding. Prototype giữ40.020record tại10k, restore/checkpoint+tail/duplicate/conflict/root/totals PASS. App JSON import/preview/confirm/save/render thật trong jsdom/fakeIDB cả4cỡ PASS;10k preview49s/confirm66s, không nghiệm thu Android.
+- Dry-run thiếu ACK/ngoài thiết bị/pending/conflict/membership/rollback bị chặn. Positive attestation chỉfixture; mọiplan executable=false. Không pruneoperations/outbox/snapshot. Mã v1 chưa cólogFloor/bootstrap nên không được dọn log.
+- Nhóm3phân bổ/orphan/overpayment/receipts sau restore/tombstone quote và chặn overwrite checkpoint/target PASS prototype. Hồi quy đầy đủ giữ nguyên app logic; chỉ timeout chờ async crypto trong testdialog đổi sang thời hạn thực.
+- Đọc A03-SAFE-CHECKPOINT-DESIGN.md, STORAGE-POLICY.md và PRODUCTION-READINESS.md; evidence/a03-*.json/log. NO-GO, PR7 draft, không production/main.

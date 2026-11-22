@@ -95,3 +95,67 @@ Vá tối thiểu `sync/engine.js`: giữ failure tạm trong bộ nhớ, hiển
 | Retention tự động/checkpoint/all-device ACK | CHƯA TRIỂN KHAI | Không đủ chứng cứ dọn an toàn, A03 chưa đóng |
 
 Chạy `npm run test:storage-policy`; log/evidence cùng thư mục. Không dùng dữ liệu công nợ thật để gây lỗi. Kết luận **NO-GO production** tới khi có giới hạn thực tế, checkpoint/retention được chứng minh và nghiệm thu thiết bị.
+
+
+## A03 SCALABILITY & SAFE CHECKPOINT — 22/11/2026
+
+**A03 chưa đóng cho production.** Đã có thiết kế và prototype cô lập; không đổi runtime app/Worker/D1/IndexedDB, không dọn snapshot/log hoặc dữ liệu staging. Chi tiết: [A03-SAFE-CHECKPOINT-DESIGN.md](A03-SAFE-CHECKPOINT-DESIGN.md).
+
+### Kiến trúc được đề xuất
+
+Per-record JSON nguyên trạng + SQL indexes/CAS/transaction, delta theo cursor, checkpoint bất biến chia trang và archive kỹ thuật. Giữ order/items/sizes/payment group/ID/ngày/tiền như cũ; không tăng riêng cap5MB rồi tiếp tục copy toàn state. Physical storage/transport cần phiên bản mới và migration/shadow stores có kiểm chứng; chưa áp dụng trên kho đang dùng.
+
+Checkpoint có S/root/hash/count/totals, membership và các trang records/receipts/quote claims/log. Tất cả trang thử nghiệm <=256KiB/200dòng, ghi trong snapshot nhất quán. Shadow restore chỉ activate sau verify toàn bộ; sau đó replay tail>S. Receipts/idempotency, quote claims và tombstones giữ lâu dài. Old v1 không hiểu logFloor/rebootstrap nên **không prune log hiện tại**.
+
+ACK ECDSA gắn checkpoint/root/sequence/membership; device offline/missing/new, sai chữ ký/future sequence hoặc pending/conflict đều chặn. Prototype registry ở bộ nhớ, chưa là ACK ledger bền vững trong D1 và chưa chứng minh thiết bị đã ghi flash. Dry-run không có executor, luôn executable=false; positive branch chỉ dùng attestation giả lập để kiểm logic. Bản copy khác thư mục vẫn cùng máy nên externalBackupVerified thực tế là false; không được dùng làm phép dọn staging.
+
+### Đo 1.000 / 3.000 / 5.000 / 10.000 đơn
+
+Fixture mỗi bộ có20KH/1NCC, đúngNđơn gồm1phiếuNCC; phần lớn đơn có2hạng mục/2kích thước,2đợt thu khác ngày,1audit. Không phải dữ liệu thật. Một lượt đo mỗi cỡ trên Node/SQLite Linux, host dùng chung, cache có thể nóng; không p95/SLA, không D1/Android/network latency.
+
+| Đơn | JSON main byte | Handler Worker v1 | Prototype bootstrap ms | Checkpoint ms | Restore B ms | Delta transaction ms |
+|---:|---:|---|---:|---:|---:|---:|
+| 1,000 | 1,693,236 | HTTP201 | 244.10 | 164.39 | 179.09 | 3.91 |
+| 3,000 | 5,123,226 | HTTP413 | 951.71 | 355.48 | 518.41 | 12.96 |
+| 5,000 | 8,553,226 | HTTP413 | 1797.21 | 565.11 | 868.05 | 18.01 |
+| 10,000 | 17,128,226 | HTTP413 | 5818.12 | 1139.50 | 1759.88 | 38.98 |
+
+Handler là mã Worker hiện tại chạy với SQLite adapter trong memory; dữ liệu được preseed chỉ để đo **một lần sửa/cap**. HTTP201 ở1.000đơn không phải bằng chứng onboarding/end-to-end1.000đơn trên Cloudflare. Bộ3.000đơn5,12MB và lớn hơn bị413, giữ nguyên state; planner v1 cũng chặn. Không tăng cap trên staging.
+
+Prototype tại10.000đơn giữ40.020record/19.999payment/19.999item/19.998dimension. SQLite file45.789.184byte, checkpoint+full technical archive45.480.017byte,201trang records+119trang kỹ thuật, trang lớn nhất243.012byte. Delta sửa đơn+thu tiền+audit chỉ2.397byte; B/C nhận cùng root/số dư, retry không trùng, conflict sau một tentative put rollback toàn transaction. Restore checkpoint rồi replay tail mới hơn khớp hiện tại; checkpoint cũ không bị sửa khi ledger thay đổi.
+
+Đây **không phải giảm dung lượng miễn phí**: SQL/index/log/archive lớn hơn JSON17,13MB; lợi ích là tránh nhân full state ở mỗi pull và bounded page/delta. Content-addressed reuse, real D1 CPU/quota, targeted validation và client per-record chưa tích hợp. Peak RSS là toàn driver (gồm fixture/Worker VM), không phải RAM ứng dụng điện thoại.
+
+### Phục hồi bằng mã app hiện tại
+
+Mã importData/preview/confirmBackupRestore/save/render thật chạy trong jsdom +fake IndexedDB mới; không stub render, nhưng không browser layout/PWA/flash thật. Audit nhập và recovery tăng đúng1 theo thiết kế, ID/payload trước đó giữ nguyên. Dữ liệu thu hai đợt dùng ngày khác nhau để không yêu cầu bỏ qua nghi trùng.
+
+| Đơn | Preview ms | Xác nhận/lưu/render ms | Đối soát ms | ID/tiền/lưu fakeIDB |
+|---:|---:|---:|---:|---|
+| 1,000 | 1037.30 | 1132.21 | 26.16 | PASS tự động |
+| 3,000 | 5556.96 | 5838.47 | 239.18 | PASS tự động |
+| 5,000 | 12733.46 | 16512.13 | 637.83 | PASS tự động |
+| 10,000 | 49013.97 | 66484.91 | 4152.79 | PASS tự động |
+
+Local JSON restore10.000đơn PASS không có nghĩa sync v1 hỗ trợ10.000đơn: server/planner5MB vẫn chặn. 49giây preview và66giây xác nhận ở10.000 trong lần đo này cho thấy đường restore/full-state vẫn cần tối ưu; không chuyển số đó thành dự báo S24.
+
+Fixture ban đầu có hai payment khácID nhưng cùng ngày/amount/method và bị preflight nghi trùng chặn (999conflict ở1.000đơn), không ghi vào kho. Giữ nguyên guard, không tự gộp/không đổi code restore để ép PASS. Backup lịch sử thật có trường hợp tương tự cần review chủ xưởng; vẫn CHƯA XÁC MINH.
+
+### Trạng thái kiểm thử
+
+| Mục | Kết quả |
+|---|---|
+| 4cỡ dữ liệu, byte/time/restore/delta/checkpoint+tail | PASS Node/SQLite cô lập |
+| Code app JSON restore4cỡ, so ID/items/sizes/payment/totals | PASS jsdom/fakeIDB |
+| ACK missing/offline/member mới/sai chữ ký/sequence | PASS protocol test, không integration thiết bị |
+| Pin first-sync/reconciliation/pending/conflict/future | PASS dry-run, không xóa |
+| Backup ngoài thiết bị chưa verify | BLOCKED đúng thiết kế |
+| Hash page hỏng/restore target đã có/checkpoint overwrite | Bị chặn; shadow rollback, dữ liệu nguồn giữ nguyên |
+| Nhóm3phân bổ nguyên tử, orphan/overpayment/retry/quote tombstone | PASS prototype tests |
+| 7suite/3data-safety/ZIP/storage/debt hiện có | PASS hồi quy; sửa riêng timeout chờ dialog trong test cho host bận |
+| D1 live/Android/PC vật lý10.000đơn, quota/power loss | CHƯA KIỂM THỬ |
+| Durable ACK/client tx/retention executor/fragmentation/migration | CHƯA TRIỂN KHAI |
+
+Code `sync/experiments/a03/` không được app/SW/Worker import. Chạy `npm run test:a03-scale` và `npm run test:a03-app-restore`; fake IndexedDB cần dependencies hiện có. Evidence `a03-scalability.json`, `a03-app-restore.json` và logs cùng prefix. Không gửi fixture vào D1 live. Không xóa log khi v1 còn hoạt động.
+
+**NO-GO**: bước tiếp là staging v2 riêng cho per-record/ACK/paged bootstrap và migration có backup; cần benchmark D1/S24, device ACK thật và backup ngoài thiết bị được đọc lại trước khi đề nghị cleanup. Không coi prototype đạt là A03 production đã xử lý xong.

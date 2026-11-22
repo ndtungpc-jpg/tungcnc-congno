@@ -104,7 +104,7 @@ Ghi model/OS/browser/PWA, origin/commit/thời gian, số liệu trước-sau v�
 | ZIP/JSON/Excel/SHA/fresh app restore | PASS tự động | S24/Chrome/Zalo và Excel thật sau vá |
 | SQL sync D1 full restore riêng | PASS thực tế | Inbox D1 và toàn bộ kịch bản DR |
 | Quota false-sync | FAIL trước, PASS mô phỏng sau | Áp lực quota thật |
-| A03 checkpoint/retention/ACK | CHƯA TRIỂN KHAI | Implementation/backup/pin/tests trước cleanup |
+| A03 checkpoint/retention/ACK | Prototype cô lập; runtime chưa | Implementation/backup/pin/tests trước cleanup |
 | Dữ liệu đời đầu/nhiều kho riêng | CHƯA XÁC MINH | Bản ẩn danh và owner review |
 | Android/PC/PWA/power-loss | CHƯA KIỂM THỬ đủ | Checklist vật lý |
 | Prod config/resources/maintenance/rollback | CHƯA SẴN SÀNG | Tài nguyên riêng, review và diễn tập |
@@ -112,3 +112,15 @@ Ghi model/OS/browser/PWA, origin/commit/thời gian, số liệu trước-sau v�
 | Lệnh phát hành v2.3 của chủ xưởng | CHƯA CÓ | Xác nhận riêng sau nghiệm thu; không dùng lệnh cũ của phiên bản khác |
 
 **NO-GO**. Đọc STORAGE-POLICY.md và DISASTER-RECOVERY-PLAN.md để xem bằng chứng/giới hạn. Báo cáo này không cho phép tự thực thi cutover.
+
+
+## A03 scalability / checkpoint — bổ sung22/11/2026
+
+**NO-GO không đổi.** Có thiết kế dài hạn [A03-SAFE-CHECKPOINT-DESIGN.md](A03-SAFE-CHECKPOINT-DESIGN.md), benchmark1k/3k/5k/10k và actual-app restore trong kho giả. Xem STORAGE-POLICY.md để có bảng byte/ms/giới hạn.
+
+- V1 với bộ3.000đơn đã>5MB, handler/planner từ chối413 và không đổi state. Không nâng cap để che nghẽn.
+- Prototype per-record JSON/SQL phục hồi và đối soát10.000đơn/40.020record, chia201trang records+119trang kỹ thuật <=256KiB; receipts/log/quote claims và tail đều phục hồi. B/C localSQLite hội tụ, không phải client Android/D1 thực tế.
+- ACK ký ECDSA, pin và dry-run có negative tests; real off-device proof không có cho checkpoint mới nên BLOCKED. Luôn executable=false, không cleanup hoặc migration staging.
+- App JSON restore10.000đơn trong jsdom/fakeIDB giữ ID/totals nhưng preview49s/confirm66s; không phải mobile acceptance hoặc sync10k thành công.
+- Trước production cần Worker/D1 v2 riêng, durable ACK/bounded bootstrap/shadow activation/client migration/oversized group/recovery+tail cùng nghiệm thu quota/thiết bị thật. Giữ nguyên payload nghiệp vụ; không tự gộp hoặc bỏ audit/payment.
+- App runtime/Worker/D1/UI không thay trong đợt này. Chỉ thêm prototype/test/report và sửa chờ dialog trong test để không flake dưới tải CPU. Không merge main, không production.
