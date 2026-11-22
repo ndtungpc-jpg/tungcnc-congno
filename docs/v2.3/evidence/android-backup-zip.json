@@ -1,0 +1,135 @@
+{
+  "environment": "Synthetic data only. Actual app JS in fresh jsdom/fake-indexeddb; independent Python/openpyxl. NOT Microsoft Excel GUI or Android physical.",
+  "results": [
+    {
+      "name": "same immutable snapshot; JSON envelope v2 accepted by unchanged legacy parser; hashes verify",
+      "status": "PASS"
+    },
+    {
+      "name": "tampered new JSON rejected; historical JSON without metadata remains supported",
+      "status": "PASS"
+    },
+    {
+      "name": "destroyed private test database; fresh app confirmed additive JSON restore preserves all supported business records and balances",
+      "status": "PASS"
+    },
+    {
+      "name": "repeat JSON restore adds no duplicate IDs/payments",
+      "status": "PASS"
+    },
+    {
+      "name": "actual import blocks checksum corruption and same-ID changed data without overwriting existing records",
+      "status": "PASS"
+    },
+    {
+      "name": "same JSON separately restores local quote inbox after confirmation, without creating debt",
+      "status": "PASS"
+    },
+    {
+      "name": "one verified ZIP download contains JSON/XLSX/SHA256.json from one snapshot; source unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "corrupt CRC, truncated/missing-component ZIP and valid-CRC archive with wrong SHA-256 are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "cancelled ZIP never falls back to loose files or reports completed backup",
+      "status": "PASS"
+    },
+    {
+      "name": "Excel generation and ZIP integrity errors block every download; no partial backup",
+      "status": "PASS"
+    },
+    {
+      "name": "actual DOM filename dialog opens once, sanitizes ZIP name and activates exactly one download",
+      "status": "PASS"
+    },
+    {
+      "name": "standalone JSON export still uses its original file and does not mutate accounting",
+      "status": "PASS"
+    },
+    {
+      "name": "independent Python extracts ZIP, verifies CRC/SHA-256/snapshot and opens XLSX offline",
+      "status": "PASS"
+    },
+    {
+      "name": "independent openpyxl opens nine-sheet XLSX offline; links/counts/allocations/totals/precision/right-alignment reconcile",
+      "status": "PASS"
+    },
+    {
+      "name": "16-digit historical money retained as exact text, never rounded by Excel numeric precision",
+      "status": "PASS"
+    }
+  ],
+  "counts": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "items": 3,
+    "sizes": 2,
+    "payments": 5,
+    "audit": 12,
+    "trash": 1,
+    "recovery": 1,
+    "reminderEvents": 2,
+    "reminderTemplates": 1,
+    "excelImports": 1
+  },
+  "totals": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "payments": 5,
+    "receivable": 6651000,
+    "payable": 500000,
+    "received": 650000,
+    "disbursed": 300000.125
+  },
+  "restoredCounts": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "items": 3,
+    "sizes": 2,
+    "payments": 5,
+    "audit": 13,
+    "trash": 1,
+    "recovery": 2,
+    "reminderEvents": 2,
+    "reminderTemplates": 1,
+    "excelImports": 1
+  },
+  "jsonSha256": "cfe877822a88eed6057e16677be4eac12afc5c967edd55ddae3f829f7d917df0",
+  "xlsxSha256": "78955102fba899578b2d81ceeb99349bdce80336619f3df6859efa547d984ead",
+  "originalDatabaseDeleted": true,
+  "productionOrD1Access": false,
+  "workbookSheets": [
+    "Khách hàng",
+    "Nhà cung cấp",
+    "Đơn hàng",
+    "Hạng mục",
+    "Kích thước",
+    "Thanh toán và phân bổ",
+    "Tổng hợp công nợ",
+    "Lịch sử nhắc nợ",
+    "Thông tin sao lưu và đối soát"
+  ],
+  "limitations": [
+    "D1 server data, device keys/outbox, themes/drafts/cache excluded",
+    "Excel is independent readable projection, not a full restore format",
+    "Local inbox restores business payload/status/receivedAt; recomputes fingerprint and does not preserve arbitrary extra row metadata",
+    "Physical Microsoft Excel and Android/PWA not tested",
+    "Earliest real historical backups not provided"
+  ],
+  "reportedBeforePatch": {
+    "device": "Samsung S24 Ultra",
+    "browsers": [
+      "Chrome",
+      "Zalo"
+    ],
+    "status": "FAIL (owner reported)",
+    "symptom": "Excel not requested after JSON"
+  },
+  "afterPatchPhysicalAndroid": "UNTESTED"
+}

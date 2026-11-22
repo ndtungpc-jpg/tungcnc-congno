@@ -6,9 +6,9 @@ Ngày22/11/2026, nhánh `feature/v2.3-sync-foundation`. Nguồn trước thay đ
 
 **PASS kỹ thuật tự động cho phạm vi đã kiểm chứng:** cùng snapshot JSON/XLSX, checksum, phục hồi dữ liệu nghiệp vụ được liệt kê bên dưới vào kho giả mới sau khi xóa kho giả cũ, đọc workbook độc lập, không nhân đôi khi phục hồi lại. **CHƯA NGHIỆM THU toàn bộ disaster recovery/production:** chưa mở file bằng Microsoft Excel GUI/Android thật, chưa có dữ liệu lịch sử đời đầu và chưa diễn tập phục hồi D1. Không tuyên bố phục hồi toàn bộ mọi dữ liệu của thiết bị/dịch vụ.
 
-## Cấu trúc bộ sao lưu
+## Cấu trúc bộ sao lưu (đã vá Android: một ZIP)
 
-Thao tác mới **Sao lưu JSON + Excel độc lập** tạo trước cả hai định dạng từ một bản chụp đã clone, không đọc lại state giữa các lần tải. Nguồn là `committed` của ứng dụng đang mở và hộp thư cục bộ tại lúc chụp. Không bao gồm bản nháp chưa lưu, outbox, thay đổi chưa nhận từ thiết bị khác hay toàn bộ tài khoản Cloudflare. Nếu hộp thư không đọc được, dừng và báo lỗi, không coi thiếu hộp thư là rỗng.
+Thao tác **Sao lưu JSON + Excel độc lập** hiện tạo một ZIP, chứa `backup.json`, `backup.xlsx`, `SHA256.json`. Cả bộ lấy từ một bản chụp đã clone, không đọc lại state trong khi tạo các thành phần. Chỉ một hộp thoại đặt tên ZIP và một thao tác tải. Nguồn là `committed` của ứng dụng đang mở và hộp thư cục bộ tại lúc chụp. Không bao gồm bản nháp chưa lưu, outbox, thay đổi chưa nhận từ thiết bị khác hay toàn bộ tài khoản Cloudflare. Nếu hộp thư không đọc được, dừng và báo lỗi, không coi thiếu hộp thư là rỗng.
 
 ### JSON phục hồi
 
@@ -38,9 +38,9 @@ Các cột tiền căn phải, không ép làm tròn. Số trên15 chữ số đ
 
 ### Checksum và lưu file
 
-File thứ ba `*_SHA256.json` chứa SHA-256 toàn byte JSON và XLSX, tên thực tế sau chỉnh sửa, thời gian chung, schema/counts/totals và snapshot hash. Không nhúng checksum của XLSX vào chính XLSX: đây là tham chiếu vòng không thể dùng làm kiểm tra toàn byte. Hash JSON cũng được ghi trong sheet thông tin Excel.
+Thành phần `SHA256.json` bên trong ZIP chứa SHA-256 toàn byte JSON và XLSX, tên thành phần cố định trong ZIP, thời gian chung, schema/counts/totals và snapshot hash. Không nhúng checksum của XLSX vào chính XLSX: đây là tham chiếu vòng không thể dùng làm kiểm tra toàn byte. Hash JSON cũng được ghi trong sheet thông tin Excel.
 
-Nếu build Excel lỗi hoặc người dùng hủy bất kỳ file nào, báo bộ sao lưu chưa hoàn tất. Không tự xóa file đã tải hoặc bản sao cũ. Trình duyệt chỉ chứng minh đã yêu cầu tải, không biết người dùng đã lưu thật lên ổ đĩa; thông báo yêu cầu kiểm tra đủ3 file, không ghi nhận “đã lưu thành công” giả. Nút Sao lưu JSON cũ được giữ để dùng riêng, kể cả khi dữ liệu quá lớn để tạo Excel. Giới hạn Excel:32.767 ký tự/ô,1.048.576 dòng/sheet; nếu vượt phải báo lỗi, không cắt nội dung.
+Trước khi mở hộp thoại đặt tên, ZIP được đọc lại để kiểm tra EOCD/central/local header, tên/đủ3 thành phần, kích thước, CRC-32, SHA-256 JSON/XLSX, hash snapshot và cấu trúc/CRC của XLSX lồng. ZIP32 dạng STORE không cần CDN hoặc mạng. Nếu build Excel/ZIP hoặc xác minh lỗi, không gọi download và không tải file thiếu. Nếu hủy ZIP, báo chưa hoàn tất và không chuyển sang tải file rời. Không tự xóa file đã tải hoặc bản sao cũ. Trình duyệt chỉ chứng minh đã yêu cầu tải, không biết người dùng đã lưu thật lên ổ đĩa; thông báo yêu cầu kiểm tra ZIP tải xuống và giải nén đủ3 thành phần, không ghi nhận “đã lưu thành công” giả. Nút Sao lưu JSON cũ được giữ để dùng riêng, kể cả khi dữ liệu quá lớn để tạo Excel. Giới hạn Excel:32.767 ký tự/ô,1.048.576 dòng/sheet; nếu vượt phải báo lỗi, không cắt nội dung.
 
 SHA-256 phát hiện thay đổi byte, không mã hóa và không xác thực người tạo. Ai có file có thể đọc và tự tính lại hash; không chia sẻ bản sao kinh doanh công khai.
 
@@ -76,11 +76,11 @@ So từng ID/nội dung của partners/orders/payments/trash/reminderEvents/remi
 | Nhiều phân bổ, cùng ngày nhiều lần, ngày thu cũ | PASS tự động | 5 payment ID giữ riêng; nhóm3 dòng600.000, lần khác50.000 không gộp; ngày15/10 không đổi |
 | Workbook độc lập offline | PASS openpyxl | Mở9sheet chỉ từ file, so ID/liên kết/counts/tổng; không import mã app hay gọi mạng |
 | Số thập phân và số16 chữ số | PASS tự động | Không làm tròn giá trị item459999.99999999994/tiền lẻ;16 chữ số giữ nguyên dạng chữ |
-| Hủy JSON/Excel/checksum, Excel encoder lỗi | PASS tự động | Không báo hoàn tất; lỗi build không yêu cầu tải file nào |
-| File tên đã sửa và checksum | PASS tự động | Hash đúng bytes và tên thực tế của hai download |
+| Hủy ZIP, Excel/ZIP encoder lỗi | PASS tự động | Không báo hoàn tất; lỗi build/verify không yêu cầu tải file nào |
+| Tên ZIP và checksum | PASS tự động | Tên ZIP được sửa/làm sạch; hash đúng bytes của thành phần bên trong |
 | Hồi quy đồng bộ/công nợ/UI-R4.2.1 | PASS tự động |7 bộ npm test,3 bộ data-safety và5 debt audit chạy lại |
 | Microsoft Excel GUI / Excel Android | CHƯA KIỂM THỬ | openpyxl không thay thế nghiệm thu ứng dụng Excel thực tế |
-| Android/PWA tải3 file thật, dung lượng lớn | CHƯA KIỂM THỬ | Cần chủ xưởng thử S24 Ultra; không đánh dấu bằng VM |
+| Android/PWA tải ZIP thật, dung lượng lớn | CHƯA KIỂM THỬ | Cần chủ xưởng thử S24 Ultra; không đánh dấu bằng VM |
 | Bản sao lịch sử đời đầu | CHƯA XÁC MINH | Chưa được cung cấp |
 | D1 disaster recovery | CHƯA KIỂM THỬ trong đợt này | Không chạm Worker/D1; xem báo cáo staging trước |
 
@@ -97,11 +97,51 @@ Chạy `npm run test:backup-recovery` trong sync, cần Node24, jsdom/fake-index
 ## Hướng dẫn chủ xưởng
 
 1. Trên từng thiết bị có dữ liệu riêng: lưu đơn đang nhập, kiểm tra trạng thái đồng bộ và số dư. Khi cần backup trước xử lý xung đột, giữ bản riêng của từng thiết bị, không tự hợp nhất.
-2. Vào **Dữ liệu → Nhập / Xuất dữ liệu → Sao lưu JSON + Excel độc lập**. Đặt tên khi tải từng file. Kiểm tra đủ JSON, XLSX và SHA256.json trong Tải xuống. Cho phép nhiều lượt tải nếu trình duyệt yêu cầu. Giữ nút JSON cũ cho trường hợp chỉ cần cứu bản JSON.
-3. Mở Excel từ Tải xuống để đối chiếu. Giữ nguyên bản gốc không chỉnh sửa; nếu cần làm việc, tạo bản sao. Cất thêm một bản ở PC/USB/thư mục cá nhân bảo vệ tốt. Không gửi GitHub, Pages công khai hoặc kèm file kinh doanh vào báo cáo lỗi.
+2. Vào **Dữ liệu → Nhập / Xuất dữ liệu → Sao lưu JSON + Excel độc lập**. Đặt tên ZIP một lần và bấm Tải file một lần. Trong Tải xuống, dùng My Files/Tệp của bạn trên Samsung hoặc công cụ ZIP để giải nén; kiểm tra `backup.json`, `backup.xlsx`, `SHA256.json`. Không cần cho phép3 lượt tải liên tiếp. Giữ nút JSON cũ cho trường hợp chỉ cần cứu bản JSON.
+3. Mở `backup.xlsx` sau giải nén để đối chiếu. Giữ nguyên bản gốc không chỉnh sửa; nếu cần làm việc, tạo bản sao. Cất thêm một bản ở PC/USB/thư mục cá nhân bảo vệ tốt. Không gửi GitHub, Pages công khai hoặc kèm file kinh doanh vào báo cáo lỗi.
 4. Kiểm tra hash ngoài app: PowerShell `Get-FileHash -Algorithm SHA256 <file>` hoặc Linux `sha256sum <file>`; so với SHA256.json. Tên file đổi ngoài app không làm đổi byte/hash.
 5. Khi mất app/thiết bị: dùng app thử mới/cài lại ở môi trường kiểm soát. **Phục hồi dữ liệu** chọn JSON, xem trước counts/tổng/xung đột, xác nhận khi đã đối chiếu. Không nhập đè kho đang sử dụng. So lại số đơn, payment ID, phải thu/phải trả; nhập lại không được tăng số liệu.
 6. Nếu JSON có hộp thư cục bộ: mở **Hộp thư báo giá → Thêm file báo giá JSON**, chọn chính JSON backup, xác nhận bổ sung. Mục đã có giữ nguyên, không tự tạo công nợ. Xác minh báo giá chờ bằng mắt.
 7. Khi Cloudflare/app không truy cập được: Excel vẫn là file OOXML cục bộ để đọc/đối soát; JSON cần giữ tới khi có bản app tương thích để phục hồi. Không upload file vào công cụ chuyển đổi công khai. Khôi phục app không đồng nghĩa khôi phục D1 hoặc trạng thái xác thực/đồng bộ.
 
 **Không phát hành production từ báo cáo này.** Giữ PR7 draft, chờ nghiệm thu thiết bị và quy trình D1 riêng.
+
+
+## FIX ANDROID BACKUP DOWNLOAD — 22/11/2026
+
+### Lỗi thực tế và sửa nguồn
+
+Chủ xưởng xác nhận trên S24 Ultra cả Chrome/Zalo đều dừng sau JSON, báo Excel chưa được yêu cầu tải. **Luồng3file cũ: FAIL nghiệm thu Android.** Chưa có trace thiết bị để kết luận chính xác chính sách trình duyệt/user activation nào gây hủy; không coi kiểm thử VM trước đó là chứng cứ Android PASS.
+
+Thay luồng ba download thành một ZIP đã build/verify hoàn chỉnh rồi mới gọi download. Giữ đúng một dialog đặt tên và một anchor click trong giao diện xuất file hiện hữu. Không sửa `exportData()` JSON riêng, JSONv2/backupIntegrity, báo cáo, công nợ hoặc sync. Thêm MIME application/zip và đổi SW asset cache để thiết bị lấy mã mới; không xóa IndexedDB/localStorage. File-tools vẫn chỉ xác nhận yêu cầu tải, không khẳng định Android đã lưu thành công.
+
+Trong khi kiểm tra phát hiện manifest cũ đặt app trước spread metadata, bị app của snapshot ghi đè. Đã đổi thứ tự đặt trường định danh sau spread để manifest đúng `TungGiang-Backup-Checksums`. Chỉ thay manifest checksum, không đổi JSON nghiệp vụ.
+
+### Bằng chứng sau vá
+
+| Kiểm thử | Kết quả | Bằng chứng |
+|---|---|---|
+| Một snapshot,3 thành phần trong một ZIP | PASS tự động | JSON giải nén khớp committed snapshot, không thay state; JSON/XLSX có SHA và thời gian chung |
+| CRC sai / ZIP cắt cụt / thiếu thành phần | PASS tự động | verify chặn trước download |
+| CRC hợp lệ nhưng SHA trong manifest sai | PASS tự động | SHA-256 verification từ chối |
+| XLSX encoder lỗi / XLSX sai cấu trúc | PASS tự động | Không gọi download, không xuất JSON rời hoặc ZIP thiếu |
+| Một dialog + một lần tải | PASS DOM tự động | Dùng download/finishFileSave thật trong jsdom:1dialog,1anchor click, đuôiZIP/tên không hợp lệ được làm sạch, queue rỗng sau thao tác |
+| Hủy ZIP | PASS tự động | Chỉ1request, không fallback file rời, không báo hoàn tất |
+| JSON riêng | PASS tự động | Mở dialog JSON gốc, nội dung backup appv2, state giữ nguyên |
+| Giải nén độc lập | PASS Python zipfile | testzip/CRC, đúng3file, checksum JSON/XLSX khớp |
+| Excel từ ZIP không cần app/Cloudflare | PASS openpyxl | Đọc9sheet, số đơn/payment và số dư phải thu/phải trả khớp manifest |
+| Phục hồi JSON / ID / nhóm thanh toán | PASS tự động hồi quy | Fresh app sau xóa kho giả, không duplicate hoặc ghi đè |
+| S24 Ultra Chrome/Zalo sau vá | CHƯA KIỂM THỬ vật lý | Cần chủ xưởng tải ZIP, giải nén và mở Excel thật; không thay bằng DOM |
+| Microsoft Excel GUI / Android Excel | CHƯA KIỂM THỬ | openpyxl chỉ chứng minh định dạng đọc độc lập, không phải nghiệm thu native |
+
+Evidence mới: `evidence/android-backup-zip.json`, `android-backup-zip-tests.log`, logs hồi quy cùng prefix. Script `sync/tests/backup-zip-check.py` giải nén chỉ dữ liệu giả trong thư mục tạm ngoài repo. Không commit ZIP/JSON/XLSX kinh doanh.
+
+### Chủ xưởng thử lại
+
+1. Mở đúng staging, nhận bản cập nhật PWA hoặc tải lại trang. Không xóa dữ liệu website/ứng dụng để làm mới.
+2. Chọn Sao lưu JSON + Excel độc lập, đặt tênZIP, bấm Tải file một lần. Kiểm tra trong My Files → Downloads.
+3. Giải nén ZIP, mở backup.xlsx; kiểm tra KH/NCC/đơn/thanh toán/tổng nợ. Giữ nguyên backup.json và SHA256.json.
+4. Nếu Zalo chặn tải blob, mở cùng staging bằng Chrome để thử và ghi rõ trình duyệt/thông báo. Đây là giới hạn chưa kiểm chứng, không tự coi Chrome đã PASS.
+5. Phục hồi dùng JSON đã giải nén qua luồng xem trước/xác nhận cũ; không chọn ZIP trực tiếp trong Phục hồi dữ liệu. Không restore thử lên kho thật.
+
+**Kết luận: PASS kỹ thuật ZIP và hồi quy, CHƯA NGHIỆM THU Android vật lý sau vá.** Chỉ staging, PR7 draft; không merge main/production. Các giới hạn D1, outbox, dữ liệu lịch sử và Microsoft Excel ở báo cáo trước vẫn giữ nguyên.

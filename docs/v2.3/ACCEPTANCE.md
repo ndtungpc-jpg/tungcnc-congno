@@ -212,3 +212,11 @@ Kiểm thử: node sync/tests/android-reminder-ui.cjs (jsdom 26.1.0, chỉ DOM t
 - PASS tự động: xóa kho fake IndexedDB nguồn, app/VM mới phục hồi4đơn/3hạng mục/2kích thước/5payment, nhóm3 phân bổ,2reminder/1template/trash/excelImports; audit12→13/recovery1→2 đúng cơ chế. Giữ thu650.000/phải thu6.651.000/chi300.000,125/phải trả500.000. Nhập lại không tăng bản ghi. Workbook mở bằng Python/openpyxl độc lập, không mã app/mạng. Hủy1/2/3file và lỗi encoder đều không báo hoàn tất.
 - Hồi quy7 bộ npm test +3 data-safety +5 debt audit PASS. Chi tiết/evidence và hướng dẫn: [BACKUP-RECOVERY-ACCEPTANCE.md](BACKUP-RECOVERY-ACCEPTANCE.md).
 - CHƯA KIỂM THỬ Microsoft Excel GUI, Android/PWA tải thật, backup đời đầu, tải lớn/quota và D1 restore. Không coi snapshot app là backup server hoặc private key/outbox/draft/theme. Excel là bản đọc, không phải full restore. PR7 draft; không main/production.
+
+
+## FIX ANDROID BACKUP DOWNLOAD — 22/11/2026
+
+- Chủ xưởng xác nhận luồng3file cũ FAIL trên S24 Ultra/Chrome/Zalo. Thay bằng1ZIP chứa backup.json/backup.xlsx/SHA256.json, từ cùng committed snapshot, verify toàn bộ trước1dialog/1download. JSON riêng/JSONv2/schema/kế toán/sync/UI giữ nguyên; chỉ MIMEZIP và SW cache cập nhật.
+- PASS tự động: cấu trúc ZIP/CRC/nested XLSX/SHA/snapshot; từ chối archive lỗi/cắt cụt/thiếu file/saiSHA; encoder/verify lỗi không tải; hủy không fallback; actual DOM một dialog/anchor click; JSON riêng giữ nguyên; Python giải nén và openpyxl đọc9sheet/đối soát độc lập; restore/ID/payment hồi quy.
+- Sửa app định danh manifest bị metadata spread ghi đè; không thay JSON phục hồi. Chi tiết: BACKUP-RECOVERY-ACCEPTANCE.md, evidence/android-backup-zip.*.
+- CHƯA KIỂM THỬ S24 Ultra Chrome/Zalo sau vá và Excel native. Không lấy DOM/zipfile/openpyxl thay nghiệm thu Android. Chỉ staging, không main/production.
