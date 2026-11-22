@@ -11,7 +11,7 @@ paymentsCardsView=function(monthOnly=false){
 };
 // One immutable PNG blob per exact report snapshot, shared by preview/download/share.
 const r42RenderPNG=reportPNG;let r42PNGCache=null,r42Viewer=null,r42PreviewSequence=0;
-reportPNG=async function(d){const key=canonicalRecord(d);if(r42PNGCache?.key===key)return r42PNGCache.blob;const blob=await r42RenderPNG(d);r42PNGCache={key,blob};return blob;};
+reportPNG=async function(d){const key=canonicalRecord({day:today(),data:d});if(r42PNGCache?.key===key)return r42PNGCache.blob;const blob=await r42RenderPNG(d);r42PNGCache={key,blob};return blob;};
 function r42Snapshot(){return canonicalRecord({partners:state.partners,orders:state.orders,payments:state.payments})}
 previewReport=function(pid,kind='debt'){
  const p=partner(pid);if(!p)return;
@@ -30,7 +30,7 @@ function r42ApplyZoom(){const v=r42Viewer;if(!v)return;const img=document.queryS
 function r42Zoom(factor){if(!r42Viewer)return;r42Viewer.scale=Math.min(8,Math.max(1,r42Viewer.scale*factor));r42ApplyZoom()}
 function r42Fit(){if(!r42Viewer)return;Object.assign(r42Viewer,{scale:1,x:0,y:0});r42ApplyZoom()}
 function r42ViewerFile(){const v=r42Viewer;if(!v||v.snapshot!==r42Snapshot())throw Error('Dữ liệu đã thay đổi. Đóng và tạo lại ảnh để đối chiếu.');return new File([v.blob],cleanExportName(document.getElementById('r42ViewerName').value,'png'),{type:'image/png'});}
-async function r42Output(action){const v=r42Viewer;if(!v)return;try{const file=r42ViewerFile();const execute=()=>action(file);if(partner(v.pid)?.type==='customer')return await runReminderExport(v.pid,v.kind==='orders'?'orders-png':'statement-png',execute);return await execute()}catch(e){const el=document.getElementById('r42ViewerStatus');if(el)el.textContent=e.message;}}
+async function r42Output(action){const v=r42Viewer;if(!v)return;try{const file=r42ViewerFile();const execute=()=>action(r42ViewerFile());if(partner(v.pid)?.type==='customer')return await runReminderExport(v.pid,v.kind==='orders'?'orders-png':'statement-png',execute);return await execute()}catch(e){const el=document.getElementById('r42ViewerStatus');if(el)el.textContent=e.message;}}
 function r42DownloadPNG(){return r42Output(async f=>(await download(f.name,f,'image/png'))?.requested===true)}
 function r42SharePNG(){return r42Output(async f=>{if(!navigator.share||navigator.canShare&&!navigator.canShare({files:[f]}))throw Error('Trình duyệt chưa hỗ trợ chia sẻ PNG; hãy tải ảnh rồi chọn trong Zalo/SMS.');try{await navigator.share({files:[f]});return true}catch(e){if(e.name==='AbortError')return false;throw e}})}
 // Attachment thumbnails use the exact prepared attachment, never a second report render.
