@@ -130,3 +130,17 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
 }
 /* Emergency wrapping only for exceptional values, without clipping money. */
 .r4-money b,.r4-money small{max-width:100%;overflow-wrap:anywhere}
+
+/* Final v2.3: three order states and compact phone rows. */
+.r4-order-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:700px){
+ .r4-order{min-height:56px;padding:4px 0}
+ .r4-order .r4-avatar,.r4-order .r4-order-status.updated{display:none}
+ .r4-order .r4-open{grid-template-columns:minmax(0,1fr) auto;min-height:46px;gap:8px}
+ .r4-order .r4-body strong{-webkit-line-clamp:1;font-size:13px}
+ .r4-order .r4-order-meta{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block!important}
+ .r4-order .r4-money{gap:2px}
+ .r4-order .r4-money b{font-size:12px}
+ .r4-order .r4-money small{font-size:10px}
+ .r4-order-tabs button{min-height:40px;font-size:12px}
+}
