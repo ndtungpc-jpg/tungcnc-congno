@@ -29,10 +29,12 @@ def transform(path,text):
         old="origin.includes('.baogia-tungcnc.')"
         assert old in text
         text=text.replace(old,'origin==='+json.dumps(QUOTE))
+    if path=='index.html': text=text.replace('Sổ công nợ · v2.3 · Đồng bộ thử nghiệm','Sổ công nợ · v2.3 · Đồng bộ')
     if path=='sync/client.js':
+        text=text.replace('Đồng bộ v2.3 · Thử nghiệm','Đồng bộ v2.3')
         # Production environment labels only; keep RC1 handlers and layout unchanged.
         text=text.replace('Kết nối kho nghiệm thu riêng · PC A / S24 B','Kết nối đồng bộ Production').replace('Bật đồng bộ STAGING?','Bật đồng bộ Production?').replace('Tên thiết bị thử nghiệm (A/B/C):','Tên thiết bị Production (PC/S24):')
-    if path=='version.json': text=json.dumps({'version':'2.3.0-rc1-production-prepared','feature':'sync-foundation','production':True})+'\n'
+    if path=='version.json': text=json.dumps({'version':'2.3.0','feature':'sync-foundation','production':True})+'\n'
     if path.endswith('_headers'):
         text=text.replace(' '.join([SYNC]*3),SYNC)
     # Freeze layout/UI. Environment strings remain as RC1 pending separate release approval.
