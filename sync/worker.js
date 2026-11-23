@@ -1,4 +1,4 @@
-import './safety.js';import '../reminder-history.js';import './core.js';
+import './safety.js';import '../reminder-history.js';import './core.js';import './pairing.js';
 const C=globalThis.TGSyncCore,ORIGINS=new Set(["https://tungcnc-congno.pages.dev"]);
 const enc=new TextEncoder(),hash=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s))),b=>b.toString(16).padStart(2,'0')).join('');
 // Initial bootstrap only, isolated D1, no partial business state or chunk uploads.
@@ -56,7 +56,7 @@ function deltaSql(kinds,appendChanges=null){
  UPDATE sync_state SET version=?,data=(SELECT data FROM candidate),versions=(SELECT versions FROM candidate),last_op=? WHERE id=1 AND version=? AND EXISTS(SELECT 1 FROM candidate WHERE length(CAST(data AS BLOB))<=5000000 AND length(CAST(data AS BLOB))+length(CAST(versions AS BLOB))+length(?)<=1900000)`;
 }
 function unhex(s){if(typeof s!=='string'||!/^([a-f0-9]{2})+$/.test(s))throw Error('Signature invalid');return Uint8Array.from(s.match(/../g),x=>parseInt(x,16))}
-export default {async fetch(request,env){const origin=request.headers.get('Origin'),url=new URL(request.url);const h={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin','X-Content-Type-Options':'nosniff'},out=(d,status=200)=>new Response(JSON.stringify(d),{status,headers:h}),rawOut=text=>new Response(text,{headers:h});if(!ORIGINS.has(origin))return out({error:'Origin not allowed'},403);Object.assign(h,{'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type, X-Device-Id, X-Time, X-Nonce, X-Signature'});if(request.method==='OPTIONS')return new Response(null,{status:204,headers:h});
+export default {async fetch(request,env){const origin=request.headers.get('Origin'),url=new URL(request.url);const h={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin','X-Content-Type-Options':'nosniff'},out=(d,status=200)=>new Response(JSON.stringify(d),{status,headers:h}),rawOut=text=>new Response(text,{headers:h});if(!ORIGINS.has(origin)&&origin!==env.PAIRING_ORIGIN)return out({error:'Origin not allowed'},403);Object.assign(h,{'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type, X-Device-Id, X-Time, X-Nonce, X-Signature'});if(request.method==='OPTIONS')return new Response(null,{status:204,headers:h});
 try{
  const raw=await limitedRequest(request);if(enc.encode(raw).length>1000000)return out({error:'Giao dịch vượt 1.000.000 byte; giữ nguyên hàng đợi, không chia nhỏ'},413);const now=Date.now();
  if(url.pathname==='/api/devices/register'&&request.method==='POST'){
@@ -72,6 +72,7 @@ try{
  const inserted=await env.DB.prepare('INSERT OR IGNORE INTO sync_nonces(device_id,nonce,at) VALUES(?,?,?)').bind(deviceId,nonce,now).run();if(!inserted.meta.changes)return out({error:'Replayed request'},401);
  if(url.pathname==='/api/device'&&request.method==='GET')return out({id:d.id,status:d.status});
  if(url.pathname==='/api/device/revoke'&&request.method==='POST'){await env.DB.prepare("UPDATE sync_devices SET status='revoked' WHERE id=?").bind(d.id).run();return out({status:'revoked'});}
+ if(env.ENABLE_DEVICE_PAIRING==='true'){const result=await globalThis.TGDevicePairing.route({db:env.DB,request,raw,device:d,origin,now,out,hash});if(result)return result;}
  if(d.status!=='approved')return out({error:'Device awaits owner approval'},403);
  if(env.PUBLIC_INITIAL_BOOTSTRAP==='disabled'&&['/api/sync/bootstrap/status','/api/sync/bootstrap'].includes(url.pathname))return out({error:'Khởi tạo lần đầu chỉ qua kế hoạch owner-admin đã duyệt; không gửi snapshot lớn qua Worker Free'},403);
  if(url.pathname==='/api/sync/bootstrap/status'&&request.method==='GET'){

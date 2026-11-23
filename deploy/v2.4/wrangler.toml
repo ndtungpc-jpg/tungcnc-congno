@@ -1,0 +1,13 @@
+name = "tungcnc-sync-v24-preview"
+main = "entry.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[vars]
+ENABLE_DEVICE_PAIRING = "true"
+PAIRING_ORIGIN = "https://feature-v2-4-device-pairing.tungcnc-congno.pages.dev"
+PUBLIC_INITIAL_BOOTSTRAP = "disabled"
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-sync-v23-staging"
+database_id = "49163cc1-a60d-49b1-9c93-da7a6f939977"
+# All queries are rewritten by entry.js to v24_sync_*; original tables are inaccessible.
