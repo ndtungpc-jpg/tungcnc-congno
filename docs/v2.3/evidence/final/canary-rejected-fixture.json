@@ -1,0 +1,215 @@
+{
+  "start": "2026-11-23T09:29:38.026Z",
+  "scope": "Independent Cloudflare canary; synthetic ledger only; two Workers share dedicated canary D1 due account10 limit",
+  "tests": [
+    {
+      "name": "Live default write lock503, staging origin403, preflight204",
+      "status": "PASS"
+    },
+    {
+      "name": "Live atomic synthetic large bootstrap plus second-device receive exact IDs/values",
+      "status": "PASS"
+    },
+    {
+      "name": "Live post-backup transaction and exact operation retry no duplicate",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "OPTIONS",
+      "status": 204
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "OPTIONS",
+      "status": 204
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 400
+    }
+  ],
+  "snapshotMetrics": {
+    "bytes": 1737872,
+    "stateRowBytes": 1812401,
+    "requestBytes": 295855
+  },
+  "failure": {
+    "message": "400 == 201",
+    "stack": "AssertionError [ERR_ASSERTION]: 400 == 201\n    at /workspace/scratch/9e37c7d8bbfe/canary-private/live.cjs:29:89\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
+  }
+}

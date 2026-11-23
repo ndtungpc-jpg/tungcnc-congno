@@ -1,0 +1,31 @@
+{
+  "status": "PASS_FILE_PREFLIGHT",
+  "isLatestPCProductionVerified": false,
+  "sourceFileSha256": "2841c2f2a16784ffd3941a68aedced88936f323ea7f84444e8e115bc096dd46b",
+  "summary": {
+    "customers": 119,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "receivable": 1250365237.2799997,
+    "payable": 0,
+    "received": 158896322.4,
+    "disbursed": 0
+  },
+  "activeTest": true,
+  "sourceRawBytes": 8808233,
+  "snapshotHash": "8c5887abcfb986f2d37795c89927d0d25dbadc154059d9be84f1aba636cdaea2",
+  "snapshotBytes": 1647911,
+  "stateRowBytes": 1760541,
+  "requestBytes": 222347,
+  "compressedBase64Bytes": 222036,
+  "receiptRowBytes": 1648289,
+  "checks": {
+    "snapshot5MB": true,
+    "stateRow1900000": true,
+    "decompressed1900000": true,
+    "base64_800000": true,
+    "request1000000": true,
+    "receipt1900000": true
+  }
+}

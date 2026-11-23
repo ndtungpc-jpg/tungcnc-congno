@@ -4,6 +4,7 @@ const root=path.resolve(__dirname,'..'),tmp=fs.mkdtempSync(path.join(os.tmpdir()
 cp.execFileSync('python',['scripts/prepare-v23-production.py','--out',out],{cwd:root,stdio:'pipe'});
 const read=p=>fs.readFileSync(path.join(out,p),'utf8'),manifest=JSON.parse(read('manifest.json'));
 for(const [p,sha]of Object.entries(manifest.files)){assert.equal(require('crypto').createHash('sha256').update(fs.readFileSync(path.join(out,p))).digest('hex'),sha);if(/\.(js|html)$|_headers$/.test(p))assert(!/https:\/\/(?:feature-|v23-[bc]-|tungcnc-(?:sync-v23-(?:staging|legacy-acceptance|bootstrap-rehearsal)|quote-inbox-staging))/.test(read(p)),p);}
+assert.equal(manifest.requiresWorkersPaid,true);assert.equal(manifest.workerCpuMs,1000);for(const kind of ['sync','quote-inbox'])assert(read('workers/'+kind+'/wrangler.toml').includes('[limits]\ncpu_ms = 1000'));
 for(const [base,sw]of [['pages','sw.js'],['pages/bao-gia','sw.js']]){const match=read(base+'/'+sw).match(/const ASSETS=(\[[^;]+?\])/);for(const asset of vm.runInNewContext(match[1])){const p=asset.replace(/^\.\//,'').replace(/^\//,'')||'index.html';assert(fs.existsSync(path.join(out,base,p)),`Missing cached asset ${base}/${p}`)}}
 assert(!read('pages/direct-receiver.js').includes('c28f411b'));
 for(const p of ['index.html','manifest.webmanifest']){if(p==='index.html'){assert(read('pages/'+p).includes("DBNAME='tunggiang-congno-v2',STORE='state'"));assert(read('pages/'+p).includes('indexedDB.open(DBNAME,1)'));}else assert.equal(read('pages/'+p),fs.readFileSync(path.join(root,p),'utf8'));}

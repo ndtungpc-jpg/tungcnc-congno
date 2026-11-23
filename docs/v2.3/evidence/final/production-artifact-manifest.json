@@ -1,7 +1,9 @@
 {
   "sourceCommit": "93486544ed9af0e0b651bb1a73dbe404f7e3c0bf",
   "target": "production-v23",
-  "builderSha256": "81aae0318ed21623776a25ddeb98001e2b8459f112206fe4afe939d82c47ee7a",
+  "builderSha256": "fc1ec78814768b5062039f78e2328d1fcf10d9bf5d641f0e1a38db3e8b8754ba",
+  "requiresWorkersPaid": true,
+  "workerCpuMs": 1000,
   "writesDefault": "blocked",
   "deploymentPerformed": false,
   "files": {
@@ -89,13 +91,13 @@
     "workers/quote-inbox/entry.js": "5bac423bb025bd0a3525f56c64f2436f7459b6c89dd6e37168bf37dc670dcb90",
     "workers/quote-inbox/schema.sql": "e580d50520f53c75946358d164ac93e34b29a13713e11a4eb1ea0ab27176f44c",
     "workers/quote-inbox/worker.js": "2d5f2353521a3c5dd662ae945f7ae989104e00900e20135b253101139a3b2106",
-    "workers/quote-inbox/wrangler.toml": "7b5ce824b6ad32369de2146b08cd8e9546b0dffe37f176bd24ad6d98c7499f1e",
+    "workers/quote-inbox/wrangler.toml": "aaa5102780fd4940358a7229b109ba43f19445e5e2242e94f6bba88be01895dd",
     "workers/sync/core.js": "e8e92d8e56ffcc1726d6a3842c94dd750fbfe7cdeb754dd2fb479280c3f59816",
     "workers/sync/entry.js": "70f06f8e5f0572e9bbefdd51aabb79ce2c6fc0a0d38a9021a4f58d438cdb7e35",
     "workers/sync/reminder-history.js": "fe38c58c638f4164257ed27bb06f34fb3628d67e0a90863a58cfaad73efdad19",
     "workers/sync/safety.js": "f531a3986ed2eb31a80604e9313da96b23c137c2646b45ceac41730ef8ee3300",
     "workers/sync/schema.sql": "426c6344e8cf039f543b88374b301e3dc94e31a732fbd8abc141a964d3059a85",
     "workers/sync/worker.js": "b51f384d8c701c8dfded9a7a52ab9418f64c10b7e246ffda5522471e25575efc",
-    "workers/sync/wrangler.toml": "f7444845a340087382aaabdd49a6df9dce47432213105af79b134f7728a9b6cd"
+    "workers/sync/wrangler.toml": "af80ab51bb77b748cde48f6c1972f434c2aa228e1c585fc4460d936360e93612"
   }
 }

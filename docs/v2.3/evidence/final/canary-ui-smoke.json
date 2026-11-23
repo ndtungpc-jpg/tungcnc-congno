@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "testOnly": true,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 99207
+    },
+    {
+      "path": "/sync/client.js",
+      "status": 200,
+      "bytes": 15524
+    },
+    {
+      "path": "/sync/engine.js",
+      "status": 200,
+      "bytes": 13792
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "bytes": 2389
+    },
+    {
+      "kind": "sync",
+      "origin": "https://tungcnc-v23-canary-ui-20261123.ndtung-pc.workers.dev",
+      "status": 400
+    },
+    {
+      "kind": "sync",
+      "origin": "https://tungcnc-congno.pages.dev",
+      "status": 403
+    },
+    {
+      "kind": "inbox",
+      "origin": "https://tungcnc-v23-canary-ui-20261123.ndtung-pc.workers.dev",
+      "status": 400
+    },
+    {
+      "kind": "inbox",
+      "origin": "https://tungcnc-congno.pages.dev",
+      "status": 403
+    }
+  ],
+  "unknownPaths": 404
+}

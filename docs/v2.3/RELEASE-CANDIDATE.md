@@ -29,6 +29,10 @@ Không lấy dòng `physicalPCAndS24: NOT YET TESTED` của fixture tự động
 
 Đã đóng blocker119/118: xác nhận chủ xưởng + so backup119/export118 chỉ khác đúng xóa TEST có trash/audit/revision; mọi đơn/payment và lịch sử cũ giữ nguyên; hash2.224records khớp D1 live seq2. Chi tiết và phạm vi ở mục2a final gate. Không phục hồi TEST hoặc thay đổi Production. Fresh cutover exports/backup và các gate thiết bị/rollback vẫn mở.
 
+## Bổ sung go-live preparation — nguồn PC119
+
+Chủ xưởng chọn PC Production119 giữ TEST; S24 Production owner-confirmed chưa dùng, vẫn cần kiểm kho. A/B118 không phải nguồn cutover. Canary rollback/version và explicit conflict trên Cloudflare đã PASS với dữ liệu giả; còn nghiệm thu OS/UI. CPU sync p99=121.505ms không có headroom Free10ms; package mới chuẩn bị cpu_ms1000/requiresWorkersPaid, chưa triển khai/nâng gói. File119 lịch sử kiểm lại bootstrap/restore exact PASS, snapshot1.647.911/row1.760.541/request222.347byte; chưa được coi là file PC cuối. Xem final gate2b/2c và CANARY-DEVICE-FINAL-STEPS.md.
+
 ## Tái tạo và kiểm tra bộ phát hành
 
 ```sh

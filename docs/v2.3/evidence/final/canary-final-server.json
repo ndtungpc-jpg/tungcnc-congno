@@ -1,0 +1,12 @@
+{
+  "sequence": 5,
+  "receipts": 5,
+  "inbox": 1,
+  "orders": 619,
+  "payments": 48,
+  "heldPaymentCount": 1,
+  "recordsHash": "803cfc865bcb3b68abd5f98a54ce46409908ebf65eb2e3510868e997c4b02bd4",
+  "rowsWritten": 0,
+  "readOnly": true,
+  "changedDb": false
+}

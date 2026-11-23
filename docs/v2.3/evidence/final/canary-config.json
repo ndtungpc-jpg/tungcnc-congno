@@ -1,0 +1,19 @@
+{
+  "account": "de5012d37eb79706d59ccc39e1cb8b74",
+  "productionSyncD1": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+  "productionInboxD1": "78e3141d-d03c-4012-adff-e1c2002085fa",
+  "productionWrites": "blocked",
+  "canaryD1": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+  "canaryOnly": true,
+  "accountD1Limit": 10,
+  "canarySharedDbLimitation": "two independent canary workers; distinct sync/inbox schemas in one new D1, not two-D1 isolation drill",
+  "files": {
+    "sync/entry.js": "70f06f8e5f0572e9bbefdd51aabb79ce2c6fc0a0d38a9021a4f58d438cdb7e35",
+    "sync/reminder-history.js": "fe38c58c638f4164257ed27bb06f34fb3628d67e0a90863a58cfaad73efdad19",
+    "sync/core.js": "e8e92d8e56ffcc1726d6a3842c94dd750fbfe7cdeb754dd2fb479280c3f59816",
+    "sync/safety.js": "f531a3986ed2eb31a80604e9313da96b23c137c2646b45ceac41730ef8ee3300",
+    "sync/worker.js": "b51f384d8c701c8dfded9a7a52ab9418f64c10b7e246ffda5522471e25575efc",
+    "quote-inbox/entry.js": "5bac423bb025bd0a3525f56c64f2436f7459b6c89dd6e37168bf37dc670dcb90",
+    "quote-inbox/worker.js": "2d5f2353521a3c5dd662ae945f7ae989104e00900e20135b253101139a3b2106"
+  }
+}
