@@ -72,7 +72,7 @@ try{
  const inserted=await env.DB.prepare('INSERT OR IGNORE INTO sync_nonces(device_id,nonce,at) VALUES(?,?,?)').bind(deviceId,nonce,now).run();if(!inserted.meta.changes)return out({error:'Replayed request'},401);
  if(url.pathname==='/api/device'&&request.method==='GET')return out({id:d.id,status:d.status});
  if(url.pathname==='/api/device/revoke'&&request.method==='POST'){await env.DB.prepare("UPDATE sync_devices SET status='revoked' WHERE id=?").bind(d.id).run();return out({status:'revoked'});}
- if(env.ENABLE_DEVICE_PAIRING==='true'){const result=await globalThis.TGDevicePairing.route({db:env.DB,request,raw,device:d,origin,now,out,hash});if(result)return result;}
+ if(env.ENABLE_DEVICE_PAIRING==='true'){const result=await globalThis.TGDevicePairing.route({db:env.DB,request,raw,device:d,origin,now,out,hash,initialDevice:env.ENABLE_PREVIEW_INITIAL_DEVICE==='true'&&origin===env.PAIRING_ORIGIN&&!ORIGINS.has(origin)?{origin:env.INITIAL_DEVICE_ORIGIN,hash:env.INITIAL_DEVICE_GRANT_HASH,expires:Number(env.INITIAL_DEVICE_GRANT_EXPIRES)}:null});if(result)return result;}
  if(d.status!=='approved')return out({error:'Device awaits owner approval'},403);
  if(env.PUBLIC_INITIAL_BOOTSTRAP==='disabled'&&['/api/sync/bootstrap/status','/api/sync/bootstrap'].includes(url.pathname))return out({error:'Khởi tạo lần đầu chỉ qua kế hoạch owner-admin đã duyệt; không gửi snapshot lớn qua Worker Free'},403);
  if(url.pathname==='/api/sync/bootstrap/status'&&request.method==='GET'){

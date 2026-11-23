@@ -1,10 +1,21 @@
 (function(root){'use strict';
 const TTL=300000;
-async function route({db,request,raw,device:d,origin,now,out,hash}){
+async function route({db,request,raw,device:d,origin,now,out,hash,initialDevice}){
  const path=new URL(request.url).pathname,post=request.method==='POST';
- if(!['/api/pairing/code','/api/pairing/join','/api/pairing/devices','/api/pairing/rename','/api/pairing/revoke','/api/pairing/presence'].includes(path))return null;
+ if(!['/api/pairing/initialize','/api/pairing/code','/api/pairing/join','/api/pairing/devices','/api/pairing/rename','/api/pairing/revoke','/api/pairing/presence'].includes(path))return null;
  const data=post?JSON.parse(raw||'{}'):{};
  const rate=async(key,max,period)=>{const bucket=await hash('pairing:'+key+':'+Math.floor(now/period)),r=await db.prepare('INSERT INTO sync_rates(bucket,n) VALUES(?,1) ON CONFLICT(bucket) DO UPDATE SET n=n+1 RETURNING n').bind(bucket).first();return r.n<=max;};
+ // Owner capability is issued privately via Cloudflare administration, never by this API.
+ // First-device grant is Preview-only, expires, and cannot be reused by another identity.
+ if(path==='/api/pairing/initialize'&&post){
+  if(!initialDevice||initialDevice.origin!==origin||!Number.isFinite(initialDevice.expires)||initialDevice.expires<=now||!/^([a-f0-9]{64})$/.test(initialDevice.hash||''))return out({error:'Khởi tạo thiết bị chưa được chủ xưởng cấp phép hoặc đã hết hạn.'},403);
+  const ip=request.headers.get('CF-Connecting-IP')||'unknown';
+  if(!await rate('initialize:'+ip,5,TTL))return out({error:'Thử khởi tạo quá nhiều lần. Vui lòng chờ 5 phút.'},429);
+  if(!/^[a-f0-9]{64}$/.test(data.grant||'')||await hash(data.grant)!==initialDevice.hash)return out({error:'Liên kết khởi tạo không hợp lệ.'},403);
+  if(d.status==='approved')return out({status:'approved',id:d.id}); // same signed identity recovering ACK
+  const result=await db.prepare("UPDATE sync_devices SET status='approved' WHERE id=? AND origin=? AND status='pending' AND NOT EXISTS(SELECT 1 FROM sync_devices WHERE origin=? AND status!='pending') AND EXISTS(SELECT 1 FROM sync_state WHERE id=1 AND version=0 AND NOT EXISTS(SELECT 1 FROM json_each(data) WHERE key IN ('partners','orders','payments','audit','trash','excelImports','reminderHistory') AND json_array_length(value)>0)) AND NOT EXISTS(SELECT 1 FROM sync_operations)").bind(d.id,origin,origin).run();
+  return result.meta.changes?out({status:'approved',id:d.id},201):out({error:'Sổ đã được khởi tạo hoặc đã có dữ liệu. Hãy dùng mã kết nối; dữ liệu không thay đổi.'},409);
+ }
  if(path==='/api/pairing/join'&&post){
   const ip=request.headers.get('CF-Connecting-IP')||'unknown';
   if(!await rate('join-ip:'+ip,10,TTL)||!await rate('join-device:'+d.id,5,TTL))return out({error:'Nhập sai quá nhiều lần. Thử lại sau 5 phút.'},429);
