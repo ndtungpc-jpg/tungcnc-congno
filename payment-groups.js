@@ -1,5 +1,13 @@
 'use strict';
 // Optional linkage only; legacy accounting records are never rewritten for display.
+// Display-only exception confirmed by the owner; never persisted back to a payment.
+function paymentDateInfo(p){
+ if(p.id==='legacy-thanhtoan-479')return {day:'',rank:-2,label:'Thu trước năm 2022 · Sổ cũ'};
+ const day=typeof p.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(p.date)&&excelDate(p.date)===p.date?p.date:'';
+ return {day,rank:day?0:-1,label:day?date(day):'Chưa rõ ngày thu/chi'};
+}
+function comparePaymentDates(a,b){const x=paymentDateInfo(a),y=paymentDateInfo(b);return x.rank-y.rank||x.day.localeCompare(y.day)||String(a.id).localeCompare(String(b.id));}
+function paymentDateLabel(p){return paymentDateInfo(p).label;}
 function paymentLink(p){
  if(typeof p.paymentGroupId==='string'&&p.paymentGroupId)return {key:'group:'+p.paymentGroupId,explicit:true,id:p.paymentGroupId};
  const m=String(p.note||'').match(/ · (Phân bổ|Chi NCC) ([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i);

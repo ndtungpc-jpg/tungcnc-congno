@@ -4,7 +4,7 @@ function reportData(pid,kind='debt'){
  const pt=partner(pid);if(!pt)return null;let d;
  if(pt.type==='customer')d=customerStatementData(pid);else{const orders=state.orders.filter(o=>o.partnerId===pid&&!o.cancelled),ids=new Set(orders.map(o=>o.id)),payments=state.payments.filter(p=>ids.has(p.orderId));d={pt,orders,payments,gross:orders.reduce((a,o)=>a+o.amount,0),received:payments.reduce((a,p)=>a+p.amount,0),remaining:orders.reduce((a,o)=>a+balance(o),0)}}
  if(d.discrepancy)throw Error('Số liệu không khớp. Kiểm tra dữ liệu trước khi xuất.');
- return {...d,kind:kind==='orders'?'orders':'debt',orders:[...d.orders].sort((a,b)=>String(a.created||'').localeCompare(String(b.created||''))),payments:[...d.payments].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')))};
+ return {...d,kind:kind==='orders'?'orders':'debt',orders:[...d.orders].sort((a,b)=>String(a.created||'').localeCompare(String(b.created||''))),payments:[...d.payments].sort((a,b)=>comparePaymentDates(a,b))};
 }
 function reportTitle(kind){return kind==='orders'?'BẢNG THỐNG KÊ ĐƠN HÀNG':'BẢNG ĐỐI CHIẾU CÔNG NỢ'}
 function reportOrderRows(d){return d.orders.flatMap(o=>{
@@ -17,7 +17,7 @@ function reportOrderRows(d){return d.orders.flatMap(o=>{
  for(const [i,x] of items.entries())rows.push(['', '  '+(i+1)+'. '+[x.name,x.core,x.finish].filter(Boolean).join(' / ')+(x.sizes?.length?'\n'+x.sizes.map(z=>[z.widthMm,z.heightMm].filter(v=>v!==''&&v!=null).join(' × ')+' mm · SL '+(z.count??1)).join('; '):''),quantity(x),price(x),x.amount==null?'—':money(x.amount)]);
  rows.push(['','Tổng đơn (đã gồm điều chỉnh)','—','—',money(o.amount)]);return rows;
  });}
-function reportPaymentRows(d){const groups=typeof paymentGroups==='function'?paymentGroups({...state,payments:d.payments}):d.payments.map(p=>({rows:[p]}));return groups.sort((a,b)=>String(a.rows[0].date||'').localeCompare(String(b.rows[0].date||''))).map(g=>{const p=g.rows[0];return [date(p.date),friendlyPaymentNote(p),p.method||'Chưa rõ',money(g.rows.reduce((n,p)=>n+p.amount,0))]})}
+function reportPaymentRows(d){const groups=typeof paymentGroups==='function'?paymentGroups({...state,payments:d.payments}):d.payments.map(p=>({rows:[p]}));return groups.sort((a,b)=>comparePaymentDates(a.rows[0],b.rows[0])).map(g=>{const p=g.rows[0];return [paymentDateLabel(p),friendlyPaymentNote(p),p.method||'Chưa rõ',money(g.rows.reduce((n,p)=>n+p.amount,0))]})}
 function reportSections(d){return [{title:'I. Chi tiết đơn hàng',headers:['Ngày','Nội dung/Hạng mục','Khối lượng/ĐVT','Đơn giá','Thành tiền'],rows:reportOrderRows(d),widths:[22,65,31,29,35],right:[2,3,4]},...(d.kind==='debt'?[{title:'II. Lịch sử thanh toán',headers:['Ngày','Nội dung','Hình thức','Số tiền'],rows:reportPaymentRows(d),widths:[27,86,32,37],right:[3]}]:[])]}
 function reportSummary(d){return d.kind==='debt'?[['Tổng đơn hàng',money(d.gross)],['Tổng thanh toán',money(d.received)],['TỔNG CÒN PHẢI THANH TOÁN',money(d.remaining)]]:[['Số đơn hàng',String(d.orders.length)],['TỔNG GIÁ TRỊ ĐƠN HÀNG',money(d.gross)]]}
 function reportHTML(d){return `<div class="report-paper"><h2>${reportTitle(d.kind)}</h2><p>${esc(d.pt.name)} · Ngày lập ${date(today())}</p>${reportSections(d).map(s=>`<h3>${s.title}</h3>${table(s.headers,s.rows.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x).replaceAll('\n','<br>')+'</td>').join('')+'</tr>').join(''))}`).join('')}<h3>${d.kind==='debt'?'III. Tổng kết':'II. Tổng kết'}</h3>${reportSummary(d).map((x,i)=>`<p class="${i===reportSummary(d).length-1?'report-total':''}">${esc(x[0])}: <b>${esc(x[1])}</b></p>`).join('')}</div>`}
