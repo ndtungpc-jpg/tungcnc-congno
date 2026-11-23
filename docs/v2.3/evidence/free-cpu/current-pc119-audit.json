@@ -1,0 +1,94 @@
+{
+  "status": "PASS_CURRENT119_SOURCE_RECONCILIATION",
+  "sourceFile": "CongNo_2026-11-23.json",
+  "sourceFileSha256": "538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3",
+  "sourceRawBytes": 8808204,
+  "exportedAt": "2026-11-23T16:02:49.479Z",
+  "sourceAuthority": "Owner supplied current PC Production export in response to119-source request; screenshot version2.1.12 matches displayed debt and debtors; no live IndexedDB inspection inferred",
+  "counts": {
+    "partners": 119,
+    "orders": 619,
+    "payments": 46,
+    "audit": 1438,
+    "trash": 1,
+    "recovery": 8,
+    "customersNeedingCollection": 118
+  },
+  "testActive": true,
+  "testRemovedOrRestoredByAssistant": false,
+  "summary": {
+    "customers": 119,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "receivable": 1250365237.2799997,
+    "payable": 0,
+    "received": 158896322.4,
+    "disbursed": 0
+  },
+  "idSetHashes": {
+    "partners": "ed05da9913c3176e7ead53d0179f542373692efeb8b94bafccfa79405210c971",
+    "orders": "55e2b8cf9aaeaa07086ea041fedb80862fc90ce1416befc6f8c3562c35e9698f",
+    "payments": "59805525935a84b129c33e3336644ea2f43796d0fdb07b4aa78b4ab218da716a",
+    "audit": "16d964eaed3f45a4ab63637f083ed5f42aa7cb65e34a82e0285a7e725d359ab0",
+    "trash": "6e2f2cb5e476c56f9a7b96bc854aa5b8622a008e1dd6f904ef29e339d2fa6116",
+    "excelImports": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "reminderTemplates": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "reminderEvents": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "collectionHashes": {
+    "partners": "a8961bae5da3bc30aacf18b9ba5679a5bc61235db2e32dc2f975d622b88d62ce",
+    "orders": "424aefb9f7949ac2afc68204d54a5350e63b9909f052b3056b19df256b41c5cb",
+    "payments": "367f1d47cbeaa7e4e37f97c98873b23ffafb8acd3b4b7208d0d3e24939ac11dc",
+    "audit": "13850ed7675c439134d4d930637aa23ac4ad18060c277328f9f505e16d32c252",
+    "trash": "5239f94f2e44a3f2c91778fc8f227d5bc9c1b6ec84f10f6c3a4d6bdfd1764e30",
+    "recovery": "0bbe0b154bdb607a3a8708ee007ce2a502f242e805c3e7c5854043195db48b89"
+  },
+  "referenceFileSha256": "2841c2f2a16784ffd3941a68aedced88936f323ea7f84444e8e115bc096dd46b",
+  "comparison": {
+    "partnersOrdersPaymentsTrashExact": true,
+    "allBusinessDatesFractionalAmountsAndAllocationsExact": true,
+    "common1437AuditRowsExact": true,
+    "common7RecoveryRowsExact": true,
+    "importHistoryDifference": {
+      "oldAuditId": "3ed98d94-19ec-4d40-8790-8302c1a1ef38",
+      "currentAuditId": "3e9fcfb1-260a-4da8-9f1c-c6659ec059a5",
+      "oldAt": "2026-11-21T19:02:08.174Z",
+      "currentAt": "2026-11-21T06:05:28.880Z",
+      "changedFields": [
+        "id",
+        "at",
+        "device"
+      ],
+      "sameActionKindRecordIdBeforeAfter": true,
+      "oldRecoveryId": "357ade7e-3abf-4e19-8380-ed781c9e1bf4",
+      "currentRecoveryId": "a075506f-71e3-4f56-a38d-6cc2147385eb",
+      "sameRecoveryPayload": true
+    },
+    "optionalEmptyReminderTemplates": "Absent in supplied Production export; [] in reference. Original file not normalized or rewritten.",
+    "allOtherDataRootFieldsExact": true
+  },
+  "snapshotHash": "aaa6d0f06f27f3e2d9951ce9bf1cd89bf538b0f33f2a5f7d8781e8fb3eb6cad6",
+  "snapshotBytes": 1647911,
+  "stateRowBytes": 1760541,
+  "ownerAdminReceiptRowBytes": 1761011,
+  "sourceFilesUnchanged": true,
+  "productionWrites": false,
+  "realSnapshotSentToCloudflare": false,
+  "productionDeviceAndGrantNotIssued": true,
+  "independentPhysicalDeviceRestoreNotCertified": true,
+  "newSourceCopyTests": {
+    "status": "PASS",
+    "scope": "Generated blocked Production artifact on isolated in-memory SQLite/fake IndexedDB COPY of newly uploaded119 source, no Cloudflare or Production writes",
+    "publicBootstrapDisabledTest": true,
+    "legacyBootstrapRegressionOnlyWithExplicitTestOverride": true,
+    "lostAckRetryNoDuplicate": true,
+    "twoWayCopyTransactions": true,
+    "restoreBaselineThenNewDeltaExact": true,
+    "allIdsRawValuesDatesAllocationsAndHistoryEqual": true,
+    "sourceFileSha256AfterTest": "538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3",
+    "limitations": [
+      "Physical PC/S24 OS tests and large ledger restore to a second Cloudflare D1 are still pending"
+    ]
+  }
+}

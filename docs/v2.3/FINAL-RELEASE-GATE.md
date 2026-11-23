@@ -1,6 +1,6 @@
 # V2.3 — Final release gate
 
-Ngày23/11/2026 (Việt Nam). **NO-GO Production; tiếp tục RC1 trên Free. Canary/rollback và bản tối ưu delta đã kiểm thử; còn file PC119 cuối, nghiệm thu thiết bị, CPU dư địa nhỏ và phương án recovery khi đủ10 D1.**
+Ngày23/11/2026 (Việt Nam). **NO-GO Production; tiếp tục RC1 trên Free. Canary/rollback và bản tối ưu delta đã kiểm thử; nguồn PC119 mới đã đối soát PASS; còn nghiệm thu thiết bị, CPU dư địa nhỏ và phương án recovery khi đủ10 D1.**
 
 **Nguồn authoritative đã được chủ xưởng chọn: PC Production, giữ nguyên119 đối tác bao gồm TEST. Không sử dụng bản nghiệm thu118 hoặc canary để khởi tạo Production.** S24 Production chưa từng dùng theo xác nhận chủ xưởng; chưa kiểm IndexedDB thực tế, phải kiểm trước nhận.
 Không merge main hoặc triển khai Production trong nhiệm vụ này. PASS nghiệm thu PC/S24 không đồng nghĩa phê duyệt cutover. Tài liệu này thay thế kết luận/inventory cũ của `PRODUCTION-READINESS.md`; A03 không phải điều kiện của v2.3, vẫn để v2.4.
@@ -23,9 +23,10 @@ Không merge main hoặc triển khai Production trong nhiệm vụ này. PASS n
 | Airplane/reopen và giải quyết conflict bằng UI trên kho riêng | CHƯA NGHIỆM THU thiết bị | Mô phỏng đã PASS, không chứng nhận airplane/OS kill |
 | Chênh lệch 119/118 do xóa TEST | PASS — CLOSED | Chủ xưởng xác nhận có chủ đích; backup119 → export118 chỉ khác đúng TEST/trash/audit/revision; hash D1 live khớp. Evidence test-deletion-*.json |
 | Authoritative | OWNER CONFIRMED | PC Production119 giữ TEST; A/B118 chỉ là bằng chứng nghiệm thu |
-| File nguồn mới + backup trước cutover và S24 local storage | OPEN | PC đã yêu cầu tải JSON nhưng chưa đọc/kiểm hash file; S24 owner-confirmed chưa dùng, IndexedDB thực tế chưa kiểm |
+| File nguồn PC119 mới | PASS file và bản sao tự động | CongNo_2026-11-23.json, SHA538d02eb…; mục8; giữ TEST và toàn lịch sử nguồn này |
+| S24 Production local storage | OPEN thiết bị | Owner-confirmed chưa dùng, chưa kiểm IndexedDB thực tế |
 | Production runtime bindings/secrets/approval trực tiếp | CHƯA DEPLOY, chưa xác minh live | Chỉ xác minh config package; resource inventory đọc-only |
-| Backup độc lập trước cutover + restore kiểm tra | CHƯA ĐỦ bằng chứng hiện thời | Backup nghiệm thu cũ có; backup Production-PC vừa yêu cầu tải chưa xác nhận thành công; D1 Production trống chưa áp schema |
+| Backup PC hiện thời + restore kiểm tra | PASS file/bản sao local; còn thiết bị/D1 độc lập | JSON mới giữ SHA nguồn; test copy restore+delta PASS. Không thay nghiệm thu physical hoặc backup đúng thời điểm cutover |
 | Cho phép phát hành riêng của chủ xưởng | CHƯA YÊU CẦU | Chỉ xin sau các gate bắt buộc đã đóng |
 
 ## 2. Kiểm kê nguồn và lựa chọn authoritative
@@ -121,12 +122,12 @@ Giới hạn thực thi delta: snapshot5.000.000byte; request1.000.000byte; tố
 
 Hướng dẫn cụ thể: [CANARY-DEVICE-FINAL-STEPS.md](CANARY-DEVICE-FINAL-STEPS.md).
 
-1. Gửi JSON PC Production119 mới nhất; S24 mở Production → kiểm tra kho0/0/0, không nhập/sync.
+1. JSON PC Production119 đã nhận/đối soát ở mục8, không yêu cầu xuất lại khi chưa có thay đổi. S24 mở Production → kiểm tra kho0/0/0, không nhập/sync.
 2. Hai máy mở link canary riêng, bật đồng bộ và gửi2mã thiết bị; chỉ approve trên D1 canary. Nhận dữ liệu giả rồi làm ZIP/Excel/JSON-restore cùng một lượt.
 3. Gộp airplane/reopen/pending và same-ID UI conflict thành một lượt trên canary; gửi2export/ảnh, không thao tác thử trên sổ thật.
 4. Xác nhận Dashboard đang Workers Free (API billing403, chưa thể tự chứng nhận gói). Không nâng cấp. Account đã10/10D1: cần phương án sao lưu/đối soát kho thử rồi phê duyệt riêng giải phóng một slot phục hồi; chưa xóa D1 nào.
 
-Còn chặn: chưa đọc file PC cuối và kiểm backup độc lập; S24 IndexedDB thực tế chưa kiểm; ZIP/PWA/Excel/JSON-restore/airplane/UI-conflict vật lý chưa có bằng chứng; CPU lần đầu11ms chưa đạt tiêu chí mọi request≤10ms, gói tài khoản và slot recovery chưa xác minh/đóng. Không dùng tối ưu không thiết yếu để mở rộng phạm vi; không đổi sang Paid. Canary/rollback protocol đã PASS không thay các bước OS/UI. D1 Production còn trống nghiệp vụ, Worker Production chưa tồn tại nên binding/live write-lock Production chỉ được kiểm sau phê duyệt triển khai riêng; không coi đó là việc được phép làm trong chuẩn bị.
+Còn chặn hiện tại (file PC119 đã đóng ở mục8): S24 IndexedDB thực tế chưa kiểm; ZIP/PWA/Excel/JSON-restore/airplane/UI-conflict vật lý chưa có bằng chứng; CPU lần đầu11ms chưa đạt tiêu chí mọi request≤10ms, gói tài khoản và slot recovery chưa xác minh/đóng. Không dùng tối ưu không thiết yếu để mở rộng phạm vi; không đổi sang Paid. Canary/rollback protocol đã PASS không thay các bước OS/UI. D1 Production còn trống nghiệp vụ, Worker Production chưa tồn tại nên binding/live write-lock Production chỉ được kiểm sau phê duyệt triển khai riêng; không coi đó là việc được phép làm trong chuẩn bị.
 
 Chỉ sau các gate trên mới lập đề nghị phê duyệt phát hành riêng với file PC119/hash/device Production mới/D1 UUID/backup_ref/manifest. Không bootstrap dữ liệu thật, merge main hoặc mở ghi Production khi chưa được phê duyệt riêng.
 
@@ -142,7 +143,7 @@ Gói Production cũ có `cpu_ms=1000`/requiresWorkersPaid đã **SUPERSEDED — 
 
 Gói Free đã đóng từ runtime commit `f57cb8778d15eb6af1d7d912f7f7fd465c653437`: `release-v23-free-f57cb87.zip`,93file, SHA256 `f8124f6c9c03771b69f8e65dfba187a655d4870c10bbb95217ca42ee4330cc56`. Hash mọi asset khớp chính xác gói đã qua test; manifest ghi deploymentPerformed=false, writesDefault=blocked, publicInitialBootstrap=disabled, requiresWorkersPaid=false. Evidence `evidence/free-cpu/release-package.json`. **Prepared, chưa APPROVED/DEPLOYED.**
 
-## 7. JSON vừa nhận — đối soát nguồn, chưa chấp thuận cutover
+## 7. JSON118 nhận trước — bằng chứng cũ, gate nguồn đã được thay thế bởi mục8
 
 File `TungGiang_CongNo_Backup_2026-11-23(1).json`, exportedAt16:26:54 ngày23/11/2026 (VN), SHA256 `d09fbb9195c0c8cde669225d7e2bbaf3d89be607d35f250e46793b9bf6062b12`: **PASS toàn vẹn, BLOCKED xác minh nguồn authoritative**. Chủ xưởng xác nhận119 đang hoạt động, nhưng file có118partner/619order/46payment/1439audit/2trash/8recovery. Không dùng file này tự động khởi tạo Production.
 
@@ -151,3 +152,15 @@ So với backup119 đã kiểm: 118partner còn lại,619đơn đầy đủ trư
 Raw phải thu `1250365237.2799997`, đã thu `158896322.4`; số hiển thị nguyên đồng không thay raw. Không ID trùng ở các collection đồng bộ, full validators PASS. Snapshot1.648.442byte,state+versions1.761.126byte,receipt owner-admin1.761.578byte đều dưới guard; đây chỉ là preflight, không có grant/operation hoặc dữ liệu gửi tới D1. SHA hai file nguồn kiểm lại giữ nguyên. Evidence `evidence/free-cpu/pc-upload-20261123-audit.json` chỉ lưu hash/count/ID chẩn đoán, không chứa hồ sơ kinh doanh.
 
 Bước cần chủ xưởng: mở đúng `https://tungcnc-congno.pages.dev/` trên PC đang dùng119đối tác, xuất JSON mới từ tab Dữ liệu và gửi file cùng ảnh119. Không import/restore để làm số đếm khớp. Nếu nguồn hiện đã118 thì báo rõ trước chọn lại nguồn; không tự suy diễn xác nhận119 đã thay đổi. Trong lúc chưa xác minh, không bootstrap, ghi đè, merge/main hoặc triển khai Production.
+
+## 8. PC Production119 mới — đối soát PASS, chưa phê duyệt Production
+
+Đã nhận `CongNo_2026-11-23.json`, exportedAt23:02:49 ngày23/11/2026 (VN), SHA256 `538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3`. Chủ xưởng cung cấp thay file118 trước theo yêu cầu đúng PC Production. Ảnh PC v2.1.12 hiển thị118 **khách có nợ**, không phải tổng partner. File có119partner,619order,46payment,1438audit,1trash,8recovery; TEST vẫn active, không có đơn liên kết. **CLOSED gate thiếu file nguồn119/mismatch file118**, không thay bằng acceptance118, không thêm/xóa/khôi phục TEST. Không suy diễn đã kiểm trực tiếp IndexedDB/device enrollment từ JSON hoặc ảnh không hiện URL.
+
+Các119partner,619order đầy đủ chi tiết/ID/ngày/số phân lẻ,46payment/nhóm/phân bổ,trash khớp nguyên bản119 trước. Giữ1437audit và7recovery chung nguyên nội dung. Khác đúng1audit import/backup (ID/time/device) và1recovery safe-additive-restore (ID/time); before/after audit và data recovery giống hoàn toàn. Audit import nguồn mới `3e9fcfb1-260a-4da8-9f1c-c6659ec059a5` lúc21/11 06:05:28.880UTC, bản tham chiếu `3ed98d94-19ec-4d40-8790-8302c1a1ef38` lúc21/11 19:02:08.174UTC. Không gọi hai file có lịch sử hoàn toàn giống nhau; **giữ nguyên lịch sử của nguồn Production mới**, không chép audit của staging. Trường optional reminderTemplates trống không có trong file Production, reference có[]; không rewrite JSON để thêm trường. Full validators và unique IDs PASS.
+
+Raw phải thu `1250365237.2799997`, đã thu `158896322.4` khớp bản119 trước; ảnh hiển thị1.250.365.237đ và118khách có nợ khớp phép tính trên từng partner. Không làm tròn hoặc đổi giá trị lưu. Snapshot hash nguồn này `aaa6d0f06f27f3e2d9951ce9bf1cd89bf538b0f33f2a5f7d8781e8fb3eb6cad6`; snapshot1.647.911byte,state+versions1.760.541byte,receipt owner-admin preflight1.761.011byte đều PASS ngưỡng. Device UUID/backup_ref dùng placeholder để đo byte, **không phải grant hoặc kế hoạch đã được duyệt**; phải đo/hash lại kế hoạch cụ thể trước thực thi. Source raw8.808.204byte gồm recovery cục bộ không đồng nghĩa snapshot>5MB.
+
+Đã chạy riêng test mới cho file mới (không chạy lại bộ benchmark đã hoàn tất): generated Production package writeblocked/public-bootstrap disabled, legacy bootstrap regression chỉ override ở harness, mất ACK/retry, giao dịch hai chiều trên COPY, restore baseline vào SQLite mới rồi replay giao dịch sau backup. PASS full IDs/raw values/history/versions, source SHA kiểm lại không đổi. Không có real snapshot gửi Cloudflare, không grant/device Production, không thay IDB. Bản JSON người dùng cất giữ + bản upload độc lập đã kiểm bằng SHA; chưa chứng nhận restore trên S24/OS thật hoặc ledger lớn sang D1 vật lý thứ hai.
+
+Evidence `evidence/free-cpu/current-pc119-audit.json`, `current-pc119-copy-tests.log`; không commit JSON công nợ gốc. Còn thực hiện nghiệm thu PC/S24 ZIP/Excel/restore/offline/UI conflict trên canary, kiểm S24 Production trống, xác nhận Free/CPU rủi ro và recovery slot. Không yêu cầu xuất lại file nguồn khi chưa có thay đổi; trước cutover chỉ recheck SHA/khác biệt phát sinh và xin phê duyệt riêng. NO-GO Production cho đến đóng gate còn lại, không main merge/deploy/bootstrap/mở ghi tự động.
