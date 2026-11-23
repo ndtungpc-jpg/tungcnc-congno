@@ -1,0 +1,75 @@
+{
+  "status": "PASS_PRODUCTION_INITIAL_SNAPSHOT_VERIFIED",
+  "mode": "committed-one-atomic-insert",
+  "checkedAt": "2026-11-23T16:39:48.539Z",
+  "databaseId": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+  "deviceId": "89fc541a-7915-4b5c-bed0-915957a60e85",
+  "operationId": "5d90fe82-d94f-41be-a59c-89c18dc4fbf7",
+  "sequence": 1,
+  "receipts": 1,
+  "snapshotHash": "aaa6d0f06f27f3e2d9951ce9bf1cd89bf538b0f33f2a5f7d8781e8fb3eb6cad6",
+  "versionsHash": "c670c347496244378235c4d5981644daab8fdb06353154456fdf7a94b6e0189a",
+  "sourceFileSha256": "538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3",
+  "recordVersions": 2223,
+  "snapshotBytes": 1647911,
+  "stateRowBytes": 1760541,
+  "receiptRowBytes": 1761138,
+  "summary": {
+    "customers": 119,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "receivable": 1250365237.2799997,
+    "payable": 0,
+    "received": 158896322.4,
+    "disbursed": 0
+  },
+  "perCollection": {
+    "partners": {
+      "count": 119,
+      "sha256": "08fa5601b7a6570a02d40e930d0f9f93b6a9e91c07d0eb26a64e74ca8b60bd3f"
+    },
+    "orders": {
+      "count": 619,
+      "sha256": "ebb8210db688655b42286aac7d3a11ec374ad7c1dba1106477ac2b262e8d980c"
+    },
+    "payments": {
+      "count": 46,
+      "sha256": "f4c72f464684e0e5160eabbb5d74fb4f69bf66800fbde07165ee48d2b9fc36fa"
+    },
+    "audit": {
+      "count": 1438,
+      "sha256": "707c221e424a985c1e75cacab57edb7a43962db18d600ef4f56f55088d1a1ad6"
+    },
+    "trash": {
+      "count": 1,
+      "sha256": "3dd2077ad42121521d560b565d00720840bf91a789910356e563c93eccb20a2b"
+    },
+    "excelImports": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "reminderTemplates": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "reminderEvents": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "testStillActive": true,
+  "fullSnapshotRootAndHistoryExact": true,
+  "allIdsRawNumbersDatesAndAllocationsExact": true,
+  "guardConsumed": true,
+  "S24Approved": false,
+  "PCIndexedDBWrittenByTool": false,
+  "privateDataOmittedFromReport": true,
+  "baselineBackup": {
+    "file": "TungGiang_V23_Production_Baseline_2026-11-23_seq1.zip",
+    "sha256": "54eae1b8dc0b19a234dec826345322dded240484f2434c1309bf6c2f3e5e3c4f",
+    "libraryFileId": "libfile_8eab7dd616308191a7f2ec3f8011a27d",
+    "offlineRestoreCopyIntegrity": "PASS",
+    "physicalD1RestoreNotClaimed": true
+  }
+}
