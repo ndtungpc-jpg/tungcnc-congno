@@ -4,3 +4,12 @@
 #fileSaveDialog{z-index:1400!important}
 @media(max-width:430px){.r42-payment-open{grid-template-columns:24px minmax(0,1fr) auto}.r42-payment-open>.r42-amount{grid-column:3;grid-row:1}.r42-payment .r4-body{grid-column:2;grid-row:1;padding-top:0}.r42-payment .r4-body strong{font-size:13px}.r42-amount{font-size:12px}}
 .ui-r4 #r42PNGViewer .btn.primary,.ui-r4 .r42-report-options>.primary{background:#246399!important;color:#fff!important;border-color:#8cbfee!important}
+
+.r42-allocations{grid-column:1/-1;min-width:0;border-top:1px solid var(--r4-line);font-size:12px}
+.r42-allocations>summary{cursor:pointer;min-height:40px;padding:10px 4px;color:var(--muted)}
+.r42-allocations ul{list-style:none;padding:0;margin:0}
+.r42-allocations li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border-top:1px solid var(--r4-line);padding:6px 4px}
+.r42-allocations li button{border:0;background:transparent;color:inherit;min-width:0;min-height:44px;text-align:left;padding:2px 0}
+.r42-allocations li strong,.r42-allocations li span{display:block;overflow-wrap:anywhere}
+.r42-allocations li span{font-size:11px;color:var(--muted)}
+.r42-allocations li>b{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
