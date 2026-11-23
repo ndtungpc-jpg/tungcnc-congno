@@ -16,6 +16,10 @@ function r42PaymentDisplayGroups(source=state){
  }
  return [...groups,...pending.values()];
 }
+function customerPaymentsView(pid){
+ const rows=r42PaymentDisplayGroups().filter(g=>g.rows.every(p=>order(p.orderId)?.partnerId===pid)).map(g=>({g,p:g.rows[0],pt:partner(pid),total:g.rows.reduce((n,p)=>n+p.amount,0),out:false})).sort((a,b)=>comparePaymentDates(b.p,a.p));
+ return `<section class="panel r42-pay customer-payments"><h3>Lịch sử thu tiền (${rows.length} giao dịch)</h3><div class="r4-rows">${rows.map(r42PaymentCard).join('')||'<p>Chưa có giao dịch thu tiền.</p>'}</div></section>`;
+}
 function r42ToggleAllocations(id){const el=document.getElementById(id);if(el)el.open=!el.open;}
 function r42PaymentCard({g,p,pt,total,out},index){
  const multiple=g.rows.length>1,detailId='r42Allocations'+index,count=new Set(g.rows.map(p=>p.orderId)).size;
