@@ -71,16 +71,17 @@ export default {async fetch(request,env,ctx){
         (folder/'entry.js').write_text(wrapper)
         config=f'name = "{name}"\nmain = "entry.js"\ncompatibility_date = "2026-11-21"\nworkers_dev = true\n[vars]\nRELEASE_WRITES = "blocked"\n'
         if kind=='sync': config+=f'INITIAL_BOOTSTRAP_TARGET = "{TARGET}"\n'
-        config+='[limits]\ncpu_ms = 1000\n'
+        if kind=='sync': config+='PUBLIC_INITIAL_BOOTSTRAP = \"disabled\"\n'
         config+=f'[[d1_databases]]\nbinding = "DB"\ndatabase_name = "{name}"\ndatabase_id = "{dbid}"\n'
         parsed=tomllib.loads(config)
-        assert parsed['limits']['cpu_ms']==1000 and parsed['vars']['RELEASE_WRITES']=='blocked'
+        assert 'limits' not in parsed and parsed['vars']['RELEASE_WRITES']=='blocked'
         assert parsed['d1_databases'][0]['database_id']==dbid
         (folder/'wrangler.toml').write_text(config)
         schemas=['schema.sql','initial-guard.sql'] if kind=='sync' else ['schema.sql','schema-device.sql']
         (folder/'schema.sql').write_text('\n'.join(transform(kind+'/'+s,(ROOT/kind/s).read_text()) for s in schemas))
+        if kind=='sync': (folder/'owner-admin-initial.sql').write_text((ROOT/'sync/admin-initial.sql').read_text())
     paths=sorted(p for p in out.rglob('*') if p.is_file())
-    manifest={'sourceCommit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'target':TARGET,'builderSha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'requiresWorkersPaid':True,'workerCpuMs':1000,'writesDefault':'blocked','deploymentPerformed':False,'files':{str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}
+    manifest={'sourceCommit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'target':TARGET,'builderSha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'requiresWorkersPaid':False,'workerCpuBudgetMs':10,'initialization':'owner-admin-once','publicInitialBootstrap':'disabled','writesDefault':'blocked','deploymentPerformed':False,'files':{str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     with zipfile.ZipFile(str(out)+'.zip','w',zipfile.ZIP_DEFLATED) as z:
         for p in sorted(out.rglob('*')):

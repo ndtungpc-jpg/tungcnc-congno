@@ -1,0 +1,32 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> test
+> node tests/sync.cjs && node tests/reminder-history.cjs && node tests/android-reminder-ui.cjs && node tests/dashboard-ui.cjs && node tests/ui-r4.cjs && node tests/ui-r4-dom.cjs && node tests/ui-r42.cjs
+
+PASS A creates -> B/C receive exact full order; first-enable backup; nonextractable device keys and pending approval
+PASS B payment -> A/C, historical receipt date unchanged; ACK loss + repeated push produces one payment
+PASS offline create, persistent queue, restarted engine, reconnect and A/B/C balances
+PASS failed pull transaction keeps main and cursor unchanged; replay applies once
+PASS concurrent amount edits preserve local+remote versions, block silent overwrite and retain conflict report
+PASS explicit conflict preview/choices; failed resolution rolls back; old amount and queue preserved in recovery
+PASS stale cloud preview rejected without changing local data
+PASS populated legacy-shaped dataset onboarding after explicit review; supplier balance and receipt preserved
+PASS reminder exported/sent events sync A/B/C independently without changing accounting
+PASS per-template sync/reset keeps other template and all accounting totals unchanged
+PASS oversized bootstrap blocked atomically; local/cloud/queue unchanged
+PASS fixture exported/accepted by current quote apps replicates exact dimensions/materials/discount/shipping/VAT and total to B/C
+PASS same quote on two offline devices -> one globally accepted order; rejected local attempt retained for explicit reconciliation
+PASS server cursor rollback and reserved owner-admin envelope fail closed without business/receipt/local mutation
+PASS signed-request replay denied, revoked device cannot push, offline data/queue preserved
+PASS suspicious payment with different ID requires review, exclusion preserves original backup; no automatic merge
+PASS template variables survive render/edit/default conversion; no fixed customer amount
+PASS backup restore in independent IndexedDB reproduces original records and totals
+PASS operation log and server sequence reconcile: 13 atomic commits
+PASS 24h exact expiry/history retained, per customer, repeated warning/override, manual sent distinct, cancelled/failed export not marked, fresh remote warning, original accounting unchanged
+PASS AUTOMATED DOM ONLY: all customer/debt/overdue/search/detail routes, repeat dialog before copy/share/debt PNG/order PNG/attachment, cancel prevents export, override allowed, in-flow cloud menu, accounting unchanged. Not a rendered browser or Android test.
+PASS AUTOMATED: recent five/create/edit/payment/remote-copy/legacy fallback, no source writes; online/offline/busy/queue/conflict status projection. Not physical Android.
+PASS AUTOMATED UI-R4: 1200 rows, eight sorts, combined accent-insensitive search/debt/overdue/reminder filters, no mutation
+PASS AUTOMATED UI-R4 DOM: seven routes, sort/filter/search combinations, reset, debt tabs, compact rows, business action routes, four stats/recent orders; no accounting writes. Not physical Android.
+PASS R4.2.1: real canvas right numeric/left dates, XLSX exported for XML alignment verification
+PASS UI-R4.2 real canvas PNG/cache identity, report hierarchy/combined unit/unit price/authoritative total, payment search+type filter, no state writes
+PASS AUTOMATED UI-R4 DOM: seven routes, sort/filter/search combinations, reset, debt tabs, compact rows, business action routes, four stats/recent orders; no accounting writes. Not physical Android.

@@ -1,0 +1,782 @@
+{
+  "worker": "tungcnc-v23-free-profile-base",
+  "start": 1795436906624,
+  "requests": [
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02ca66816b5d4",
+      "wallMs": 7413
+    },
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02caafc0db5d4",
+      "wallMs": 617
+    },
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02caecdc2b5d4",
+      "wallMs": 608
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02deb7e95b5d4",
+      "wallMs": 5900
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02deedfb9b5d4",
+      "wallMs": 412
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02df17e59b5d4",
+      "wallMs": 421
+    },
+    {
+      "phase": "setup",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02df42d55b5d4",
+      "wallMs": 965
+    },
+    {
+      "phase": "bootstrap-first",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02eab4b1bb5d4",
+      "wallMs": 5770
+    },
+    {
+      "phase": "bootstrap-first",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02eb28de2b5d4",
+      "wallMs": 410
+    },
+    {
+      "phase": "bootstrap-first",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02eb6c8c3b5d4",
+      "wallMs": 1982
+    },
+    {
+      "phase": "bootstrap-first",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02ec37ab0b5d4",
+      "wallMs": 1325
+    },
+    {
+      "phase": "bootstrap-first",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02ecf0bc1b5d4",
+      "wallMs": 598
+    },
+    {
+      "phase": "bootstrap-duplicate",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02ed31ec4b5d4",
+      "wallMs": 731
+    },
+    {
+      "phase": "bootstrap-duplicate",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02ed7bb0db5d4",
+      "wallMs": 745
+    },
+    {
+      "phase": "bootstrap-duplicate",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02edc781db5d4",
+      "wallMs": 700
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02ee0dc93b5d4",
+      "wallMs": 445
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02ee39c86b5d4",
+      "wallMs": 1356
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02eed0eb6b5d4",
+      "wallMs": 391
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02eef8dceb5d4",
+      "wallMs": 1395
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02ef99a19b5d4",
+      "wallMs": 391
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02efc2955b5d4",
+      "wallMs": 585
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02effebcfb5d4",
+      "wallMs": 398
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f029affb5d4",
+      "wallMs": 587
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f067d99b5d4",
+      "wallMs": 408
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f092c4cb5d4",
+      "wallMs": 590
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f0cee17b5d4",
+      "wallMs": 401
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f0fadffb5d4",
+      "wallMs": 575
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f135842b5d4",
+      "wallMs": 388
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f15ef46b5d4",
+      "wallMs": 575
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f19892ab5d4",
+      "wallMs": 391
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f1c0818b5d4",
+      "wallMs": 594
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f1fea3cb5d4",
+      "wallMs": 394
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f2278fab5d4",
+      "wallMs": 578
+    },
+    {
+      "phase": "idle",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f262b09b5d4",
+      "wallMs": 414
+    },
+    {
+      "phase": "idle",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f28ca1bb5d4",
+      "wallMs": 608
+    },
+    {
+      "phase": "status",
+      "path": "/api/sync/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f2cdcebb5d4",
+      "wallMs": 801
+    },
+    {
+      "phase": "status",
+      "path": "/api/sync/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f31fa44b5d4",
+      "wallMs": 1544
+    },
+    {
+      "phase": "status",
+      "path": "/api/sync/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f3bb9e5b5d4",
+      "wallMs": 838
+    },
+    {
+      "phase": "status",
+      "path": "/api/sync/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f411f80b5d4",
+      "wallMs": 1457
+    },
+    {
+      "phase": "status",
+      "path": "/api/sync/status",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f4a6ed7b5d4",
+      "wallMs": 1384
+    },
+    {
+      "phase": "snapshot",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f534e12b5d4",
+      "wallMs": 1392
+    },
+    {
+      "phase": "snapshot",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f5cbd64b5d4",
+      "wallMs": 850
+    },
+    {
+      "phase": "snapshot",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f62ac64b5d4",
+      "wallMs": 1484
+    },
+    {
+      "phase": "snapshot",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f6c5bc9b5d4",
+      "wallMs": 859
+    },
+    {
+      "phase": "snapshot",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f724b5db5d4",
+      "wallMs": 1424
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02f7db88bb5d4",
+      "wallMs": 2202
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f8b9bc5b5d4",
+      "wallMs": 581
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f8fce54b5d4",
+      "wallMs": 577
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02f93c898b5d4",
+      "wallMs": 580
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02f97cad5b5d4",
+      "wallMs": 590
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02f9c5d7cb5d4",
+      "wallMs": 1477
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fa5acadb5d4",
+      "wallMs": 576
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fa9aec2b5d4",
+      "wallMs": 584
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fada919b5d4",
+      "wallMs": 585
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02fb1bb28b5d4",
+      "wallMs": 588
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02fb64e63b5d4",
+      "wallMs": 2606
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fc698dfb5d4",
+      "wallMs": 579
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fcadd1bb5d4",
+      "wallMs": 591
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fcf08e7b5d4",
+      "wallMs": 583
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02fd32b3db5d4",
+      "wallMs": 586
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02fd82f3eb5d4",
+      "wallMs": 1515
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fe1bf5cb5d4",
+      "wallMs": 581
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02fe64a7db5d4",
+      "wallMs": 585
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f02feb6f75b5d4",
+      "wallMs": 581
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f02ff0ac8cb5d4",
+      "wallMs": 579
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f02ff52805b5d4",
+      "wallMs": 1868
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f03000ede1b5d4",
+      "wallMs": 587
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0300508ceb5d4",
+      "wallMs": 589
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030098c2bb5d4",
+      "wallMs": 575
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f0300dd815b5d4",
+      "wallMs": 595
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f030136e83b5d4",
+      "wallMs": 1515
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0301cff20b5d4",
+      "wallMs": 837
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f03022ce9db5d4",
+      "wallMs": 587
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030273a1bb5d4",
+      "wallMs": 596
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f0302c1e7db5d4",
+      "wallMs": 581
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f03030eba2b5d4",
+      "wallMs": 1534
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0303a8c26b5d4",
+      "wallMs": 596
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0303ecf84b5d4",
+      "wallMs": 595
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030435bc4b5d4",
+      "wallMs": 574
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f03047aea0b5d4",
+      "wallMs": 601
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f0304c29d4b5d4",
+      "wallMs": 2191
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0305a0f86b5d4",
+      "wallMs": 583
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0305e9ba8b5d4",
+      "wallMs": 592
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030637924b5d4",
+      "wallMs": 584
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f030683e5eb5d4",
+      "wallMs": 609
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f0306d1c77b5d4",
+      "wallMs": 2494
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0307ccd2db5d4",
+      "wallMs": 572
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f03080f8c9b5d4",
+      "wallMs": 597
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030867ee6b5d4",
+      "wallMs": 575
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f0308afaceb5d4",
+      "wallMs": 586
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f0308f7f00b5d4",
+      "wallMs": 2203
+    },
+    {
+      "phase": "delta-payment",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0309d4c37b5d4",
+      "wallMs": 573
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030a1d81eb5d4",
+      "wallMs": 575
+    },
+    {
+      "phase": "delta-pull",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f030a6bcaeb5d4",
+      "wallMs": 576
+    },
+    {
+      "phase": "delta-duplicate",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200,
+      "ray": "a5f030aba9e9b5d4",
+      "wallMs": 580
+    }
+  ],
+  "testResults": [
+    {
+      "name": "large synthetic atomic bootstrap",
+      "status": "PASS"
+    },
+    {
+      "name": "3 clients exact IDs/raw values; ten delta payments once; duplicate retries unchanged",
+      "status": "PASS"
+    }
+  ],
+  "snapshot": {
+    "bytes": 1729350,
+    "stateRowBytes": 1799435,
+    "requestBytes": 298819
+  },
+  "end": 1795437079113
+}

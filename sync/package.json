@@ -8,7 +8,8 @@
     "test:storage-policy": "node tests/storage-growth.cjs && node tests/storage-failures.cjs",
     "test:a03-scale": "node experiments/a03/protocol.cjs && node experiments/a03/benchmark.cjs",
     "test:a03-app-restore": "node experiments/a03/app-restore.cjs",
-    "test:initial-bootstrap": "node tests/initial-bootstrap.cjs"
+    "test:initial-bootstrap": "node tests/initial-bootstrap.cjs",
+    "test:free-rc1": "node tests/free-delta-equivalence.cjs && node tests/owner-initial.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "6.2.8",

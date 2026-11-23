@@ -1,0 +1,28 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> test:data-safety
+> node tests/data-safety-validation.cjs && node tests/data-safety-restore.cjs && node tests/data-safety-sync.cjs
+
+PASS invalid nested details rejected; blanks/numeric legacy strings preserved without conversion; fractional historical order total preserved; real Worker relative imports resolve
+PASS exact diagnostic IDs/values, no mutation, invalid money rejected, snapshot cap blocks even no-op
+PASS actual JSON export -> preview -> confirmed additive restore in isolated second app; IDs/records/details/balances equal; repeated restore no writes; orphan blocked
+PASS A creates -> B/C receive exact full order; first-enable backup; nonextractable device keys and pending approval
+PASS B payment -> A/C, historical receipt date unchanged; ACK loss + repeated push produces one payment
+PASS offline create, persistent queue, restarted engine, reconnect and A/B/C balances
+PASS failed pull transaction keeps main and cursor unchanged; replay applies once
+PASS concurrent amount edits preserve local+remote versions, block silent overwrite and retain conflict report
+PASS explicit conflict preview/choices; failed resolution rolls back; old amount and queue preserved in recovery
+PASS stale cloud preview rejected without changing local data
+PASS populated legacy-shaped dataset onboarding after explicit review; supplier balance and receipt preserved
+PASS reminder exported/sent events sync A/B/C independently without changing accounting
+PASS per-template sync/reset keeps other template and all accounting totals unchanged
+PASS oversized bootstrap blocked atomically; local/cloud/queue unchanged
+PASS fixture exported/accepted by current quote apps replicates exact dimensions/materials/discount/shipping/VAT and total to B/C
+PASS AUDIT create/edit/delete order; edit/backdate/cancel/restore payment; repeated ACK-loss no duplicate; A/B/C exact balances and counts
+PASS same quote on two offline devices -> one globally accepted order; rejected local attempt retained for explicit reconciliation
+PASS signed-request replay denied, revoked device cannot push, offline data/queue preserved
+PASS suspicious payment with different ID requires review, exclusion preserves original backup; no automatic merge
+PASS template variables survive render/edit/default conversion; no fixed customer amount
+PASS backup restore in independent IndexedDB reproduces original records and totals
+PASS malformed nested data rejected by actual Worker409; cloud unchanged; local payload/outbox retained for explicit review
+PASS operation log and server sequence reconcile: 21 atomic commits

@@ -22,6 +22,6 @@ D1 canary đã PASS rollback/cloud conflict qua Node clients; các bước trên
 
 ## C. Xác nhận năng lực Cloudflare — không mua hoặc đổi gói tự động
 
-Sync canary CPU p99=121505µs =121.505ms; vượt ngân sách Workers Free10ms. Account đang bị giới hạn10D1, không tạo được D1 thứ11. Cần chủ xưởng kiểm tra tên gói Workers Free/Paid và phương án CPU/quota trong Dashboard. Bộ cấu hình đã chuẩn bị `cpu_ms=1000` và khóa ghi mặc định; **cần Workers Paid/capacity phù hợp**, chưa áp vào Production. Không cần gửi thông tin thẻ/thanh toán. Nếu cần nâng gói, chủ xưởng tự phê duyệt và thao tác; chưa có quyền thực hiện giao dịch này.
+Chỉ dùng Workers Free, không nâng gói. CPU cũ121,505ms là aggregate gồm bootstrap, không đại diện delta. Sau tối ưu: phần lớn ghi7–10ms, lần đầu11ms ở vòng cuối (vòng trước20ms); xem FREE-CPU-VALIDATION.md. Chủ xưởng chỉ cần xác nhận tên gói **Free** trong Dashboard; không mua/nâng cấp. API billing hiện403 nên chưa tự kiểm được. Account đã10D1; phương án giữ một slot phục hồi cần sao lưu kho thử và phê duyệt riêng trước bất kỳ xóa tài nguyên nào; hiện chưa xóa.
 
-Sau khi A/B/C hoàn tất mới lập đề nghị phát hành riêng: đúng file PC119/hash/device mới/D1 UUID/backup_ref/manifest; bootstrap nguyên tử một request, giữ TEST, rồi S24 Production kiểm tra trống và nhận dữ liệu. Chưa xin xác nhận mở Production khi các gate vẫn còn mở.
+Sau khi A/B/C hoàn tất mới lập đề nghị phát hành riêng: đúng file PC119/hash/device mới/D1 UUID/backup_ref/manifest; khởi tạo owner-admin một SQL nguyên tử (public bootstrap lớn bị khóa), giữ TEST, rồi S24 Production kiểm tra trống và nhận dữ liệu. Chưa xin xác nhận mở Production khi các gate vẫn còn mở.

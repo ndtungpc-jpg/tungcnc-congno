@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-23T13:19:22.912Z",
+  "productionReadOnly": true,
+  "databases": [
+    {
+      "id": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+      "name": "tungcnc-sync-v23-prod",
+      "bytes": 12288,
+      "tables": [
+        {
+          "name": "_cf_KV"
+        }
+      ],
+      "rows_written": 0,
+      "changed_db": false
+    },
+    {
+      "id": "78e3141d-d03c-4012-adff-e1c2002085fa",
+      "name": "tungcnc-quote-inbox-prod",
+      "bytes": 12288,
+      "tables": [
+        {
+          "name": "_cf_KV"
+        }
+      ],
+      "rows_written": 0,
+      "changed_db": false
+    }
+  ],
+  "productionWorkers": [],
+  "databaseCount": 10
+}

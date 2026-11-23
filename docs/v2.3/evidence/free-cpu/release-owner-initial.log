@@ -1,0 +1,1 @@
+PASS one owner-admin SQL transaction, grant/hash/device/nonempty fail-closed, forced final-statement rollback, same-ID retry receipt, all original metadata/IEEE-754 values and source unchanged; no Worker bootstrap CPU

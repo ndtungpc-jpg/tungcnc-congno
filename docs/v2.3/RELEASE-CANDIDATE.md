@@ -31,7 +31,7 @@ Không lấy dòng `physicalPCAndS24: NOT YET TESTED` của fixture tự động
 
 ## Bổ sung go-live preparation — nguồn PC119
 
-Chủ xưởng chọn PC Production119 giữ TEST; S24 Production owner-confirmed chưa dùng, vẫn cần kiểm kho. A/B118 không phải nguồn cutover. Canary rollback/version và explicit conflict trên Cloudflare đã PASS với dữ liệu giả; còn nghiệm thu OS/UI. CPU sync p99=121.505ms không có headroom Free10ms; package mới chuẩn bị cpu_ms1000/requiresWorkersPaid, chưa triển khai/nâng gói. File119 lịch sử kiểm lại bootstrap/restore exact PASS, snapshot1.647.911/row1.760.541/request222.347byte; chưa được coi là file PC cuối. Xem final gate2b/2c và CANARY-DEVICE-FINAL-STEPS.md.
+Chủ xưởng chọn PC Production119 giữ TEST; S24 Production owner-confirmed chưa dùng, vẫn cần kiểm IndexedDB. A/B118 chỉ nghiệm thu. Chỉ Cloudflare Free; gói cpu_ms1000/Paid cũ đã bị thay thế. RC1 chỉ vá CPU delta, polling60s, khóa public bootstrap lớn và chặn cursor lùi; giữ UI/schema/protocol, không A03. Khởi tạo owner-admin1SQL nguyên tử đã PASS trên D1 canary với1.647.911byte giả và kiểm thất bại rollback/retry. CPU final15ghi: 14mẫu≤10ms, đầu11ms; không chứng nhận mọi request≤10ms. Toàn data/metadata/versions cuối khớp, regression/safety/differential59ca/package PASS. Còn file119 mới nhất, backup/S24 local, nghiệm thu thiết bị, xác nhận Free và slot phục hồi. Xem FREE-CPU-VALIDATION.md và FINAL-RELEASE-GATE.md.
 
 ## Tái tạo và kiểm tra bộ phát hành
 
