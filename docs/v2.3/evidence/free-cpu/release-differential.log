@@ -1,0 +1,1 @@
+PASS 59 differential cases: full validation equivalence, grouped payments absent/null, Unicode IDs, all raw IEEE-754 values/unknown fields, history and root metadata, array order, versions; no source mutation

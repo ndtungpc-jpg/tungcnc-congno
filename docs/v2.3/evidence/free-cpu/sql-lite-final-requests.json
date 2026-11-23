@@ -1,0 +1,239 @@
+{
+  "start": 1795439719457,
+  "requests": [
+    {
+      "phase": "setup",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/devices/register",
+      "status": 201,
+      "ray": "a5f0715ce91fb5d4"
+    },
+    {
+      "phase": "setup",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/snapshot",
+      "status": 200,
+      "ray": "a5f071cdbaf0b5d4"
+    },
+    {
+      "phase": "payment",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f071d59871b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f071ddd92cb5d4"
+    },
+    {
+      "phase": "payment",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f071e19b4db5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f071ea7d3ab5d4"
+    },
+    {
+      "phase": "payment",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f071ee683ab5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f071f62e06b5d4"
+    },
+    {
+      "phase": "payment",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f071fa39a5b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072009b5bb5d4"
+    },
+    {
+      "phase": "payment",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f072046e41b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f0720b4924b5d4"
+    },
+    {
+      "phase": "group",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f0720f3d7ab5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072161934b5d4"
+    },
+    {
+      "phase": "group",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f07219ec24b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f07221ebdfb5d4"
+    },
+    {
+      "phase": "group",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f07225cec8b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f0722c28ddb5d4"
+    },
+    {
+      "phase": "group",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f072302c57b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072371837b5d4"
+    },
+    {
+      "phase": "group",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f0723aeaf9b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072415cc0b5d4"
+    },
+    {
+      "phase": "edit",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f072452f86b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f0724d0d20b5d4"
+    },
+    {
+      "phase": "edit",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f07250ef79b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072595e31b5d4"
+    },
+    {
+      "phase": "edit",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f0725d184eb5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f07263fb76b5d4"
+    },
+    {
+      "phase": "edit",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f07267bda3b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f0726e9981b5d4"
+    },
+    {
+      "phase": "edit",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 201,
+      "ray": "a5f072728c7eb5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/push",
+      "status": 200,
+      "ray": "a5f072795f48b5d4"
+    },
+    {
+      "phase": "retry",
+      "worker": "tungcnc-v23-free-sql-lite",
+      "path": "/api/sync/snapshot",
+      "status": 200,
+      "ray": "a5f0727e2cbcb5d4"
+    }
+  ],
+  "fullServerDataAndMetadataExact": true,
+  "receipts": 47,
+  "end": 1795439776404
+}

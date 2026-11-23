@@ -1,0 +1,31 @@
+{
+  "environment": "staging only",
+  "sourceCommit": "8fd16fcedfcb1876dd80005465f1ed6a3b250034",
+  "worker": "tungcnc-sync-v23-staging",
+  "url": "https://tungcnc-sync-v23-staging.ndtung-pc.workers.dev",
+  "databaseName": "tungcnc-sync-v23-staging",
+  "databaseId": "49163cc1-a60d-49b1-9c93-da7a6f939977",
+  "onlyBinding": "DB",
+  "compatibilityDate": "2026-11-21",
+  "deploymentId": "1af302dd-c24d-4130-9f8d-89a4c6fbeaca",
+  "versionId": "6ab5b540-2922-42eb-9e5a-9fc7b297442f",
+  "versionNumber": 5,
+  "trafficPercent": 100,
+  "deployedAt": "2026-11-22T04:44:27.876402Z",
+  "bundleSha256": "0388d66bd2b543281e415af2e57779f702e23bb70a963ef0561871b619346f72",
+  "downloadedModuleExactlyMatchesUploadedBundle": true,
+  "preDeploymentRecovery": {
+    "d1TimeTravelBookmark": "00000016-00000000-0000512b-7f6a1b84099adb8405c4628ec01130a2",
+    "previousWorkerDeployment": "5bb2bc2f-5093-4802-9bd6-4fc343e6c14e",
+    "previousWorkerVersion": "7fb30e3e-478d-4b8c-8247-e64c0a474cb6",
+    "restoreExecuted": false,
+    "warning": "Worker rollback does not restore D1. Time Travel is retention-limited and a whole-database restore would discard later writes; do not restore automatically. Re-export and reconcile later records in a separate database before any recovery."
+  },
+  "migrationExecuted": false,
+  "productionUnchanged": {
+    "mainCommit": "e4d6d39b7110f5fc44302aaaac3d26b42cc5f09f",
+    "accountingPagesDeployment": "f3f53157-2416-432e-89b2-beb975e00d5a",
+    "quotePagesCommit": "ec021150698753f66e80f59ae2b0ae7bdab45f23",
+    "quotePagesDeployment": "61bc40ff-74db-4c1a-956c-5d00a57dd70a"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "environment": "Synthetic JSON byte sizing only; excludes IndexedDB structured-clone/CryptoKey/index overhead and browser quota",
+  "rows": [
+    {
+      "orders": 100,
+      "payments": 200,
+      "audit": 100,
+      "mainJsonBytes": 161485,
+      "approxMainPlus100FullTechnicalSnapshots": 16309985,
+      "approxMainPlus1000FullTechnicalSnapshots": 161646485,
+      "queued100ExampleOrderOpsBytes": 76201,
+      "sourceWorkerFiveMbCapExceeded": false
+    },
+    {
+      "orders": 1000,
+      "payments": 2000,
+      "audit": 1000,
+      "mainJsonBytes": 1623085,
+      "approxMainPlus100FullTechnicalSnapshots": 163931585,
+      "approxMainPlus1000FullTechnicalSnapshots": 1624708085,
+      "queued100ExampleOrderOpsBytes": 76201,
+      "sourceWorkerFiveMbCapExceeded": false
+    },
+    {
+      "orders": 3000,
+      "payments": 6000,
+      "audit": 3000,
+      "mainJsonBytes": 4891085,
+      "approxMainPlus100FullTechnicalSnapshots": 493999585,
+      "approxMainPlus1000FullTechnicalSnapshots": 4895976085,
+      "queued100ExampleOrderOpsBytes": 76201,
+      "sourceWorkerFiveMbCapExceeded": false
+    },
+    {
+      "orders": 4000,
+      "payments": 8000,
+      "audit": 4000,
+      "mainJsonBytes": 6525085,
+      "approxMainPlus100FullTechnicalSnapshots": 659033585,
+      "approxMainPlus1000FullTechnicalSnapshots": 6531610085,
+      "queued100ExampleOrderOpsBytes": 76201,
+      "sourceWorkerFiveMbCapExceeded": true
+    }
+  ],
+  "pollingModel": {
+    "devices": 3,
+    "activeHoursPerDay": 8,
+    "tickSeconds": 15,
+    "minSignedRequestsPerIdleTick": 2,
+    "nonceRowsPerActiveDay": 11520,
+    "nonceRowsPer30Days": 345600,
+    "nonceLogicalBytesPerRowApprox": 92,
+    "nonceLogicalBytesPer30DaysApprox": 31795200
+  },
+  "unbounded": [
+    "main.audit",
+    "main.trash",
+    "main.recovery",
+    "main.reminderEvents",
+    "sync.meta.backups",
+    "sync.meta.versions tombstones",
+    "offline outbox until ACK",
+    "D1 sync_operations",
+    "D1 sync_nonces",
+    "D1 sync_rates",
+    "D1 inbox_rates/claims/quote_inbox"
+  ]
+}

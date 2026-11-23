@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "revision": 0,
+  "partners": [
+    {
+      "id": "b3c3531a-067f-48a6-88b8-4f6a6e3a664e",
+      "name": "Khách Cũ",
+      "type": "customer",
+      "phone": "0900000000",
+      "note": "Tạo từ Báo Giá Nhanh"
+    }
+  ],
+  "orders": [
+    {
+      "id": "79566831-19fc-4c57-8f89-2107c6d8a177",
+      "partnerId": "b3c3531a-067f-48a6-88b8-4f6a6e3a664e",
+      "code": "BG-MWQQOA3C-f9391012",
+      "title": "Báo giá BG-DIRECT-1 · Vách, Phào",
+      "amount": 4301000,
+      "created": "2026-11-21",
+      "due": "",
+      "note": "Nguồn: Báo Giá Nhanh\nMã báo giá: BG-DIRECT-1\n1. Vách | MDF / Veneer Gõ | 3.5 m² × 1.000.000đ = 3.500.000đ\n1000 mm × 3500 mm × 1 chiếc × Vách thử\n2. Phào | MDF / Sơn bệt | 4.6 md × 100.000đ = 460.000đ\n4600 mm × 1 chiếc × Phào\nGiảm giá: 100.000đ; Vận chuyển: 50.000đ; VAT (10%): 391.000đ\nThử riêng",
+      "quoteTransferId": "tgq-v1-e4acfd3c278dc9d1af21952805e6acef4c79e0ab356fc7dd8ce96a2ccdc4f944",
+      "quoteSourceCode": "BG-DIRECT-1",
+      "quoteContentFingerprint": "2a71be38278077dc8e1b4e363c2da9442f776851b21c9fcc301a16bbceae7889",
+      "quoteDirectFingerprint": "e4acfd3c278dc9d1af21952805e6acef4c79e0ab356fc7dd8ce96a2ccdc4f944",
+      "quoteItems": [
+        {
+          "index": 1,
+          "name": "Vách",
+          "core": "MDF",
+          "finish": "Veneer Gõ",
+          "type": "m2",
+          "unit": "m²",
+          "quantity": 3.5,
+          "unitPrice": 1000000,
+          "amount": 3500000,
+          "sizes": [
+            {
+              "widthMm": 1000,
+              "heightMm": 3500,
+              "count": 1,
+              "description": "Vách thử"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "Phào",
+          "core": "MDF",
+          "finish": "Sơn bệt",
+          "type": "meter",
+          "unit": "md",
+          "quantity": 4.6,
+          "unitPrice": 100000,
+          "amount": 459999.99999999994,
+          "sizes": [
+            {
+              "widthMm": 4600,
+              "heightMm": "",
+              "count": 1,
+              "description": "Phào"
+            }
+          ]
+        }
+      ],
+      "quoteTotals": {
+        "subtotal": 3960000,
+        "discount": 100000,
+        "shipping": 50000,
+        "vatPercent": 10,
+        "vatAmount": 391000,
+        "grandTotal": 4301000
+      },
+      "quoteOriginalItems": [
+        {
+          "index": 1,
+          "name": "Vách",
+          "core": "MDF",
+          "finish": "Veneer Gõ",
+          "type": "m2",
+          "unit": "m²",
+          "quantity": 3.5,
+          "unitPrice": 1000000,
+          "amount": 3500000,
+          "sizes": [
+            {
+              "widthMm": 1000,
+              "heightMm": 3500,
+              "count": 1,
+              "description": "Vách thử"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "Phào",
+          "core": "MDF",
+          "finish": "Sơn bệt",
+          "type": "meter",
+          "unit": "md",
+          "quantity": 4.6,
+          "unitPrice": 100000,
+          "amount": 459999.99999999994,
+          "sizes": [
+            {
+              "widthMm": 4600,
+              "heightMm": "",
+              "count": 1,
+              "description": "Phào"
+            }
+          ]
+        }
+      ],
+      "quoteOriginalTotals": {
+        "subtotal": 3960000,
+        "discount": 100000,
+        "shipping": 50000,
+        "vatPercent": 10,
+        "vatAmount": 391000,
+        "grandTotal": 4301000
+      },
+      "quoteImportedAt": "2026-11-21T18:26:08.279Z",
+      "updatedAt": "2026-11-21T18:26:08.279Z"
+    }
+  ],
+  "payments": [],
+  "audit": [],
+  "trash": [],
+  "recovery": []
+}

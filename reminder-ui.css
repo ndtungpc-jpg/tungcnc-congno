@@ -1,0 +1,13 @@
+[data-reminder-for]{display:block;margin-top:8px;max-width:100%}
+.reminder-badge{display:inline-flex;flex-direction:column;gap:4px;padding:10px 12px;border:2px solid #ffd166;border-radius:10px;background:#173b50;color:#fff3c4!important;font-size:15px;font-weight:650;line-height:1.4;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.reminder-badge strong{color:#fff!important;font-size:16px}
+.reminder-badge span{color:#fff3c4!important}
+.reminder-repeat-overlay{z-index:20000;padding:16px;background:rgba(0,0,0,.75)}
+.reminder-repeat-overlay .dialog{width:min(100%,520px);max-height:calc(100dvh - 32px);overflow:auto;background:#102b45!important;color:#fff!important;border:2px solid #ffd166;padding:20px}
+.reminder-repeat-time{font-size:18px;color:#fff3c4!important}
+.reminder-repeat-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
+.reminder-repeat-actions button{min-height:52px;border:2px solid #fff;border-radius:10px;background:#253b50;color:white;font-size:16px;font-weight:700;padding:12px}
+.reminder-repeat-actions [data-repeat-continue]{background:#ffd166;color:#142638;border-color:#ffd166}
+.cloud-tools-menu .btn{position:static!important;inset:auto!important;z-index:auto!important;min-height:48px;width:100%;white-space:normal}
+@media(max-width:650px){.reminder-badge{font-size:15px}.reminder-repeat-overlay .dialog{padding:16px}.cloud-tools-menu .menu-grid{grid-template-columns:1fr}}
+\n[data-reminder-for]:empty{display:none}\n

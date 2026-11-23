@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "method": "one authenticated owner-admin D1 REST INSERT with triggers",
+  "workerBootstrapInvocations": 0,
+  "syntheticOnly": true,
+  "snapshotBytes": 1647911,
+  "stateRowBytes": 1775716,
+  "snapshotHash": "cb82f4602307113b421d61323fd229e261f6e8637acc51c2828f53fcd434271d",
+  "versionsHash": "1ae8403104003d5adc518f92c99b704963d2e91b62af0df1c3ffb639a556f864",
+  "version": 1,
+  "receipts": 1,
+  "grantConsumed": true,
+  "missingGrantDeniedInFirstAttempt": true,
+  "forcedLastUpdateFailureRolledBackSnapshotReceiptAndGrantInFirstAttempt": true,
+  "exactRetryNoDuplicate": true,
+  "nonemptyDenied": true,
+  "precisionLexemesExact": true,
+  "harnessNote": "D1 meta.changes includes trigger side effects; initial assertion expecting exactly1 was corrected to verify receipt/state hashes and counts; source/data were correct"
+}

@@ -1,0 +1,64 @@
+{
+  "source": "tungcnc-sync-v23-staging",
+  "sourceId": "49163cc1-a60d-49b1-9c93-da7a6f939977",
+  "target": "tungcnc-sync-v23-dr-20261122",
+  "targetId": "0e536fcd-f683-4dc9-9392-bcd11974a914",
+  "targetBoundToWorker": false,
+  "exportSqlBytes": 319732,
+  "exportSha256": "1b9094d4c0e0c65a16a7e2a5d989dfe0ea8f4576964f7de8b53830130ebdfb4c",
+  "tables": [
+    {
+      "table": "sync_devices",
+      "before": 8,
+      "after": 8,
+      "identicalAllRows": true,
+      "sha256": "af2a939b8e8824d334bbd938ee7a2be94a2857f180e246d5aac7c23de1c0ccfd"
+    },
+    {
+      "table": "sync_nonces",
+      "before": 1619,
+      "after": 1619,
+      "identicalAllRows": true,
+      "sha256": "fc9aff657b7b7c043c694fdda10469d677f5ccffba84ad3cfb6c6b84613d1d4c"
+    },
+    {
+      "table": "sync_rates",
+      "before": 5,
+      "after": 5,
+      "identicalAllRows": true,
+      "sha256": "becb9e2bf0492924ed8d7f2da3bab4aff348966034904411e2aa5a2b09499ccc"
+    },
+    {
+      "table": "sync_state",
+      "before": 1,
+      "after": 1,
+      "identicalAllRows": true,
+      "sha256": "b1d3cf80d5fb77284aff0fdbf1abb20f64c78441485faeb0c1dc90c7e9b0683e"
+    },
+    {
+      "table": "sync_operations",
+      "before": 19,
+      "after": 19,
+      "identicalAllRows": true,
+      "sha256": "ac1a2f9eb35b88d66e5b1a6b863974ebf9c2747b62d0396fb89a9c2834f27f83"
+    }
+  ],
+  "sourceSequence": 19,
+  "operationCount": 19,
+  "allTablesExact": true,
+  "recoveryIsSeparateDatabase": true,
+  "restoreOverExistingDatabase": false,
+  "business": {
+    "records": 41,
+    "customers": 6,
+    "suppliers": 1,
+    "orders": 9,
+    "payments": 4,
+    "reminderEvents": 4,
+    "receivable": 20927300,
+    "payable": 500000,
+    "received": 2500000,
+    "disbursed": 300000
+  },
+  "sourceStateUnchangedAfterDrill": true
+}

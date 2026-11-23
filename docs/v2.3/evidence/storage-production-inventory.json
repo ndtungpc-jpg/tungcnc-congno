@@ -1,0 +1,149 @@
+{
+  "checkedDate": "2026-11-22",
+  "sourceCommit": "ca71ea794c84c36ecb4d5e654aa140bf927718b9",
+  "readOnlyProduction": true,
+  "inventory": {
+    "pages": {
+      "tungcnc-congno": {
+        "productionBranch": "main",
+        "productionCommit": "e4d6d39b7110f5fc44302aaaac3d26b42cc5f09f",
+        "productionDeployment": "f3f53157-2416-432e-89b2-beb975e00d5a",
+        "latestCommit": "ca71ea794c84c36ecb4d5e654aa140bf927718b9"
+      },
+      "baogia-tungcnc": {
+        "productionBranch": "test/direct-quote-bridge",
+        "productionCommit": "ec021150698753f66e80f59ae2b0ae7bdab45f23",
+        "productionDeployment": "61bc40ff-74db-4c1a-956c-5d00a57dd70a",
+        "latestCommit": "ca71ea794c84c36ecb4d5e654aa140bf927718b9"
+      }
+    },
+    "workers": {
+      "tungcnc-quote-inbox-staging": {
+        "compatibilityDate": "2026-11-21",
+        "bindings": [
+          {
+            "name": "DB",
+            "type": "d1",
+            "databaseId": "4c5f1ba6-592d-43a6-9d7c-b13fe8cd00fa"
+          },
+          {
+            "name": "SESSION_SIGNING_KEY",
+            "type": "secret_text"
+          }
+        ],
+        "annotations": {
+          "workers/triggered_by": "upload"
+        }
+      },
+      "tungcnc-sync-v23-staging": {
+        "compatibilityDate": "2026-11-21",
+        "bindings": [
+          {
+            "name": "DB",
+            "type": "d1",
+            "databaseId": "49163cc1-a60d-49b1-9c93-da7a6f939977"
+          }
+        ],
+        "annotations": {
+          "workers/commit_sha": "8fd16fcedfcb1876dd80005465f1ed6a3b250034",
+          "workers/message": "Audited staging build SHA256 0388d66bd2b543281e415af2e57779f702e23bb70a963ef0561871b619346f72",
+          "workers/tag": "audit-A01-A02",
+          "workers/triggered_by": "version_upload"
+        }
+      }
+    },
+    "databases": [
+      {
+        "name": "tungcnc-sync-v23-staging",
+        "uuid": "49163cc1-a60d-49b1-9c93-da7a6f939977",
+        "fileSize": 438272
+      },
+      {
+        "name": "tungcnc-quote-inbox-staging",
+        "uuid": "4c5f1ba6-592d-43a6-9d7c-b13fe8cd00fa",
+        "fileSize": 57344
+      }
+    ]
+  },
+  "workerDeployments": {
+    "tungcnc-sync-v23-staging": {
+      "id": "1af302dd-c24d-4130-9f8d-89a4c6fbeaca",
+      "versions": [
+        {
+          "version_id": "6ab5b540-2922-42eb-9e5a-9fc7b297442f",
+          "percentage": 100
+        }
+      ]
+    },
+    "tungcnc-quote-inbox-staging": {
+      "id": "b2eae3b1-7cb7-4783-bab3-d3efc5c91e74",
+      "versions": [
+        {
+          "version_id": "03e5b3b0-8b60-4dc9-8938-feb60d21fd83",
+          "percentage": 100
+        }
+      ]
+    }
+  },
+  "syncTables": [
+    {
+      "name": "sync_state",
+      "rows": 1,
+      "payload_bytes": 17597
+    },
+    {
+      "name": "sync_operations",
+      "rows": 19,
+      "payload_bytes": 23777
+    },
+    {
+      "name": "sync_nonces",
+      "rows": 1619,
+      "payload_bytes": 148948
+    },
+    {
+      "name": "sync_rates",
+      "rows": 5,
+      "payload_bytes": 360
+    },
+    {
+      "name": "sync_devices",
+      "rows": 8,
+      "payload_bytes": 2040
+    }
+  ],
+  "quoteInboxTables": [
+    {
+      "name": "quote_inbox",
+      "rows": 2,
+      "payload_bytes": 2625
+    },
+    {
+      "name": "inbox_devices",
+      "rows": 2,
+      "payload_bytes": 411
+    },
+    {
+      "name": "inbox_rates",
+      "rows": 1,
+      "payload_bytes": 72
+    },
+    {
+      "name": "inbox_claims",
+      "rows": 2,
+      "payload_bytes": 282
+    }
+  ],
+  "productionDbIdentity": {
+    "dbDeclaration": "const DBNAME='tunggiang-congno-v2',STORE='state'",
+    "openDb": "indexedDB.open(DBNAME,1)",
+    "storageKey": "const STORAGE_KEY='tunggiang-congno-offline-v2'"
+  },
+  "browserActualStorageMeasurement": "UNTESTED: no access to owner Android/PC storage profile",
+  "runtimeCleanupPerformed": false,
+  "newIsolatedRecoveryDatabase": {
+    "id": "0e536fcd-f683-4dc9-9392-bcd11974a914",
+    "name": "tungcnc-sync-v23-dr-20261122",
+    "boundToWorker": false
+  }
+}

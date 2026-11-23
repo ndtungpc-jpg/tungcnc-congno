@@ -1,0 +1,10 @@
+name = "tungcnc-quote-inbox-prod"
+main = "entry.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[vars]
+RELEASE_WRITES = "blocked"
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-quote-inbox-prod"
+database_id = "78e3141d-d03c-4012-adff-e1c2002085fa"

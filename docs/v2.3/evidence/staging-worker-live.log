@@ -1,0 +1,16 @@
+PASS baseline validates and is backed up privately
+PASS A creates detailed order; B/C receive exact data
+PASS B records historical receipt and supplier payment; A/C converge
+PASS three retries preserve one receipt and unchanged sequence
+PASS operation ID reused with different content blocked
+PASS stale concurrent order edit blocked; accepted version retained
+PASS A01 negative nested quantity rejected
+PASS A01 nonnumeric nested unit price rejected
+PASS overpayment rejected
+PASS orphan payment rejected
+PASS same quote with different order ID rejected
+PASS malformed JSON rejected without business write
+PASS signed request replay rejected
+PASS ordered pull rebuilds exact central records
+PASS balances reconcile; every pre-existing record unchanged
+PASS all three test devices revoked and immediately denied

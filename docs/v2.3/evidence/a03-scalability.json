@@ -1,0 +1,247 @@
+{
+  "date": "2026-11-22T09:31:49.295Z",
+  "sourceCommit": "d02d8d5cb8f3e8a314672be2a0910824f179de5e",
+  "environment": {
+    "node": "v24.22.3",
+    "platform": "linux",
+    "architecture": "x64",
+    "cpus": 9,
+    "totalMemoryBytes": 10451423232,
+    "scope": "Node SQLite files + actual source Worker VM/SQLite adapter; NOT Cloudflare D1 or Android; one run per size, warm filesystem possible"
+  },
+  "results": [
+    {
+      "orders": 1000,
+      "items": 1999,
+      "dimensions": 1998,
+      "payments": 1999,
+      "records": 4020,
+      "jsonBytes": 1693236,
+      "fixtureMs": 14.9,
+      "jsonEncodeMs": 36.46,
+      "currentWorker": {
+        "http": 201,
+        "ms": 178.35,
+        "sourceRecordsUnchangedOnReject": false,
+        "scope": "actual source Worker handler + SQLite adapter; full fixture preseeded only to probe cap, NOT successful onboarding"
+      },
+      "currentChangePlanner": "accept",
+      "prototype": {
+        "bootstrapMs": 244.1,
+        "databaseBytes": 4620288,
+        "checkpointMs": 164.39,
+        "checkpointBytes": 4503821,
+        "pages": 21,
+        "maxPageBytes": 239328,
+        "technicalPages": 13,
+        "checkpointPlusTailRecovered": true,
+        "restoreBMs": 179.09,
+        "restoreCMs": 190.5,
+        "rollbackRestoreMs": 211.7,
+        "pushDeltaMs": 3.91,
+        "duplicateMs": 0.16,
+        "twoReplicaDeltaApplyMs": 7.33,
+        "deltaRequestBytes": 2397,
+        "recordRootVerified": true,
+        "totalsBefore": {
+          "receivable": 1498500000,
+          "payable": 500000,
+          "received": 499500000,
+          "disbursed": 300000
+        },
+        "totalsAfter": {
+          "receivable": 1498490100,
+          "payable": 500000,
+          "received": 499510000,
+          "disbursed": 300000
+        },
+        "duplicateAndConflictSafe": true,
+        "dryRunNoExternalBackup": "BLOCKED",
+        "noCleanupExecuted": true
+      },
+      "elapsedMs": 1953.37
+    },
+    {
+      "orders": 3000,
+      "items": 5999,
+      "dimensions": 5998,
+      "payments": 5999,
+      "records": 12020,
+      "jsonBytes": 5123226,
+      "fixtureMs": 3.57,
+      "jsonEncodeMs": 91.66,
+      "currentWorker": {
+        "http": 413,
+        "ms": 467.73,
+        "sourceRecordsUnchangedOnReject": true,
+        "scope": "actual source Worker handler + SQLite adapter; full fixture preseeded only to probe cap, NOT successful onboarding"
+      },
+      "currentChangePlanner": "blocked-5MB",
+      "prototype": {
+        "bootstrapMs": 951.71,
+        "databaseBytes": 13746176,
+        "checkpointMs": 355.48,
+        "checkpointBytes": 13609439,
+        "pages": 61,
+        "maxPageBytes": 242994,
+        "technicalPages": 36,
+        "checkpointPlusTailRecovered": true,
+        "restoreBMs": 518.41,
+        "restoreCMs": 618.31,
+        "rollbackRestoreMs": 526.25,
+        "pushDeltaMs": 12.96,
+        "duplicateMs": 0.21,
+        "twoReplicaDeltaApplyMs": 18.72,
+        "deltaRequestBytes": 2397,
+        "recordRootVerified": true,
+        "totalsBefore": {
+          "receivable": 4498500000,
+          "payable": 500000,
+          "received": 1499500000,
+          "disbursed": 300000
+        },
+        "totalsAfter": {
+          "receivable": 4498490100,
+          "payable": 500000,
+          "received": 1499510000,
+          "disbursed": 300000
+        },
+        "duplicateAndConflictSafe": true,
+        "dryRunNoExternalBackup": "BLOCKED",
+        "noCleanupExecuted": true
+      },
+      "elapsedMs": 5900.06
+    },
+    {
+      "orders": 5000,
+      "items": 9999,
+      "dimensions": 9998,
+      "payments": 9999,
+      "records": 20020,
+      "jsonBytes": 8553226,
+      "fixtureMs": 6.78,
+      "jsonEncodeMs": 69.07,
+      "currentWorker": {
+        "http": 413,
+        "ms": 821.75,
+        "sourceRecordsUnchangedOnReject": true,
+        "scope": "actual source Worker handler + SQLite adapter; full fixture preseeded only to probe cap, NOT successful onboarding"
+      },
+      "currentChangePlanner": "blocked-5MB",
+      "prototype": {
+        "bootstrapMs": 1797.21,
+        "databaseBytes": 22896640,
+        "checkpointMs": 565.11,
+        "checkpointBytes": 22715171,
+        "pages": 101,
+        "maxPageBytes": 243006,
+        "technicalPages": 59,
+        "checkpointPlusTailRecovered": true,
+        "restoreBMs": 868.05,
+        "restoreCMs": 976.61,
+        "rollbackRestoreMs": 898.42,
+        "pushDeltaMs": 18.01,
+        "duplicateMs": 0.3,
+        "twoReplicaDeltaApplyMs": 32.27,
+        "deltaRequestBytes": 2397,
+        "recordRootVerified": true,
+        "totalsBefore": {
+          "receivable": 7498500000,
+          "payable": 500000,
+          "received": 2499500000,
+          "disbursed": 300000
+        },
+        "totalsAfter": {
+          "receivable": 7498490100,
+          "payable": 500000,
+          "received": 2499510000,
+          "disbursed": 300000
+        },
+        "duplicateAndConflictSafe": true,
+        "dryRunNoExternalBackup": "BLOCKED",
+        "noCleanupExecuted": true
+      },
+      "elapsedMs": 9544.82
+    },
+    {
+      "orders": 10000,
+      "items": 19999,
+      "dimensions": 19998,
+      "payments": 19999,
+      "records": 40020,
+      "jsonBytes": 17128226,
+      "fixtureMs": 15.97,
+      "jsonEncodeMs": 126.55,
+      "currentWorker": {
+        "http": 413,
+        "ms": 3101.09,
+        "sourceRecordsUnchangedOnReject": true,
+        "scope": "actual source Worker handler + SQLite adapter; full fixture preseeded only to probe cap, NOT successful onboarding"
+      },
+      "currentChangePlanner": "blocked-5MB",
+      "prototype": {
+        "bootstrapMs": 5818.12,
+        "databaseBytes": 45789184,
+        "checkpointMs": 1139.5,
+        "checkpointBytes": 45480017,
+        "pages": 201,
+        "maxPageBytes": 243012,
+        "technicalPages": 119,
+        "checkpointPlusTailRecovered": true,
+        "restoreBMs": 1759.88,
+        "restoreCMs": 1724.45,
+        "rollbackRestoreMs": 1736.16,
+        "pushDeltaMs": 38.98,
+        "duplicateMs": 0.18,
+        "twoReplicaDeltaApplyMs": 72.12,
+        "deltaRequestBytes": 2397,
+        "recordRootVerified": true,
+        "totalsBefore": {
+          "receivable": 14998500000,
+          "payable": 500000,
+          "received": 4999500000,
+          "disbursed": 300000
+        },
+        "totalsAfter": {
+          "receivable": 14998490100,
+          "payable": 500000,
+          "received": 4999510000,
+          "disbursed": 300000
+        },
+        "duplicateAndConflictSafe": true,
+        "dryRunNoExternalBackup": "BLOCKED",
+        "noCleanupExecuted": true
+      },
+      "elapsedMs": 22311.25
+    }
+  ],
+  "checks": [
+    "four dataset sizes measured",
+    "actual source Worker 5MB behavior measured without network",
+    "JSON record payloads/IDs/items/dimensions retained in SQLite prototype",
+    "B/C checkpoint and delta exact roots and balances",
+    "duplicate operation and rollback of partial conflict",
+    "ECDSA ACK identity/future-sequence/membership/missing member gates",
+    "off-device backup unverified blocks real dry-run",
+    "test-only attestation yields manual candidates, never executable",
+    "pending/conflict/first-sync/reconciliation/future snapshots pinned",
+    "corrupt checkpoint rolls back shadow restore",
+    "no log or business record cleanup"
+  ],
+  "liveStagingMutated": false,
+  "cleanupExecuted": false,
+  "appCodeImportedPrototype": false,
+  "externalBackupVerifiedForNewCheckpoints": false,
+  "physicalDeviceAcceptance": "UNTESTED",
+  "limitations": [
+    "No live Cloudflare/D1 or real Android benchmark",
+    "Current Worker fixtures preseeded in memory SQLite for single-edit cap probe, not end-to-end onboarding",
+    "Prototype replicas are separate SQLite files, not app IndexedDB/PWA",
+    "Outside-device copy is same-host simulation; real external backup not verified",
+    "Positive external-backup attestation is test-only; executable always false",
+    "Prototype relational validation still scans full tables; targeted D1 validation and oversized-record/group transport unverified",
+    "No live cleanup or schema migration"
+  ],
+  "combinedDriverPeakRssBytes": 583233536,
+  "production": "NO-GO"
+}

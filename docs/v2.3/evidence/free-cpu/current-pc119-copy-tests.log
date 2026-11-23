@@ -1,0 +1,18 @@
+PASS artifact hashes, exact Production endpoints, CSP, all PWA cached assets, unchanged DB identity/schema and manifest
+PASS default/missing write gate fails closed with 503; staging origins rejected; read/preflight retained; explicit enable delegates
+PASS pending enrollment blocked, explicit approval, role and origin isolation
+PASS full detail/totals, content fingerprint, repeated send and malformed amount/dimensions
+PASS competing devices, claim retries, lost ack retry, revision/code lock, no unclaimed import
+PASS immediate per-device revocation
+PASS Production public large bootstrap disabled on Free
+PASS oversized request/decompression rejected
+PASS wrong hash and device approval
+PASS stale preview and failed local writes
+PASS D1 transaction rollback and concurrent revoke
+PASS actual Production write gate 503 preserves durable snapshot job, main and cursor; no false ACK
+PASS offline bootstrap retained
+PASS server commit with lost ACK
+PASS complete source/destination equality
+PASS restore into NEW database plus post-backup signed transaction replay, exact IDs/values/history/versions; retry no duplicates; original database retained
+PASS owner/hash/backup grant, exact initial snapshot, bounded gzip, stale CAS, offline/restart/ACK, device approval, nonempty target, conflict, local and D1 rollback, all per-ID records and metadata, two-way payments on isolated COPY
+PASS generated Production runtime bootstrap, two-way COPY, write freeze/retry and new-transaction restore; no remote writes

@@ -1,0 +1,151 @@
+{
+  "run": "AUDIT-LIVE-20261122044538",
+  "environment": "LIVE HTTPS staging Worker/D1; Node clients, NOT Android physical",
+  "worker": "https://tungcnc-sync-v23-staging.ndtung-pc.workers.dev",
+  "sourceCommit": "8fd16fcedfcb1876dd80005465f1ed6a3b250034",
+  "results": [
+    {
+      "name": "baseline validates and is backed up privately",
+      "status": "PASS",
+      "evidence": {
+        "sequence": 16,
+        "records": 35,
+        "sha256": "7eea16218c706ef39d73558e78028a7e0080bc3e61b7632fbdee60efb6dddf9f"
+      }
+    },
+    {
+      "name": "A creates detailed order; B/C receive exact data",
+      "status": "PASS",
+      "evidence": {
+        "sequence": 17,
+        "items": 1,
+        "dimensions": 1
+      }
+    },
+    {
+      "name": "B records historical receipt and supplier payment; A/C converge",
+      "status": "PASS",
+      "evidence": {
+        "sequence": 18,
+        "customerPaid": 1000000,
+        "supplierPaid": 300000,
+        "receiptDate": "2026-10-15"
+      }
+    },
+    {
+      "name": "three retries preserve one receipt and unchanged sequence",
+      "status": "PASS",
+      "evidence": {
+        "sequence": 18
+      }
+    },
+    {
+      "name": "operation ID reused with different content blocked",
+      "status": "PASS",
+      "evidence": {
+        "http": 409
+      }
+    },
+    {
+      "name": "stale concurrent order edit blocked; accepted version retained",
+      "status": "PASS",
+      "evidence": {
+        "http": 409
+      }
+    },
+    {
+      "name": "A01 negative nested quantity rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 409,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "A01 nonnumeric nested unit price rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 409,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "overpayment rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 409,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "orphan payment rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 409,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "same quote with different order ID rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 409,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "malformed JSON rejected without business write",
+      "status": "PASS",
+      "evidence": {
+        "http": 400
+      }
+    },
+    {
+      "name": "signed request replay rejected",
+      "status": "PASS",
+      "evidence": {
+        "http": 401
+      }
+    },
+    {
+      "name": "ordered pull rebuilds exact central records",
+      "status": "PASS",
+      "evidence": {
+        "operations": 3,
+        "sequence": 19
+      }
+    },
+    {
+      "name": "balances reconcile; every pre-existing record unchanged",
+      "status": "PASS",
+      "evidence": {
+        "beforeSequence": 16,
+        "afterSequence": 19,
+        "existingRecords": 35,
+        "addedCustomers": 1,
+        "addedSuppliers": 1,
+        "addedOrders": 2,
+        "addedPayments": 2,
+        "receivableDelta": 4000000,
+        "payableDelta": 500000,
+        "receivedDelta": 1000000,
+        "disbursedDelta": 300000,
+        "baselineRecordHash": "f11d40019f755be5a05d74a12c6d0336d5763552a78acdec71133117d0f5444b"
+      }
+    },
+    {
+      "name": "all three test devices revoked and immediately denied",
+      "status": "PASS",
+      "evidence": {
+        "devices": 3,
+        "http": 401
+      }
+    }
+  ],
+  "workerDeploymentId": "1af302dd-c24d-4130-9f8d-89a4c6fbeaca",
+  "workerVersionId": "6ab5b540-2922-42eb-9e5a-9fc7b297442f",
+  "d1OperationLogCheck": {
+    "sequence": 19,
+    "operations": 19
+  }
+}

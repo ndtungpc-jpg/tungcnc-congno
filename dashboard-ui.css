@@ -1,0 +1,31 @@
+body>header{align-items:center;gap:12px}
+#headerSync{position:static;flex:0 0 auto;display:inline-grid;grid-template-columns:24px auto;align-items:center;gap:4px 6px;min-height:44px;max-width:132px;border:1px solid #8ca8c5;background:#203e58;color:#fff;padding:6px 8px;border-radius:10px;font-size:12px;line-height:1.25}
+#headerSync svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8}
+#headerSync b{grid-column:2;font-size:13px}
+#headerSync[data-mode=synced]{border-color:#70d6a4;color:#b5f5d3}
+#headerSync[data-mode=error]{border-color:#ff9e9e;color:#ffcccc}
+#headerSync[data-mode=waiting]{border-color:#ffd166;color:#ffebae}
+.recent-order-list{display:grid;gap:8px}
+.recent-order{display:flex;justify-content:space-between;align-items:start;gap:12px;width:100%;min-height:70px;padding:12px;border:1px solid var(--line,#789);border-radius:10px;background:transparent;color:inherit;text-align:left}
+.recent-order>span{display:grid;gap:4px;min-width:0;overflow-wrap:anywhere}
+.recent-order small{font-size:12px}.recent-money{flex-shrink:0;text-align:right}
+.recent-money b{display:block;font-variant-numeric:tabular-nums;white-space:nowrap}
+.reminder-badge{display:inline-flex!important;flex-direction:row;gap:4px;border-width:1px;padding:5px 7px;font-size:13px!important;line-height:1.2;max-width:100%;min-height:32px;align-items:center;cursor:pointer;color:#fff3c4!important;background:#173b50}
+[data-reminder-for]{margin-top:5px}
+#content td:has(>[data-reminder-for]){min-width:0}
+@media(max-width:650px){
+ #content table.reminder-card-table{display:block;width:100%;table-layout:auto}
+ #content table.reminder-card-table thead{display:none}
+ #content table.reminder-card-table tbody{display:grid;gap:10px}
+ #content table.reminder-card-table tr{display:grid;grid-template-columns:minmax(0,1fr);padding:10px;border:1px solid var(--line,#789);border-radius:10px}
+ #content table.reminder-card-table td{display:block;max-width:100%;padding:5px 0!important;border:0;white-space:normal;overflow-wrap:anywhere}
+ #content table.reminder-card-table td b{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:18px}
+ #content table.reminder-card-table td[data-cell-label]::before{content:attr(data-cell-label) ': ';font-size:12px;opacity:.8}
+ #content .tablewrap:has(>.reminder-card-table){overflow:visible}
+ .recent-order{flex-wrap:wrap}.recent-money{flex:1 1 100%;display:flex!important;justify-content:space-between;text-align:left;gap:12px}
+}
+@media(max-width:380px){body>header{flex-wrap:wrap}#headerSync{margin-left:auto}}
+@media(max-width:650px){
+ #content table.reminder-card-table{min-width:0!important;max-width:100%}
+ #content table.reminder-card-table tbody,#content table.reminder-card-table tr{min-width:0;max-width:100%;width:100%}
+}

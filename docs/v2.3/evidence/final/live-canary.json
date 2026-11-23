@@ -1,0 +1,517 @@
+{
+  "start": "2026-11-23T09:29:38.026Z",
+  "scope": "Independent Cloudflare canary; synthetic ledger only; two Workers share dedicated canary D1 due account10 limit",
+  "tests": [
+    {
+      "name": "Live default write lock503, staging origin403, preflight204",
+      "status": "PASS"
+    },
+    {
+      "name": "Live atomic synthetic large bootstrap plus second-device receive exact IDs/values",
+      "status": "PASS"
+    },
+    {
+      "name": "Live post-backup transaction and exact operation retry no duplicate",
+      "status": "PASS"
+    },
+    {
+      "name": "Fresh canary devices receive retained seq2 without reinitialization",
+      "status": "PASS"
+    },
+    {
+      "name": "Live Production sender/receiver roles, quote send retry, claim/import",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual version rollback:503 preserves client payment/main/outbox/cursor, inbox reads retained and writes blocked",
+      "status": "PASS"
+    },
+    {
+      "name": "After real rollback/redeploy: held transaction exactly once, both clients seq3 queue0, full records equal",
+      "status": "PASS"
+    },
+    {
+      "name": "Inbox existing quote survives code rollback; repeated original send remains duplicate",
+      "status": "PASS"
+    },
+    {
+      "name": "Live conflicting same-ID edits retain both candidates; explicit preview/local choice converges seq5 with payments unchanged and recovery backup",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "OPTIONS",
+      "status": 204
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "OPTIONS",
+      "status": 204
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/bootstrap",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes/tgq-v1-a5ed157f49c462f10344e6504bc741c09c9ad1f287fc61754084b727b399f74a/claim",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes/tgq-v1-a5ed157f49c462f10344e6504bc741c09c9ad1f287fc61754084b727b399f74a",
+      "method": "PATCH",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-inbox-20261123.ndtung-pc.workers.dev",
+      "path": "/api/quotes",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/push",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "api": "https://tungcnc-v23-canary-sync-20261123.ndtung-pc.workers.dev",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "snapshotMetrics": {
+    "bytes": 1737872,
+    "stateRowBytes": 1812401,
+    "requestBytes": 295855
+  },
+  "fixtureCorrection": "Initial hand-built quote used unsupported type cai and empty sizes; Worker correctly rejected400. Corrected to piece/count1; no runtime patch.",
+  "final": {
+    "sequence": 5,
+    "payments": 48,
+    "recordsHash": "803cfc865bcb3b68abd5f98a54ce46409908ebf65eb2e3510868e997c4b02bd4",
+    "summary": {
+      "customers": 119,
+      "suppliers": 0,
+      "orders": 619,
+      "payments": 48,
+      "receivable": 1233399873.375,
+      "payable": 0,
+      "received": 4600204,
+      "disbursed": 0
+    },
+    "snapshotSyntheticOnly": true
+  },
+  "end": "2026-11-23T09:36:13.013Z"
+}

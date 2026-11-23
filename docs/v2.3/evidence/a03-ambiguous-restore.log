@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+999 !== 0
+
+    at /workspace/scratch/c365ff6ead59/v23work/sync/experiments/a03/app-restore.cjs:7:565 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 999,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

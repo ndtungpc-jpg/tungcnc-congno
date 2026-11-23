@@ -1,0 +1,48 @@
+{
+  "start": "2026-11-23T09:26:00Z",
+  "end": "2026-11-23T09:38:07.778Z",
+  "units": "microseconds (verified GraphQL field descriptions)",
+  "result": {
+    "data": {
+      "viewer": {
+        "accounts": [
+          {
+            "inbox": [
+              {
+                "dimensions": {
+                  "scriptName": "tungcnc-v23-canary-inbox-20261123",
+                  "status": "success"
+                },
+                "quantiles": {
+                  "cpuTimeP50": 1851,
+                  "cpuTimeP99": 4485
+                },
+                "sum": {
+                  "errors": 0,
+                  "requests": 19
+                }
+              }
+            ],
+            "sync": [
+              {
+                "dimensions": {
+                  "scriptName": "tungcnc-v23-canary-sync-20261123",
+                  "status": "success"
+                },
+                "quantiles": {
+                  "cpuTimeP50": 1723,
+                  "cpuTimeP99": 121505
+                },
+                "sum": {
+                  "errors": 0,
+                  "requests": 63
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "errors": null
+  }
+}

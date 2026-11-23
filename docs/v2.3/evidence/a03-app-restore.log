@@ -1,0 +1,4 @@
+PASS actual app isolated restore {"orders":1000,"jsonBytes":1693318,"previewMs":1037.3,"confirmedRestoreAndRenderMs":1132.21,"reconcileMs":26.16,"idsPayloadsAndBalancesExact":true,"persistedToFakeIndexedDb":true,"sourceUnchanged":true}
+PASS actual app isolated restore {"orders":3000,"jsonBytes":5123308,"previewMs":5556.96,"confirmedRestoreAndRenderMs":5838.47,"reconcileMs":239.18,"idsPayloadsAndBalancesExact":true,"persistedToFakeIndexedDb":true,"sourceUnchanged":true}
+PASS actual app isolated restore {"orders":5000,"jsonBytes":8553308,"previewMs":12733.46,"confirmedRestoreAndRenderMs":16512.13,"reconcileMs":637.83,"idsPayloadsAndBalancesExact":true,"persistedToFakeIndexedDb":true,"sourceUnchanged":true}
+PASS actual app isolated restore {"orders":10000,"jsonBytes":17128308,"previewMs":49013.97,"confirmedRestoreAndRenderMs":66484.91,"reconcileMs":4152.79,"idsPayloadsAndBalancesExact":true,"persistedToFakeIndexedDb":true,"sourceUnchanged":true}

@@ -1,0 +1,346 @@
+[
+  {
+    "name": "tungcnc-v23-free-base-lite",
+    "events": [
+      {
+        "timestamp": 1795439414281,
+        "ray": "a5f069afcb76163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 567,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439410365,
+        "ray": "a5f069910d1a163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 65,
+        "wallMs": 1610,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439377561,
+        "ray": "a5f068ca3d15163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 569,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439374001,
+        "ray": "a5f068a69f42163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 109,
+        "wallMs": 2785,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439352406,
+        "ray": "a5f0682d0bf7163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 4,
+        "wallMs": 583,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439351648,
+        "ray": "a5f06821db55163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 63,
+        "wallMs": 1643,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439346701,
+        "ray": "a5f068091d77163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 586,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439345049,
+        "ray": "a5f067f608dc163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 82,
+        "wallMs": 2055,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439339147,
+        "ray": "a5f067da4db4163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 554,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439335722,
+        "ray": "a5f067bed9a3163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 52,
+        "wallMs": 1549,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439333499,
+        "ray": "a5f067b6eb2b163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 557,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439332373,
+        "ray": "a5f067a78f54163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 58,
+        "wallMs": 1920,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439330425,
+        "ray": "a5f067a35afb163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 4,
+        "wallMs": 594,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439329538,
+        "ray": "a5f06791fb2d163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 62,
+        "wallMs": 2551,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439324523,
+        "ray": "a5f0677e6ea2163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 601,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439323013,
+        "ray": "a5f067664f5d163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 85,
+        "wallMs": 3016,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439319975,
+        "ray": "a5f067622c05163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 4,
+        "wallMs": 595,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439319279,
+        "ray": "a5f067549cdc163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 57,
+        "wallMs": 2091,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439317068,
+        "ray": "a5f067503832163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 561,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439316443,
+        "ray": "a5f067463b9b163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 48,
+        "wallMs": 1564,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439314828,
+        "ray": "a5f067420825163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 567,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439314171,
+        "ray": "a5f067306f36163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 63,
+        "wallMs": 2755,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439311333,
+        "ray": "a5f0672c5b04163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 559,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439310721,
+        "ray": "a5f0671a4ec5163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 76,
+        "wallMs": 2862,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439307812,
+        "ray": "a5f0671629be163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 5,
+        "wallMs": 594,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439306813,
+        "ray": "a5f06705bb0b163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 95,
+        "wallMs": 2261,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439304398,
+        "ray": "a5f06700ad4a163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 4,
+        "wallMs": 601,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439303734,
+        "ray": "a5f066ee09b7163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 60,
+        "wallMs": 2935,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439300698,
+        "ray": "a5f066e9cd34163f",
+        "path": "/api/sync/push",
+        "status": 200,
+        "cpuMs": 3,
+        "wallMs": 575,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439299940,
+        "ray": "a5f066db0b0f163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 95,
+        "wallMs": 2232,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439297011,
+        "ray": "a5f066cd2d09163f",
+        "path": "/api/sync/snapshot",
+        "status": 200,
+        "cpuMs": 29,
+        "wallMs": 1484,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      },
+      {
+        "timestamp": 1795439234539,
+        "ray": "a5f0654be87a163f",
+        "path": "/api/devices/register",
+        "status": 201,
+        "cpuMs": 10,
+        "wallMs": 598,
+        "outcome": "ok",
+        "version": "38906171-8d24-4313-b983-55eee8fe18f4"
+      }
+    ]
+  },
+  {
+    "name": "tungcnc-v23-free-min-lite",
+    "events": [
+      {
+        "timestamp": 1795439443002,
+        "ray": "a5f06a595bf3163f",
+        "path": "/api/sync/push",
+        "status": 201,
+        "cpuMs": 70,
+        "wallMs": 2172,
+        "outcome": "ok",
+        "version": "4b07691b-9004-4255-ae93-bb28bef31d4a"
+      }
+    ]
+  },
+  {
+    "name": "tungcnc-v23-free-sql-lite",
+    "events": []
+  }
+]

@@ -1,0 +1,87 @@
+{
+  "status": "PASS_INTEGRITY_BLOCKED_AUTHORITATIVE_SOURCE_MISMATCH",
+  "uploadedFile": "TungGiang_CongNo_Backup_2026-11-23(1).json",
+  "sourceFileSha256": "d09fbb9195c0c8cde669225d7e2bbaf3d89be607d35f250e46793b9bf6062b12",
+  "sourceRawBytes": 8809006,
+  "exportedAt": "2026-11-23T09:26:54.790Z",
+  "scope": "Read-only private JSON audit. No IndexedDB, D1, bootstrap or deployment writes.",
+  "ownerDeclaredActivePartners": 119,
+  "actualCounts": {
+    "partners": 118,
+    "customers": 118,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "audit": 1439,
+    "trash": 2,
+    "recovery": 8
+  },
+  "sourceIsLatestProductionVerified": false,
+  "duplicateIds": {
+    "partners": 0,
+    "orders": 0,
+    "payments": 0,
+    "audit": 0,
+    "trash": 0,
+    "excelImports": 0,
+    "reminderTemplates": 0,
+    "reminderEvents": 0
+  },
+  "validation": "PASS full current sync/core and safety validators",
+  "comparison": {
+    "referenceSha256": "2841c2f2a16784ffd3941a68aedced88936f323ea7f84444e8e115bc096dd46b",
+    "remaining118PartnersExact": true,
+    "all619OrdersIncludingItemsDatesAmountsExact": true,
+    "all46PaymentsIncludingDatesGroupsAllocationsExact": true,
+    "all1438PriorAuditRowsExact": true,
+    "allOtherDataRootFieldsExact": true,
+    "allPriorTrashExact": true,
+    "quoteInboxExact": true,
+    "revision": [
+      1,
+      2
+    ],
+    "onlyBusinessDifference": {
+      "partnerRemovedFromActive": "90adbc6d-904e-4490-ac18-13812306aaa3",
+      "trashId": "aecbee9b-5a9d-48bd-9194-334c3322a6b8",
+      "auditId": "b558f7aa-fc00-4ddf-946b-6fe82176f379",
+      "deletedAt": "2026-11-23T07:38:07.078Z",
+      "testRecordExactInTrash": true,
+      "linkedOrders": 0
+    }
+  },
+  "hashes": {
+    "keyedRecords": "fef2d33ef5bfd3336ef022f1e76a6d9fa79874ddb6b5fa15622a9efc91e8c3bd",
+    "partners": "dc116420a0d392ce3ee52fa2602d8fca8afa1b3339481c135a442a721ccd595a",
+    "orders": "424aefb9f7949ac2afc68204d54a5350e63b9909f052b3056b19df256b41c5cb",
+    "payments": "367f1d47cbeaa7e4e37f97c98873b23ffafb8acd3b4b7208d0d3e24939ac11dc",
+    "audit": "b02f5d314daa7fc8ed8e7df443e014a68a05fdae7cd3b4372c55ec2428c9a000",
+    "trash": "bfce0809eaa05d67a7d9dc4bd5ac7b77a4cea2a812eb177d60af010c50c3168c",
+    "recovery": "6c62909417fef1c2c8ba8743a493d3de2eb9b666d90956086a4891e7dd1d248b",
+    "quoteInbox": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "snapshot": "89352d1e846e68afde56dd7063f391d665f4744fcb6ce5d022becea457e4e535"
+  },
+  "summary": {
+    "customers": 118,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "receivable": 1250365237.2799997,
+    "payable": 0,
+    "received": 158896322.4,
+    "disbursed": 0
+  },
+  "byteGuards": {
+    "snapshotBytes": 1648442,
+    "stateRowBytes": 1761126,
+    "ownerAdminReceiptRowBytes": 1761578,
+    "snapshotLimit": 5000000,
+    "stateAndReceiptLimit": 1900000,
+    "status": "PASS"
+  },
+  "sourceFilesUnchanged": true,
+  "dataUploadedToCloudflare": false,
+  "productionDataChanged": false,
+  "requiredNextStep": "Export current PC Production origin with119 active partners; do not restore TEST or import acceptance data to force equality. Current118 upload is not approved for Production seeding."
+}
+

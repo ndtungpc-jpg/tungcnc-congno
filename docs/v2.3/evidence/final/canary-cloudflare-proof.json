@@ -1,0 +1,329 @@
+{
+  "createdAt": "2026-11-23T09:37:37.799Z",
+  "sourceAuthority": {
+    "chosenByOwner": "PC Production",
+    "expectedPartners": 119,
+    "keepTest": true,
+    "s24ProductionOwnerStatement": "Never used; phone only used acceptance",
+    "s24ProductionIndexedDbChecked": false,
+    "latestPcFileVerified": false
+  },
+  "canaryBaseline": [
+    {
+      "kind": "sync",
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "deployments": {
+        "deployments": [
+          {
+            "id": "e192c5f2-839a-4678-bf1b-a50363b0346b",
+            "source": "api",
+            "strategy": "percentage",
+            "annotations": {
+              "workers/message": "Automatic deployment on upload.",
+              "workers/triggered_by": "upload"
+            },
+            "versions": [
+              {
+                "version_id": "a3d28fa5-f90d-43b1-9d36-c243278463fa",
+                "percentage": 100
+              }
+            ],
+            "created_on": "2026-11-23T09:27:00.92493Z"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "quote-inbox",
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "deployments": {
+        "deployments": [
+          {
+            "id": "c175c66f-26ec-4f2e-9a3c-8fad52bf3676",
+            "source": "api",
+            "strategy": "percentage",
+            "annotations": {
+              "workers/message": "Automatic deployment on upload.",
+              "workers/triggered_by": "upload"
+            },
+            "versions": [
+              {
+                "version_id": "2dd4e3ff-f2af-4114-a752-a3c55bb1a85f",
+                "percentage": 100
+              }
+            ],
+            "created_on": "2026-11-23T09:27:02.685502Z"
+          }
+        ]
+      }
+    }
+  ],
+  "canaryEnabled": [
+    {
+      "kind": "sync",
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "deployment": {
+        "id": "da2c4ed7-7249-40e8-a8ac-62c260c29dc1",
+        "source": "api",
+        "strategy": "percentage",
+        "annotations": {
+          "workers/message": "Automatic deployment on upload.",
+          "workers/triggered_by": "upload"
+        },
+        "versions": [
+          {
+            "version_id": "7c0d4e4c-2c55-4769-bf29-cc323c127039",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-11-23T09:29:23.914622Z"
+      }
+    },
+    {
+      "kind": "quote-inbox",
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "deployment": {
+        "id": "0bf41dc9-9596-4960-815f-3a597d073c5e",
+        "source": "api",
+        "strategy": "percentage",
+        "annotations": {
+          "workers/message": "Automatic deployment on upload.",
+          "workers/triggered_by": "upload"
+        },
+        "versions": [
+          {
+            "version_id": "91a74b75-eb7d-41fc-b34d-62355c521d14",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-11-23T09:29:24.869982Z"
+      }
+    }
+  ],
+  "rollback": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "deployment": {
+        "id": "23ed7ab7-09b0-4e10-8e39-aa811b36968b"
+      },
+      "verified": {
+        "id": "23ed7ab7-09b0-4e10-8e39-aa811b36968b",
+        "source": "api",
+        "strategy": "percentage",
+        "annotations": {
+          "workers/message": "Actual rollback drill to original A; preserve D1 and held transaction",
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "a3d28fa5-f90d-43b1-9d36-c243278463fa",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-11-23T09:34:41.459473Z"
+      }
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "deployment": {
+        "id": "fc125c2e-6ba2-4f51-bc1d-29115c14021d"
+      },
+      "verified": {
+        "id": "fc125c2e-6ba2-4f51-bc1d-29115c14021d",
+        "source": "api",
+        "strategy": "percentage",
+        "annotations": {
+          "workers/message": "Actual rollback drill to original A; preserve D1 and held transaction",
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "2dd4e3ff-f2af-4114-a752-a3c55bb1a85f",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-11-23T09:34:42.499688Z"
+      }
+    }
+  ],
+  "resume": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "deployment": {
+        "id": "4e021cbe-27f8-40f3-8eca-dbc4e1b18bbc"
+      },
+      "version": "7c0d4e4c-2c55-4769-bf29-cc323c127039"
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "deployment": {
+        "id": "4cffaedb-0282-4652-b9ea-d0091473ab9e"
+      },
+      "version": "91a74b75-eb7d-41fc-b34d-62355c521d14"
+    }
+  ],
+  "beforeRollback": {
+    "sequence": 2,
+    "ledgerHash": "465bec92790413c42497086318b7dbb715e43d9f440b24d8065a516cb7fdb65e",
+    "operationsHash": "1d1c57fe3c3251f812adb2efd7ed349cfbc57b9600e5987f2f6d905b2c35ebd2",
+    "operations": 2,
+    "inboxHash": "acc9dde0cfd7c034d8fe32a09af5877dc9f5dd538fbbf14690aad86fc1dceff7",
+    "inbox": 1
+  },
+  "afterRollback": {
+    "sequence": 2,
+    "ledgerHash": "465bec92790413c42497086318b7dbb715e43d9f440b24d8065a516cb7fdb65e",
+    "operationsHash": "1d1c57fe3c3251f812adb2efd7ed349cfbc57b9600e5987f2f6d905b2c35ebd2",
+    "operations": 2,
+    "inboxHash": "acc9dde0cfd7c034d8fe32a09af5877dc9f5dd538fbbf14690aad86fc1dceff7",
+    "inbox": 1
+  },
+  "finalLocked": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "deployment": {
+        "id": "0177675d-21f3-43dd-9c56-09e6fbd9a007"
+      },
+      "version": "a3d28fa5-f90d-43b1-9d36-c243278463fa"
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "deployment": {
+        "id": "465968d0-d382-4cf0-ac04-23dd6218c4fd"
+      },
+      "version": "2dd4e3ff-f2af-4114-a752-a3c55bb1a85f"
+    }
+  ],
+  "activeVersions": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "version": {
+        "id": "a3d28fa5-f90d-43b1-9d36-c243278463fa",
+        "number": 1,
+        "metadata": {
+          "created_on": "2026-11-23T09:27:00.92493Z",
+          "source": "api",
+          "has_preview": true
+        },
+        "annotations": {
+          "workers/triggered_by": "upload"
+        },
+        "resources": {
+          "script": {
+            "etag": "42c45dca569ee5a72264b2cec8d21200cbd197777082e999713c85638e41440a",
+            "handlers": [
+              "fetch"
+            ],
+            "last_deployed_from": "api"
+          },
+          "script_runtime": {
+            "compatibility_date": "2026-11-21",
+            "usage_model": "standard"
+          },
+          "bindings": [
+            {
+              "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+              "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+              "name": "DB",
+              "type": "d1"
+            },
+            {
+              "name": "INITIAL_BOOTSTRAP_TARGET",
+              "text": "production-v23",
+              "type": "plain_text"
+            },
+            {
+              "name": "RELEASE_WRITES",
+              "text": "blocked",
+              "type": "plain_text"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "version": {
+        "id": "2dd4e3ff-f2af-4114-a752-a3c55bb1a85f",
+        "number": 1,
+        "metadata": {
+          "created_on": "2026-11-23T09:27:02.685502Z",
+          "source": "api",
+          "has_preview": true
+        },
+        "annotations": {
+          "workers/triggered_by": "upload"
+        },
+        "resources": {
+          "script": {
+            "etag": "8edb0998e5e38447af55e2b1d48a3511f9448ab57ab80fb53c5b607739583024",
+            "handlers": [
+              "fetch"
+            ],
+            "last_deployed_from": "api"
+          },
+          "script_runtime": {
+            "compatibility_date": "2026-11-21",
+            "usage_model": "standard"
+          },
+          "bindings": [
+            {
+              "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+              "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+              "name": "DB",
+              "type": "d1"
+            },
+            {
+              "name": "RELEASE_WRITES",
+              "text": "blocked",
+              "type": "plain_text"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "analytics": {
+    "data": {
+      "viewer": {
+        "accounts": [
+          {
+            "inbox": [
+              {
+                "dimensions": {
+                  "scriptName": "tungcnc-v23-canary-inbox-20261123",
+                  "status": "success"
+                },
+                "quantiles": {
+                  "cpuTimeP50": 1851,
+                  "cpuTimeP99": 4475
+                },
+                "sum": {
+                  "errors": 0,
+                  "requests": 13
+                }
+              }
+            ],
+            "sync": [
+              {
+                "dimensions": {
+                  "scriptName": "tungcnc-v23-canary-sync-20261123",
+                  "status": "success"
+                },
+                "quantiles": {
+                  "cpuTimeP50": 1695,
+                  "cpuTimeP99": 121505
+                },
+                "sum": {
+                  "errors": 0,
+                  "requests": 36
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "errors": null
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "canaryUi": "https://tungcnc-v23-canary-ui-20261123.ndtung-pc.workers.dev",
+  "backends": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "activeVersion": "79795092-dfe9-40a5-9909-f723454d4caa",
+      "bindings": [
+        {
+          "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "INITIAL_BOOTSTRAP_TARGET",
+          "text": "production-v23",
+          "type": "plain_text"
+        },
+        {
+          "name": "RELEASE_WRITES",
+          "text": "enabled",
+          "type": "plain_text"
+        }
+      ]
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "activeVersion": "52084c48-45c2-4fb7-9415-db1797fe4f3b",
+      "bindings": [
+        {
+          "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "RELEASE_WRITES",
+          "text": "enabled",
+          "type": "plain_text"
+        }
+      ]
+    }
+  ],
+  "productionOriginsRejected": true
+}

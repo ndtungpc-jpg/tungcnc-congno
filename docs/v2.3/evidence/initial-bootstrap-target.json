@@ -1,0 +1,11 @@
+{
+  "target": "tungcnc-sync-v23-legacy-acceptance",
+  "databaseId": "f8df0e48-5c48-4c2d-8546-deb95d3b1292",
+  "baselineSha256": "7eaa4795101f2100ea964448fe2b392cf9f2b71d8a66bffd503c167a41f1c39b",
+  "backupRestoreIntegrity": "ok",
+  "sequence": 0,
+  "operations": 0,
+  "devices": 0,
+  "bootstrapGrant": null,
+  "existingStagingDatabaseUnchanged": "49163cc1-a60d-49b1-9c93-da7a6f939977"
+}

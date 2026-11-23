@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "f57cb8778d15eb6af1d7d912f7f7fd465c653437",
+  "zip": "release-v23-free-f57cb87.zip",
+  "zipSha256": "f8124f6c9c03771b69f8e65dfba187a655d4870c10bbb95217ca42ee4330cc56",
+  "files": 93,
+  "exactAssetsMatchTestedBuild": true,
+  "requiresWorkersPaid": false,
+  "writesDefault": "blocked",
+  "publicInitialBootstrap": "disabled",
+  "deploymentPerformed": false
+}

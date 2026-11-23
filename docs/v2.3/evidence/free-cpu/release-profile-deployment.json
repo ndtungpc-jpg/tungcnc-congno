@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "version": "1a9ec0f8005e4ae4b03e559457018d8b",
+  "settings": {
+    "main_module": "worker.js",
+    "compatibility_date": "2026-11-21",
+    "bindings": [
+      {
+        "type": "d1",
+        "name": "DB",
+        "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5"
+      },
+      {
+        "type": "plain_text",
+        "name": "PUBLIC_INITIAL_BOOTSTRAP",
+        "text": "disabled"
+      }
+    ],
+    "observability": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "invocation_logs": true
+      },
+      "traces": {
+        "enabled": false
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "checkedAt": "2026-11-23T09:32:15.642Z",
+  "productionDatabases": [
+    {
+      "id": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+      "response": {
+        "result": [
+          {
+            "results": [
+              {
+                "name": "_cf_KV"
+              }
+            ],
+            "success": true,
+            "meta": {
+              "served_by": "v3-prod",
+              "served_by_region": "APAC",
+              "served_by_colo": "HKG",
+              "served_by_primary": true,
+              "timings": {
+                "sql_duration_ms": 0.208
+              },
+              "duration": 0.208,
+              "changes": 0,
+              "last_row_id": 0,
+              "changed_db": false,
+              "size_after": 12288,
+              "rows_read": 2,
+              "rows_written": 0,
+              "total_attempts": 1
+            }
+          }
+        ],
+        "errors": [],
+        "messages": [],
+        "success": true
+      }
+    },
+    {
+      "id": "78e3141d-d03c-4012-adff-e1c2002085fa",
+      "response": {
+        "result": [
+          {
+            "results": [
+              {
+                "name": "_cf_KV"
+              }
+            ],
+            "success": true,
+            "meta": {
+              "served_by": "v3-prod",
+              "served_by_region": "APAC",
+              "served_by_colo": "NRT",
+              "served_by_primary": true,
+              "timings": {
+                "sql_duration_ms": 0.2029
+              },
+              "duration": 0.2029,
+              "changes": 0,
+              "last_row_id": 0,
+              "changed_db": false,
+              "size_after": 12288,
+              "rows_read": 2,
+              "rows_written": 0,
+              "total_attempts": 1
+            }
+          }
+        ],
+        "errors": [],
+        "messages": [],
+        "success": true
+      }
+    }
+  ],
+  "productionWorkers": [],
+  "canarySettings": [
+    {
+      "name": "tungcnc-v23-canary-sync-20261123",
+      "bindings": [
+        {
+          "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "INITIAL_BOOTSTRAP_TARGET",
+          "text": "production-v23",
+          "type": "plain_text"
+        },
+        {
+          "name": "RELEASE_WRITES",
+          "text": "enabled",
+          "type": "plain_text"
+        }
+      ]
+    },
+    {
+      "name": "tungcnc-v23-canary-inbox-20261123",
+      "bindings": [
+        {
+          "database_id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "id": "5075bdfd-c1df-472d-904c-6539a9e9f3d5",
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "RELEASE_WRITES",
+          "text": "enabled",
+          "type": "plain_text"
+        }
+      ]
+    }
+  ]
+}

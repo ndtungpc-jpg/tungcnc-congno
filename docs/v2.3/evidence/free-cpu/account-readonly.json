@@ -1,0 +1,9 @@
+{
+  "subscriptions": {
+    "error": "Error: Cloudflare API error: GET /accounts/de5012d37eb79706d59ccc39e1cb8b74/subscriptions returned HTTP 403 (Ray ID a5f0796879cae68f-MEL).\n\n{\n  \"success\": false,\n  \"errors\": [\n    {\n      \"code\": 10000,\n      \"message\": \"Authentication erro"
+  },
+  "workers/account-settings": {
+    "default_usage_model": "standard",
+    "green_compute": false
+  }
+}

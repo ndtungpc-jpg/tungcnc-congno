@@ -1,0 +1,109 @@
+{
+  "environment": "Synthetic data only. Actual app JS in fresh jsdom/fake-indexeddb; independent Python/openpyxl. NOT Microsoft Excel GUI or Android physical.",
+  "results": [
+    {
+      "name": "same immutable snapshot; JSON envelope v2 accepted by unchanged legacy parser; hashes verify",
+      "status": "PASS"
+    },
+    {
+      "name": "tampered new JSON rejected; historical JSON without metadata remains supported",
+      "status": "PASS"
+    },
+    {
+      "name": "destroyed private test database; fresh app confirmed additive JSON restore preserves all supported business records and balances",
+      "status": "PASS"
+    },
+    {
+      "name": "repeat JSON restore adds no duplicate IDs/payments",
+      "status": "PASS"
+    },
+    {
+      "name": "actual import blocks checksum corruption and same-ID changed data without overwriting existing records",
+      "status": "PASS"
+    },
+    {
+      "name": "same JSON separately restores local quote inbox after confirmation, without creating debt",
+      "status": "PASS"
+    },
+    {
+      "name": "actual workflow hashes both renamed files; reports download request rather than claiming disk persistence",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel/failure of Excel stops manifest and never reports complete backup",
+      "status": "PASS"
+    },
+    {
+      "name": "JSON cancellation, checksum cancellation and Excel generation failure do not claim successful backup",
+      "status": "PASS"
+    },
+    {
+      "name": "independent openpyxl opens nine-sheet XLSX offline; links/counts/allocations/totals/precision/right-alignment reconcile",
+      "status": "PASS"
+    },
+    {
+      "name": "16-digit historical money retained as exact text, never rounded by Excel numeric precision",
+      "status": "PASS"
+    }
+  ],
+  "counts": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "items": 3,
+    "sizes": 2,
+    "payments": 5,
+    "audit": 12,
+    "trash": 1,
+    "recovery": 1,
+    "reminderEvents": 2,
+    "reminderTemplates": 1,
+    "excelImports": 1
+  },
+  "totals": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "payments": 5,
+    "receivable": 6651000,
+    "payable": 500000,
+    "received": 650000,
+    "disbursed": 300000.125
+  },
+  "restoredCounts": {
+    "customers": 1,
+    "suppliers": 1,
+    "orders": 4,
+    "items": 3,
+    "sizes": 2,
+    "payments": 5,
+    "audit": 13,
+    "trash": 1,
+    "recovery": 2,
+    "reminderEvents": 2,
+    "reminderTemplates": 1,
+    "excelImports": 1
+  },
+  "jsonSha256": "46778a4cf31afd51d4b3160b847a9f9e856c0acbbdccc51d653a9bf9adc10cf7",
+  "xlsxSha256": "fd164c16e7b77e5b289cdc1cf69cb7a1d5f7e4682764df2872866b3c3881a4ed",
+  "originalDatabaseDeleted": true,
+  "productionOrD1Access": false,
+  "workbookSheets": [
+    "Khách hàng",
+    "Nhà cung cấp",
+    "Đơn hàng",
+    "Hạng mục",
+    "Kích thước",
+    "Thanh toán và phân bổ",
+    "Tổng hợp công nợ",
+    "Lịch sử nhắc nợ",
+    "Thông tin sao lưu và đối soát"
+  ],
+  "limitations": [
+    "D1 server data, device keys/outbox, themes/drafts/cache excluded",
+    "Excel is independent readable projection, not a full restore format",
+    "Local inbox restores business payload/status/receivedAt; recomputes fingerprint and does not preserve arbitrary extra row metadata",
+    "Physical Microsoft Excel and Android/PWA not tested",
+    "Earliest real historical backups not provided"
+  ]
+}

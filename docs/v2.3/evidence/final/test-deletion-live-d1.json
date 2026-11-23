@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-23T09:10:20.202Z",
+  "sequence": 2,
+  "records": 2224,
+  "recordsHash": "fef2d33ef5bfd3336ef022f1e76a6d9fa79874ddb6b5fa15622a9efc91e8c3bd",
+  "testActive": false,
+  "trash": [
+    {
+      "id": "aecbee9b-5a9d-48bd-9194-334c3322a6b8",
+      "recordId": "90adbc6d-904e-4490-ac18-13812306aaa3",
+      "deletedAt": "2026-11-23T07:38:07.078Z"
+    }
+  ],
+  "audit": [
+    {
+      "id": "b558f7aa-fc00-4ddf-946b-6fe82176f379",
+      "recordId": "90adbc6d-904e-4490-ac18-13812306aaa3",
+      "at": "2026-11-23T07:38:07.110Z",
+      "after": null
+    }
+  ],
+  "rowsWritten": 0,
+  "changedDb": false
+}

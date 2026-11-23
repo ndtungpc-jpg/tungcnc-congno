@@ -1,0 +1,23 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> test:backup-recovery
+> node tests/backup-independence.cjs
+
+PASS same immutable snapshot; JSON envelope v2 accepted by unchanged legacy parser; hashes verify
+PASS tampered new JSON rejected; historical JSON without metadata remains supported
+PASS destroyed private test database; fresh app confirmed additive JSON restore preserves all supported business records and balances
+PASS repeat JSON restore adds no duplicate IDs/payments
+PASS actual import blocks checksum corruption and same-ID changed data without overwriting existing records
+PASS same JSON separately restores local quote inbox after confirmation, without creating debt
+PASS one verified ZIP download contains JSON/XLSX/SHA256.json from one snapshot; source unchanged
+PASS corrupt CRC, truncated/missing-component ZIP and valid-CRC archive with wrong SHA-256 are rejected
+PASS cancelled ZIP never falls back to loose files or reports completed backup
+PASS Excel generation and ZIP integrity errors block every download; no partial backup
+PASS actual DOM filename dialog opens once, sanitizes ZIP name and activates exactly one download
+PASS standalone JSON export still uses its original file and does not mutate accounting
+PASS independent ZIP extraction/CRC/SHA256; extracted XLSX opens with nine sheets and reconciled totals without app or Cloudflare
+PASS independent Python extracts ZIP, verifies CRC/SHA-256/snapshot and opens XLSX offline
+PASS independent XLSX: nine sheets, original IDs/phones/dates/amounts, three allocations, no double counting, no formulas/macros/external links, right aligned numeric values
+PASS independent openpyxl opens nine-sheet XLSX offline; links/counts/allocations/totals/precision/right-alignment reconcile
+PASS 16-digit historical money retained as exact text, never rounded by Excel numeric precision
+Synthetic artifacts kept privately outside repository: /tmp/tg-backup-recovery-sVTl9e

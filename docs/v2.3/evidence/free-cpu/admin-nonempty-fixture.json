@@ -1,0 +1,99 @@
+{
+  "worker": "tungcnc-v23-free-profile-admin",
+  "start": 1795438096672,
+  "requests": [
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f049a8fbbab5d4",
+      "wallMs": 5466
+    },
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f049adffceb5d4",
+      "wallMs": 589
+    },
+    {
+      "phase": "setup",
+      "path": "/api/devices/register",
+      "method": "POST",
+      "status": 201,
+      "ray": "a5f049b1e9c6b5d4",
+      "wallMs": 645
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f04cda2efeb5d4",
+      "wallMs": 5841
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f04cdd8fffb5d4",
+      "wallMs": 419
+    },
+    {
+      "phase": "setup",
+      "path": "/api/device",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f04ce04f18b5d4",
+      "wallMs": 403
+    },
+    {
+      "phase": "bootstrap-disabled",
+      "path": "/api/sync/bootstrap/status",
+      "method": "GET",
+      "status": 403,
+      "ray": "a5f05091cb2cb5d4",
+      "wallMs": 6372
+    },
+    {
+      "phase": "owner-source-review",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f05094baecb5d4",
+      "wallMs": 1432
+    },
+    {
+      "phase": "owner-source-review",
+      "path": "/api/sync/snapshot",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f0509fdf5eb5d4",
+      "wallMs": 1448
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f050aaccc8b5d4",
+      "wallMs": 854
+    },
+    {
+      "phase": "pull-initial",
+      "path": "/api/sync/pull",
+      "method": "GET",
+      "status": 200,
+      "ray": "a5f050b14dc3b5d4",
+      "wallMs": 1389
+    }
+  ],
+  "testResults": [],
+  "failure": {
+    "message": "Synthetic empty-client fixture mistakenly retained unknown syntheticPadding metadata; receive correctly refused to overwrite a nonempty local root. Fixture corrected to actual empty schema."
+  },
+  "end": 1795438395564
+}

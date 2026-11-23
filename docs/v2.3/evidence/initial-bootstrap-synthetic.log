@@ -1,0 +1,24 @@
+PASS oversized request/decompression rejected
+PASS wrong hash and device approval
+PASS stale preview and failed local writes
+PASS D1 transaction rollback and concurrent revoke
+PASS offline bootstrap retained
+PASS server commit with lost ACK
+PASS complete source/destination equality
+{
+  "status": "PASS",
+  "source": "synthetic historical fixture",
+  "partners": 119,
+  "orders": 619,
+  "payments": 46,
+  "records": 2223,
+  "snapshotBytes": 1226651,
+  "stateRowBytes": 1301214,
+  "compressedRequestBytes": 19295,
+  "sourceFileUntouched": true,
+  "allIdsRawValuesDatesAllocationsAndRootHistoryEqual": true,
+  "atomicRollback": true,
+  "lostAckIdempotent": true,
+  "twoWayCopyTransactions": true
+}
+PASS owner/hash/backup grant, exact initial snapshot, bounded gzip, stale CAS, offline/restart/ACK, device approval, nonempty target, conflict, local and D1 rollback, all per-ID records and metadata, two-way payments on isolated COPY

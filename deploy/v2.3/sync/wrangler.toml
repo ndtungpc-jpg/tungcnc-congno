@@ -1,0 +1,12 @@
+name = "tungcnc-sync-v23-prod"
+main = "entry.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[vars]
+RELEASE_WRITES = "blocked"
+INITIAL_BOOTSTRAP_TARGET = "production-v23"
+PUBLIC_INITIAL_BOOTSTRAP = "disabled"
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-sync-v23-prod"
+database_id = "bacea568-a449-4f7e-b392-c6ed54b72c57"
