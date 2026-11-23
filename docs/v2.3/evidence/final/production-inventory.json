@@ -1,0 +1,135 @@
+{
+  "checkedAt": "2026-11-23T08:50:46.376Z",
+  "production": {
+    "databases": [
+      {
+        "id": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+        "tables": {
+          "result": [
+            {
+              "results": [
+                {
+                  "name": "_cf_KV"
+                }
+              ],
+              "success": true,
+              "meta": {
+                "served_by": "v3-prod",
+                "served_by_region": "APAC",
+                "served_by_colo": "HKG",
+                "served_by_primary": true,
+                "timings": {
+                  "sql_duration_ms": 0.2052
+                },
+                "duration": 0.2052,
+                "changes": 0,
+                "last_row_id": 0,
+                "changed_db": false,
+                "size_after": 12288,
+                "rows_read": 2,
+                "rows_written": 0,
+                "total_attempts": 1
+              }
+            }
+          ],
+          "errors": [],
+          "messages": [],
+          "success": true
+        }
+      },
+      {
+        "id": "78e3141d-d03c-4012-adff-e1c2002085fa",
+        "tables": {
+          "result": [
+            {
+              "results": [
+                {
+                  "name": "_cf_KV"
+                }
+              ],
+              "success": true,
+              "meta": {
+                "served_by": "v3-prod",
+                "served_by_region": "APAC",
+                "served_by_colo": "NRT",
+                "served_by_primary": true,
+                "timings": {
+                  "sql_duration_ms": 0.1764
+                },
+                "duration": 0.1764,
+                "changes": 0,
+                "last_row_id": 0,
+                "changed_db": false,
+                "size_after": 12288,
+                "rows_read": 2,
+                "rows_written": 0,
+                "total_attempts": 1
+              }
+            }
+          ],
+          "errors": [],
+          "messages": [],
+          "success": true
+        }
+      }
+    ],
+    "workers": [
+      {
+        "id": "tungcnc-quote-inbox-staging",
+        "modified_on": "2026-11-21T16:13:53.624759Z"
+      },
+      {
+        "id": "tungcnc-sync-v23-bootstrap-rehearsal",
+        "modified_on": "2026-11-22T14:02:30.723589Z"
+      },
+      {
+        "id": "tungcnc-sync-v23-legacy-acceptance",
+        "modified_on": "2026-11-22T14:11:03.799248Z"
+      },
+      {
+        "id": "tungcnc-sync-v23-staging",
+        "modified_on": "2026-11-22T12:01:25.21776Z"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "name": "tungcnc-congno",
+      "production_branch": "main",
+      "domains": [
+        "tungcnc-congno.pages.dev"
+      ],
+      "canonical_deployment": {
+        "id": "f3f53157-2416-432e-89b2-beb975e00d5a",
+        "url": "https://f3f53157.tungcnc-congno.pages.dev",
+        "commit": "e4d6d39b7110f5fc44302aaaac3d26b42cc5f09f"
+      },
+      "build_config": {
+        "build_command": "",
+        "destination_dir": ".",
+        "root_dir": "",
+        "web_analytics_tag": null,
+        "web_analytics_token": null
+      }
+    },
+    {
+      "name": "baogia-tungcnc",
+      "production_branch": "test/direct-quote-bridge",
+      "domains": [
+        "baogia-tungcnc.pages.dev"
+      ],
+      "canonical_deployment": {
+        "id": "61bc40ff-74db-4c1a-956c-5d00a57dd70a",
+        "url": "https://61bc40ff.baogia-tungcnc.pages.dev",
+        "commit": "ec021150698753f66e80f59ae2b0ae7bdab45f23"
+      },
+      "build_config": {
+        "build_command": "",
+        "destination_dir": "bao-gia",
+        "root_dir": "",
+        "web_analytics_tag": null,
+        "web_analytics_token": null
+      }
+    }
+  ]
+}

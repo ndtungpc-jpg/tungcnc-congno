@@ -1,3 +1,5 @@
+> Cập nhật 23/11/2026: inventory và release gate hiện hành ở [FINAL-RELEASE-GATE.md](FINAL-RELEASE-GATE.md). Các trạng thái bên dưới là lịch sử ngày22/11, không phải checklist hiện tại; A03 để v2.4, không phải điều kiện v2.3.
+
 # V2.3 — Production Readiness
 
 Ngày22/11/2026. Baseline `ca71ea794c84c36ecb4d5e654aa140bf927718b9`, nhánh `feature/v2.3-sync-foundation`, PR7 draft.

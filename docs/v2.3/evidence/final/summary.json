@@ -1,0 +1,13 @@
+{
+  "status": "PREPARED_NOT_APPROVED",
+  "sourceCommit": "93486544ed9af0e0b651bb1a73dbe404f7e3c0bf",
+  "zipName": "TungGiang_v23_Production_PREPARED_NOT_APPROVED.zip",
+  "zipSha256": "777eac7640eb2cd5bc03fc1faae5170de42264278f6b73d3690239b73a6c1eb3",
+  "zipBytes": 2359801,
+  "noProductionDeployment": true,
+  "sourceSnapshotBytes": 1648442,
+  "sourceStateRowBytes": 1761126,
+  "sourceCompressedRequestBytes": 222583,
+  "physicalGates": "OPEN",
+  "authoritativeGate": "BLOCKED: PC Production119 versus acceptance118"
+}

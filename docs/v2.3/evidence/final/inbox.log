@@ -1,0 +1,4 @@
+PASS pending enrollment blocked, explicit approval, role and origin isolation
+PASS full detail/totals, content fingerprint, repeated send and malformed amount/dimensions
+PASS competing devices, claim retries, lost ack retry, revision/code lock, no unclaimed import
+PASS immediate per-device revocation

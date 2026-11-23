@@ -1,0 +1,13 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> test:storage-policy
+> node tests/storage-growth.cjs && node tests/storage-failures.cjs
+
+PASS deterministic storage-growth estimates generated without deleting data
+[{"orders":100,"payments":200,"audit":100,"mainJsonBytes":161485,"approxMainPlus100FullTechnicalSnapshots":16309985,"approxMainPlus1000FullTechnicalSnapshots":161646485,"queued100ExampleOrderOpsBytes":76201,"sourceWorkerFiveMbCapExceeded":false},{"orders":1000,"payments":2000,"audit":1000,"mainJsonBytes":1623085,"approxMainPlus100FullTechnicalSnapshots":163931585,"approxMainPlus1000FullTechnicalSnapshots":1624708085,"queued100ExampleOrderOpsBytes":76201,"sourceWorkerFiveMbCapExceeded":false},{"orders":3000,"payments":6000,"audit":3000,"mainJsonBytes":4891085,"approxMainPlus100FullTechnicalSnapshots":493999585,"approxMainPlus1000FullTechnicalSnapshots":4895976085,"queued100ExampleOrderOpsBytes":76201,"sourceWorkerFiveMbCapExceeded":false},{"orders":4000,"payments":8000,"audit":4000,"mainJsonBytes":6525085,"approxMainPlus100FullTechnicalSnapshots":659033585,"approxMainPlus1000FullTechnicalSnapshots":6531610085,"queued100ExampleOrderOpsBytes":76201,"sourceWorkerFiveMbCapExceeded":true}]
+PASS persistent quota leaves main/cursor/outbox/backups unchanged; status/error truthful; retry converges
+PASS local save under persistent quota throws; main and queue remain atomic
+PASS closed database reports error without fake success or clearing pending data
+PASS aborted puts roll back main+queue+cursor; pending payment/outbox survives close/reopen of isolated IDB
+PASS app commit on quota restores in-memory state and warns, never shows saved
+PASS actual localStorage fallback save under quota preserves stored JSON and shows no saved toast
