@@ -17,7 +17,8 @@ Không merge main hoặc triển khai Production trong nhiệm vụ này. PASS n
 | Rollback code bằng Cloudflare deployment + reconnect thiết bị | CHƯA DIỄN TẬP thực tế | Chưa có Production Worker; cần canary riêng và rollback drill trước mở ghi Production |
 | ZIP Android / Excel ứng dụng thật / JSON restore kho riêng | CHƯA NGHIỆM THU thiết bị | Checklist mục 5 |
 | Airplane/reopen và giải quyết conflict bằng UI trên kho riêng | CHƯA NGHIỆM THU thiết bị | Mô phỏng đã PASS, không chứng nhận airplane/OS kill |
-| Authoritative và backup mọi origin Production trên PC/S24 | BLOCKED | PC Production 119 khách, A/B 118; chưa có export Production byte-level và kiểm kê S24 origin Production |
+| Chênh lệch 119/118 do xóa TEST | PASS — CLOSED | Chủ xưởng xác nhận có chủ đích; backup119 → export118 chỉ khác đúng TEST/trash/audit/revision; hash D1 live khớp. Evidence test-deletion-*.json |
+| Authoritative, kiểm kê mới và backup trước cutover mọi origin PC/S24 | OPEN | Chênh lệch đã giải thích; vẫn cần export Production mới và kiểm kê S24 để loại trừ giao dịch phát sinh sau backup |
 | Production runtime bindings/secrets/approval trực tiếp | CHƯA DEPLOY, chưa xác minh live | Chỉ xác minh config package; resource inventory đọc-only |
 | Backup độc lập trước cutover + restore kiểm tra | CHƯA ĐỦ bằng chứng hiện thời | Backup nghiệm thu cũ có; backup Production-PC vừa yêu cầu tải chưa xác nhận thành công; D1 Production trống chưa áp schema |
 | Cho phép phát hành riêng của chủ xưởng | CHƯA YÊU CẦU | Chỉ xin sau các gate bắt buộc đã đóng |
@@ -26,17 +27,32 @@ Không merge main hoặc triển khai Production trong nhiệm vụ này. PASS n
 
 | Nguồn | Trạng thái đã quan sát | Quyết định |
 | --- | --- | --- |
-| PC A, device `8f9aa3a1-0b47-47b6-b4e9-cbb3d93696f9` | Acceptance endpoint; cursor2, queue0, không lỗi; 118 KH/619 đơn/46 payment | Ứng viên nguồn, không đổi đích metadata đang enabled |
+| PC A, device `8f9aa3a1-0b47-47b6-b4e9-cbb3d93696f9` | Acceptance endpoint; cursor2, queue0, không lỗi; 118 KH/619 đơn/46 payment | Ứng viên nguồn đã đối soát chênh lệch TEST; không đổi đích metadata đang enabled |
 | S24 B, device `43609c24-dc34-4551-9fb7-9eb5d475bdb2` | Export nghiệm thu đã so khớp A/D1; cần export mới nếu phát sinh giao dịch | Không dùng số hiển thị đã làm tròn để đối soát |
 | Acceptance D1 seq2 | 2.224 keyed records; 1.439 audit; 2 trash | Chứa lịch sử thật được chủ xưởng duyệt; không lấy D1 rehearsal |
-| PC origin `https://tungcnc-congno.pages.dev/` | UI v2.1.12, integrity0 lỗi/0 cảnh báo; **119 đối tác/619 đơn/46 payment**; phải thu hiển thị1.250.365.237;118 khách có nợ | Đang có dữ liệu thật! Không ghi đè/import. Chưa có so sánh từng ID với A |
+| PC origin `https://tungcnc-congno.pages.dev/` | UI v2.1.12, integrity0 lỗi/0 cảnh báo; **119 đối tác/619 đơn/46 payment**; phải thu hiển thị1.250.365.237;118 khách có nợ | Đang có dữ liệu thật! Không ghi đè/import. Chênh lệch TEST đã xác nhận; backup119 đối soát từng ID với A PASS, chưa có export Production mới |
 | S24 origin Production | CHƯA KIỂM KÊ | Chủ xưởng xuất riêng nếu đã dùng; origin khác không chia sẻ IDB |
 | Rehearsal C | 1 khách giả/3 đơn/5 paymentrows, seq4, queue0 | Tuyệt đối loại khỏi cutover |
 
 Bản A/B đã nghiệm thu: raw receivable `1250365237.2799997`, received `158896322.4`. Records hash `fef2d33ef5bfd3336ef022f1e76a6d9fa79874ddb6b5fa15622a9efc91e8c3bd`; root metadata bỏ technical recovery hash `5a5d56e24efdc102c8e5f171542fc020fb798d3886354f796eadbddc3636ff76`.
-119→118 ở acceptance có thao tác đưa TEST id `90adbc6d-904e-4490-ac18-13812306aaa3` vào trash, nhưng **chưa chứng minh** đó là toàn bộ khác biệt với Production-PC. Không tự loại bản ghi chỉ vì tên TEST. Phải diff toàn bộ ID/nội dung/root metadata, payment group/phân bổ/ngày, tổng theo KH/đơn và raw tổng. Nếu có giao dịch độc lập ở Production, bảo toàn và đối soát thủ công trên bản sao trước chọn snapshot; không tự merge theo tên/SĐT, không lấy timestamp mới hơn làm chuẩn.
+119→118 ở acceptance có thao tác đưa TEST id `90adbc6d-904e-4490-ac18-13812306aaa3` vào trash, nhưng **Đã chứng minh** đó là toàn bộ khác biệt giữa backup lịch sử119 và export PC nghiệm thu118 đang có; chủ xưởng xác nhận nguồn gốc chênh lệch Production-PC ngày23/11/2026. Không tự loại bản ghi chỉ vì tên TEST. Trước cutover vẫn cần export Production mới để kiểm tra giao dịch phát sinh sau backup theo toàn bộ ID/nội dung/root metadata, payment group/phân bổ/ngày, tổng theo KH/đơn và raw tổng. Nếu có giao dịch độc lập ở Production, bảo toàn và đối soát thủ công trên bản sao trước chọn snapshot; không tự merge theo tên/SĐT, không lấy timestamp mới hơn làm chuẩn.
 
 Backup nguồn ban đầu đã kiểm tra độc lập: SHA256 `2841c2f2a16784ffd3941a68aedced88936f323ea7f84444e8e115bc096dd46b`. Đây là backup trước thay đổi TEST, không thay thế export cutover mới. Backup app không chứa private key; export đối soát không tự khôi phục signed outbox. Không chuyển pending bằng cách import JSON.
+
+## 2a. Đóng blocker TEST — xác minh ngày23/11/2026
+
+Chủ xưởng xác nhận chủ động xóa khách TEST khi bắt đầu nghiệm thu, không phải mất dữ liệu. **CLOSED riêng blocker chênh lệch119/118**; không phục hồi khách TEST, không sửa Production.
+
+- Partner TEST: `90adbc6d-904e-4490-ac18-13812306aaa3`; không có đơn đang liên kết trong backup119.
+- Trash: `aecbee9b-5a9d-48bd-9194-334c3322a6b8`, kind partners; record khớp nguyên bản TEST. Xóa lúc14:38:07 ngày23/11/2026 (Việt Nam).
+- Audit: `b558f7aa-fc00-4ddf-946b-6fe82176f379`, action delete/kind partners, đúng recordId, before khớp nguyên bản, after=null.
+- 118 partner còn lại khớp toàn nội dung theo ID; 619 đơn và46 payment khớp nguyên mảng, nên số tiền phân lẻ, ngày, chi tiết và phân bổ không thay đổi. 1.438 audit cũ,1 trash cũ, recovery và mọi trường root khác giữ nguyên; revision1→2 đúng một thao tác.
+- Raw receivable `1250365237.2799997`, received `158896322.4` không đổi. Export cursor2/outbox0/conflict null.
+- Đọc lại acceptance D1: seq2,2.224 records, hash `fef2d33ef5bfd3336ef022f1e76a6d9fa79874ddb6b5fa15622a9efc91e8c3bd`, TEST không active, đúng trash/audit. API rows_written0/changed_db=false.
+
+Bằng chứng: `evidence/final/test-deletion-reconciliation.json`, `test-deletion-live-d1.json`; tái chạy read-only bằng `node scripts/audit-v23-test-deletion.cjs /private/backup119.json /private/accepted118.json`. Script từ chối mọi khác biệt ngoài một delete có trash/audit/revision tương ứng, kiểm tra SHA nguồn không đổi. Không đưa dữ liệu gốc vào Git.
+
+Giới hạn: nguồn119 là backup độc lập đã nhận, không phải file export Production mới. Xác nhận chủ xưởng và phép đối soát này đủ đóng nguyên nhân119/118; không chứng nhận chưa có giao dịch mới ở mỗi origin. Fresh inventory/backup, device acceptance và rollback live vẫn OPEN; tổng thể NO-GO cho đến khi hoàn tất, không xin hoặc suy diễn quyền merge/deploy.
 
 ## 3. Tài nguyên Production — đọc-only
 

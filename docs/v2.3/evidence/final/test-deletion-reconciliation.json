@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "scope": "119-customer independent historical backup versus accepted PC export; not a fresh Production export",
+  "ownerConfirmation": "2026-11-23: deliberate TEST deletion confirmed by workshop owner",
+  "beforeFileSha256": "2841c2f2a16784ffd3941a68aedced88936f323ea7f84444e8e115bc096dd46b",
+  "afterFileSha256": "5fd698a212500c9498210b875b51f5173fe38b7959b82bf4d5554f3736c13a28",
+  "deletedPartnerId": "90adbc6d-904e-4490-ac18-13812306aaa3",
+  "trashId": "aecbee9b-5a9d-48bd-9194-334c3322a6b8",
+  "auditId": "b558f7aa-fc00-4ddf-946b-6fe82176f379",
+  "deletedAt": "2026-11-23T07:38:07.078Z",
+  "auditAt": "2026-11-23T07:38:07.110Z",
+  "remainingPartners": 118,
+  "orders": 619,
+  "payments": 46,
+  "unchangedExistingAudit": 1438,
+  "unchangedExistingTrash": 1,
+  "unchangedOtherRootFields": true,
+  "revisionChange": [
+    1,
+    2
+  ],
+  "noOrdersLinkedToDeletedTest": true,
+  "ordersHash": "424aefb9f7949ac2afc68204d54a5350e63b9909f052b3056b19df256b41c5cb",
+  "paymentsHash": "367f1d47cbeaa7e4e37f97c98873b23ffafb8acd3b4b7208d0d3e24939ac11dc",
+  "remainingPartnersHash": "dc116420a0d392ce3ee52fa2602d8fca8afa1b3339481c135a442a721ccd595a",
+  "recordsHash": "fef2d33ef5bfd3336ef022f1e76a6d9fa79874ddb6b5fa15622a9efc91e8c3bd",
+  "summary": {
+    "customers": 118,
+    "suppliers": 0,
+    "orders": 619,
+    "payments": 46,
+    "receivable": 1250365237.2799997,
+    "payable": 0,
+    "received": 158896322.4,
+    "disbursed": 0
+  },
+  "queue": 0,
+  "cursor": 2,
+  "conflict": false,
+  "productionDataChanged": false
+}

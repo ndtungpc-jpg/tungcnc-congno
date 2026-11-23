@@ -25,6 +25,10 @@ Phạm vi thay đổi chuẩn bị: bộ đóng gói offline chuyển cấu hìn
 
 Không lấy dòng `physicalPCAndS24: NOT YET TESTED` của fixture tự động làm trạng thái hiện tại: nghiệm thu vật lý sau đó được ghi riêng ở `PC-S24-ACCEPTANCE-RESULT.md`. Ngược lại, nghiệm thu mô phỏng ngắt mạng không chứng nhận airplane mode hoặc OS kill.
 
+## Cập nhật xác nhận TEST — 23/11/2026
+
+Đã đóng blocker119/118: xác nhận chủ xưởng + so backup119/export118 chỉ khác đúng xóa TEST có trash/audit/revision; mọi đơn/payment và lịch sử cũ giữ nguyên; hash2.224records khớp D1 live seq2. Chi tiết và phạm vi ở mục2a final gate. Không phục hồi TEST hoặc thay đổi Production. Fresh cutover exports/backup và các gate thiết bị/rollback vẫn mở.
+
 ## Tái tạo và kiểm tra bộ phát hành
 
 ```sh

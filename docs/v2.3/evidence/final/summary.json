@@ -9,5 +9,6 @@
   "sourceStateRowBytes": 1761126,
   "sourceCompressedRequestBytes": 222583,
   "physicalGates": "OPEN",
-  "authoritativeGate": "BLOCKED: PC Production119 versus acceptance118"
+  "authoritativeGate": "OPEN: fresh cutover inventory/backup still required; historical TEST119/118 discrepancy CLOSED with exact per-ID comparison and live D1 hash",
+  "testDeletionGate": "PASS_CLOSED"
 }
