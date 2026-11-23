@@ -1,9 +1,9 @@
 # V2.3 — Final release gate
 
-Ngày23/11/2026 (Việt Nam). **NO-GO Production; tiếp tục RC1 trên Free. Canary/rollback và bản tối ưu delta đã kiểm thử; nguồn PC119 mới đã đối soát PASS; còn nghiệm thu thiết bị, CPU dư địa nhỏ và phương án recovery khi đủ10 D1.**
+Ngày23/11/2026 (Việt Nam). **GO mã Production theo phê duyệt phát hành riêng; CHỜ PC Production enrollment để bootstrap dữ liệu. Chưa tuyên bố đồng bộ sổ thật hoàn tất.**
 
 **Nguồn authoritative đã được chủ xưởng chọn: PC Production, giữ nguyên119 đối tác bao gồm TEST. Không sử dụng bản nghiệm thu118 hoặc canary để khởi tạo Production.** S24 Production chưa từng dùng theo xác nhận chủ xưởng; chưa kiểm IndexedDB thực tế, phải kiểm trước nhận.
-Không merge main hoặc triển khai Production trong nhiệm vụ này. PASS nghiệm thu PC/S24 không đồng nghĩa phê duyệt cutover. Tài liệu này thay thế kết luận/inventory cũ của `PRODUCTION-READINESS.md`; A03 không phải điều kiện của v2.3, vẫn để v2.4.
+Giới hạn chuẩn bị trước đây đã được thay bằng phê duyệt phát hành riêng của chủ xưởng: cho merge main, Worker/D1/Pages Production và bỏ dữ liệu S24. PC vẫn phải được bảo toàn; không tự bootstrap bằng ID/key nghiệm thu. PASS nghiệm thu PC/S24 không đồng nghĩa phê duyệt cutover. Tài liệu này thay thế kết luận/inventory cũ của `PRODUCTION-READINESS.md`; A03 không phải điều kiện của v2.3, vẫn để v2.4.
 
 ## 1. Gate thực tế
 
@@ -164,3 +164,17 @@ Raw phải thu `1250365237.2799997`, đã thu `158896322.4` khớp bản119 trư
 Đã chạy riêng test mới cho file mới (không chạy lại bộ benchmark đã hoàn tất): generated Production package writeblocked/public-bootstrap disabled, legacy bootstrap regression chỉ override ở harness, mất ACK/retry, giao dịch hai chiều trên COPY, restore baseline vào SQLite mới rồi replay giao dịch sau backup. PASS full IDs/raw values/history/versions, source SHA kiểm lại không đổi. Không có real snapshot gửi Cloudflare, không grant/device Production, không thay IDB. Bản JSON người dùng cất giữ + bản upload độc lập đã kiểm bằng SHA; chưa chứng nhận restore trên S24/OS thật hoặc ledger lớn sang D1 vật lý thứ hai.
 
 Evidence `evidence/free-cpu/current-pc119-audit.json`, `current-pc119-copy-tests.log`; không commit JSON công nợ gốc. Còn thực hiện nghiệm thu PC/S24 ZIP/Excel/restore/offline/UI conflict trên canary, kiểm S24 Production trống, xác nhận Free/CPU rủi ro và recovery slot. Không yêu cầu xuất lại file nguồn khi chưa có thay đổi; trước cutover chỉ recheck SHA/khác biệt phát sinh và xin phê duyệt riêng. NO-GO Production cho đến đóng gate còn lại, không main merge/deploy/bootstrap/mở ghi tự động.
+
+## 9. Chủ xưởng phê duyệt và mã Production đã triển khai
+
+Owner đã phê duyệt rõ nguồn PC119 duy nhất, dùng file đã PASS, cho merge main/Worker/D1/Pages v2.3 và xóa/ghi đè IDB **chỉ trên S24**. Không cần nghiệm thu mở rộng; những testOS/DR vật lý chưa chạy vẫn NOT RUN, không đổi sang PASS. Những gate cũ ghi CHƯA XIN/CHƯA DEPLOY là trạng thái trước phê duyệt, thay bằng mục9 này. Không nâng Paid hoặc A03. Các risk CPU burst và account10D1 đã ghi rõ; backup119 độc lập + restore-copy/delta PASS là căn cứ rollback tối thiểu, không hứa đã có D1DR vật lý.
+
+Main merge commit ban đầu900923b63ac01261d47d2ab7e8ebee4b274dd662 tích hợp feature886fe6b và cấu hình Production đã test, không đưa stage endpoints vào main. Pages deploymentf0aa723c-d6b7-4a53-b1e9-4576af019eab success; canonical main đúngcommit, /version.json2.3.0 và sync client/engine HTTP200/hash khớp artifact trước đổi nhãn. Patch tiếp theo chỉ đổi3nhãn môi trường của nút/confirm/tên thiết bị sang Production và đồng bộ builder, không đổi layout/handler hoặc khả năng đồng bộ.
+
+Sync D1 bacea568-a449-4f7e-b392-c6ed54b72c57; inbox D1 78e3141d-d03c-4012-adff-e1c2002085fa: kiểm trống trước applyschema. Worker sync active enrollment version1b9e1861-49ed-46eb-9a04-19daa5df1c56, PUBLIC_INITIAL_BOOTSTRAPdisabled, RELEASE_WRITESenabled để đăng ký; **0device approved** nên mọi upload nghiệp vụ đều chưa được phép. Inbox versionb06e47e5-c6f8-4f5a-9f4b-4c4f008c0d09 writeblocked. Hai binding đã kiểm qua active deployment/version, không staging/acceptance. Smoke khóaghi503, originstage403, unsigned401 PASS. Inbox đầu tiênHTTP500 sau deploy, kiểm lại2lần503 không tái hiện; ghi nhận không che lỗi.
+
+23:30VN: sync sequence0,119-source chưa gửi D1,server0partner/0order/0payment/0receipt/0approved; inbox0quote. FilePC SHA vẫn538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3. Đích đã sẵn schema nhưng **chưa có device/guard/real snapshot**. Không dùng ID/key nghiệm thu hoặc sinh key thay PC để giả hoàn tất cutover.
+
+Bước duy nhất cần ngay trên PC: ngừng nhập tạm, mở Production/cập nhật ứng dụng, Thêm→Đồng bộ→Chẩn đoán→Kết nối đồng bộ Production, tênPC Production; gửi mãthiếtbị hiện ra và báo có/không giao dịch sau file23:02:49VN. Nếu có thì cập nhật JSON/hash trước bootstrap. Nút cảnh báo ordinary2.223changes vượt2.000 là guard delta, không bẻ/batch để né; dùng owner-admin1snapshot đã chuẩn bị sau duyệt đúng PCdevice.
+
+S24 chưa được approve trước bootstrapPCseq1/hashverified. Owner cho bỏS24local: không cần bảo lưu, nhưng chỉ clear site origin Production **trên S24**, không PC, rồi register/approve/nhận từD1 sau PC xong. Không merge S24 cũ, không gộp tên/SĐT. Chưa có thao tác xóa IDB trên thiết bị nào. Xem PRODUCTION-GO-LIVE.md và evidence/free-cpu/production-execution-status.json. Phải cập nhật trạng thái cuối receipt/counts sau PC bootstrap, không gọi số0 là nghiệm thu hoàn tất.

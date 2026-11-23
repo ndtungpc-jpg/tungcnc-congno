@@ -1,0 +1,97 @@
+{
+  "ownerApproved": true,
+  "productionInitialCommit": "900923b63ac01261d47d2ab7e8ebee4b274dd662",
+  "blockedDeploy": [
+    {
+      "kind": "sync",
+      "name": "tungcnc-sync-v23-prod",
+      "id": "bacea568-a449-4f7e-b392-c6ed54b72c57",
+      "schemaSuccess": true,
+      "workerSuccess": true,
+      "deploymentId": "c1c323b0d9364682943b04cb3ce28279",
+      "writeGate": "blocked",
+      "subdomain": true
+    },
+    {
+      "kind": "quote-inbox",
+      "name": "tungcnc-quote-inbox-prod",
+      "id": "78e3141d-d03c-4012-adff-e1c2002085fa",
+      "schemaSuccess": true,
+      "workerSuccess": true,
+      "deploymentId": "b06e47e5c6f84f5a9f4b4c4f008c0d09",
+      "writeGate": "blocked",
+      "subdomain": true
+    }
+  ],
+  "enrollment": {
+    "status": "ENROLLMENT_AVAILABLE_ALL_DEVICES_UNAPPROVED",
+    "before": {
+      "approved": 0,
+      "operations": 0,
+      "sequence": 0
+    },
+    "workerVersion": "1b9e186149ed46eb9a0419daa5df1c56",
+    "businessWritesRequireApprovedDevice": true,
+    "publicBootstrap": "disabled",
+    "inboxWrites": "blocked",
+    "businessRecordsUploaded": 0
+  },
+  "pages": {
+    "id": "f0aa723c-d6b7-4a53-b1e9-4576af019eab",
+    "environment": "production",
+    "latest": {
+      "name": "deploy",
+      "started_on": "2026-11-23T16:28:57.204288Z",
+      "ended_on": "2026-11-23T16:29:03.031729Z",
+      "status": "success"
+    },
+    "stages": [
+      {
+        "name": "queued",
+        "status": "success"
+      },
+      {
+        "name": "initialize",
+        "status": "success"
+      },
+      {
+        "name": "clone_repo",
+        "status": "success"
+      },
+      {
+        "name": "build",
+        "status": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "success"
+      }
+    ],
+    "commit": "900923b63ac01261d47d2ab7e8ebee4b274dd662",
+    "url": "https://f0aa723c.tungcnc-congno.pages.dev"
+  },
+  "status": {
+    "checkedAt": "2026-11-23T16:30:10.082Z",
+    "pages": {
+      "id": "f0aa723c-d6b7-4a53-b1e9-4576af019eab",
+      "commit": "900923b63ac01261d47d2ab7e8ebee4b274dd662",
+      "url": "https://tungcnc-congno.pages.dev",
+      "status": "success"
+    },
+    "sync": {
+      "version": 0,
+      "partners": 0,
+      "orders": 0,
+      "payments": 0,
+      "receipts": 0,
+      "approved": 0
+    },
+    "inbox": {
+      "quotes": 0
+    }
+  },
+  "sourceFileSha256": "538d02eb6eee1d23a050b31625369aadd177442e170e0c0e1014281270df9cd3",
+  "sourcePCUnchanged": true,
+  "S24NotApprovedOrCleared": true,
+  "realSnapshotNotBootstrapped": true
+}

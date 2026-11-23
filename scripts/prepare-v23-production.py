@@ -29,6 +29,9 @@ def transform(path,text):
         old="origin.includes('.baogia-tungcnc.')"
         assert old in text
         text=text.replace(old,'origin==='+json.dumps(QUOTE))
+    if path=='sync/client.js':
+        # Production environment labels only; keep RC1 handlers and layout unchanged.
+        text=text.replace('Kết nối kho nghiệm thu riêng · PC A / S24 B','Kết nối đồng bộ Production').replace('Bật đồng bộ STAGING?','Bật đồng bộ Production?').replace('Tên thiết bị thử nghiệm (A/B/C):','Tên thiết bị Production (PC/S24):')
     if path=='version.json': text=json.dumps({'version':'2.3.0-rc1-production-prepared','feature':'sync-foundation','production':True})+'\n'
     if path.endswith('_headers'):
         text=text.replace(' '.join([SYNC]*3),SYNC)
