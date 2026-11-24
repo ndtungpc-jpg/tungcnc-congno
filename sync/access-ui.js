@@ -18,7 +18,7 @@ root.showDeviceManager=async function(tab=activeTab){activeTab=tab;if(!verified)
 root.renameSyncDevice=async id=>{const label=prompt('Tên thiết bị mới:');if(!label?.trim())return;try{await call('/api/access/rename',{deviceId:id,label:label.trim()});if((await ctx().store.read()).meta.deviceId===id)await ctx().engine.metaUpdate(m=>m.label=label.trim());await showDeviceManager();}catch(e){alert(message(e));}};
 root.disconnectSyncDevice=async id=>{if(!confirm('Ngắt kết nối thiết bị này? Dữ liệu trên thiết bị vẫn giữ nguyên.'))return;try{const own=(await ctx().store.read()).meta.deviceId===id;await call('/api/access/revoke',{deviceId:id});if(own){await ctx().engine.metaUpdate(m=>{m.approved=false;m.error='Thiết bị đã bị thu hồi';});closeModal(true);return showAccessGate('Thiết bị đã bị thu hồi. Dữ liệu trên máy vẫn giữ nguyên.');}await showDeviceManager();}catch(e){alert(message(e));}};
 root.logoutAccess=()=>{location.href='/cdn-cgi/access/logout';};
-root.syncDevicesNow=async()=>{await ctx().engine.tick();return showDeviceManager('sync');};
+root.syncDevicesNow=async()=>{if((await ctx().store.read()).meta.initialUpload?.status==='uploading')return showInitialPaused();await ctx().engine.tick();return showDeviceManager('sync');};
 async function waitForStore(){for(let i=0;i<100;i++){try{return await ctx().store.read();}catch{await new Promise(resolve=>setTimeout(resolve,100));}}throw Error('Chưa mở được kho dữ liệu trên máy. Dữ liệu chưa thay đổi.');}
 root.verifyAccessSession=async function(){if(loading)return;loading=true;try{
  const response=await root.tgAccessFetch(root.TG_DEVICE_PAIRING_API+'/api/access/session');if(!response.ok)throw Error('Chưa xác minh được phiên.');const session=await response.json();if(!session.verified||session.email!=='ndtung.pc@gmail.com'||!Number.isFinite(session.expiresAt)||session.expiresAt<=Date.now())throw Error('Phiên không hợp lệ.');
@@ -27,21 +27,21 @@ root.verifyAccessSession=async function(){if(loading)return;loading=true;try{
  r=await store.read();if(!r.meta.approved)await engine.metaUpdate(m=>{m.bootstrapPending=true;m.pairingNeedsReview=true;});
  r=await store.read();if(!r.meta.registered){await engine.call(r.meta,'/api/devices/register',{method:'POST',body:{id:r.meta.deviceId,label:r.meta.label,publicJwk:r.meta.publicJwk}});await engine.metaUpdate(m=>m.registered=true);}
  await call('/api/access/authorize',{});await engine.metaUpdate(m=>{m.approved=true;m.error=null;});verified=true;hideGate();
- r=await store.read();if(r.meta.bootstrapPending)await reviewDeviceData(true);else {engine.reviewing=false;await engine.tick();}
+ r=await store.read();if(r.meta.initialUpload?.status==='uploading')showInitialPaused();else if(r.meta.bootstrapPending)await reviewDeviceData(true);else {engine.reviewing=false;await engine.tick();}
  }catch(e){showAccessGate(message(e));}finally{if(ctx())ctx().engine.reviewing=false;loading=false;}};
 const RS=root.TGReviewSafety;
-let reviewBackup=null,backupVerified=false,applyingReview=false;
+let reviewBackup=null,backupVerified=false,applyingReview=false,initialStatus=null,initialClient=null;
 root.reviewDeviceData=async function(){
  const {engine}=ctx();if(applyingReview)return;
- try{review=await engine.preview();RS.environment(review.snapshot);choices={};page=0;reviewBackup=null;backupVerified=false;renderReview();}
+ try{review=await engine.preview();RS.environment(review.snapshot);choices={};page=0;reviewBackup=null;backupVerified=false;initialStatus=RS.empty(review.snapshot)?await call('/api/sync/initial/status'):null;renderReview();}
  catch(e){review=null;engine.reviewing=false;alert(message(e));}
 };
 function reviewTarget(){return TGSyncReview.choose(review.main,review.snapshot,review.review,choices);}
 function reviewWarnings(target){return TGSyncReview.warnings(target);}
-function reviewLimits(target){try{RS.capacity(review.snapshot,target);return '';}catch(e){return /vượt.*giới hạn|Snapshot vượt/.test(e.message)?'Sổ này vượt giới hạn gửi an toàn hiện tại. Chưa gửi dữ liệu; giữ nguyên bản gốc và bản sao lưu.':e.message;}}
+function reviewLimits(target){try{if(initialStatus&&RS.empty(review.snapshot)){TGSyncCore.validate(target);return '';}RS.capacity(review.snapshot,target);return '';}catch(e){return /vượt.*giới hạn|Snapshot vượt/.test(e.message)?'Sổ này vượt giới hạn gửi an toàn hiện tại. Chưa gửi dữ liệu; giữ nguyên bản gốc và bản sao lưu.':e.message;}}
 function renderReview(){
  const conflicts=review.review.rows.filter(r=>r.conflict),start=page*10,empty=RS.empty(review.snapshot),unresolved=conflicts.filter(r=>!choices[r.key]).length;
- const target=unresolved?null:reviewTarget(),limit=target?reviewLimits(target):'';let warnings=[];if(target)warnings=reviewWarnings(target);
+ const target=unresolved?null:reviewTarget(),limit=target?reviewLimits(target):'',pendingApproval=empty&&initialStatus&&!initialStatus.released;let warnings=[];if(target)warnings=reviewWarnings(target);
  modal('Đối chiếu trước đồng bộ',`<section class="device-screen"><p><b>Sổ Preview đã xác minh</b> · ${empty?'Sổ Cloud trống, chưa có lịch sử đồng bộ.':'Sổ Cloud đã có dữ liệu hoặc lịch sử. Không coi là sổ mới.'}</p>
  <div class="review-totals"><article><h3>Thiết bị này</h3>${summary(review.review.localSummary)}</article><article><h3>Cloud Preview</h3>${summary(review.review.remoteSummary)}</article></div>
  <p>${review.review.rows.length-conflicts.length} khác biệt không xung đột được đối chiếu theo lô, giữ các bản ghi riêng. ${conflicts.length} xung đột cần chọn bản giữ.</p>
@@ -51,9 +51,9 @@ function renderReview(){
  ${warnings.length?`<details><summary>${warnings.length} nhóm nghi trùng cần kiểm tra</summary>${warnings.map(w=>`<p><b>${esc(w.kind)}</b>: ${w.ids.map(id=>{const r=target[w.kind.startsWith('Đối tác')?'partners':w.kind.startsWith('Đơn')?'orders':'payments'].find(r=>r.id===id);return esc([r?.name||r?.code||r?.title||'Thanh toán',r?.date,typeof r?.amount==='number'?money(r.amount):''].filter(Boolean).join(' · '));}).join('; ')}</p>`).join('')}</details><label><input id="deviceDuplicateAck" type="checkbox"> Tôi đã kiểm tra các nhóm nghi trùng; giữ riêng các giao dịch.</label>`:''}
  <p>${backupVerified?'Đã đọc kiểm tra file sao lưu, nội dung khớp hai phía.':'Bước 1: Tải bản sao lưu hai phía. Bước 2: Chọn lại file vừa lưu để kiểm tra.'}</p>
  <button class="btn device-main" onclick="backupDeviceReview()">Tải bản sao lưu an toàn</button>${reviewBackup?'<label class="field">Kiểm tra file sao lưu vừa lưu<input type="file" accept=".json,application/json" onchange="verifyDeviceReviewBackup(this.files[0])"></label>':''}
- ${limit?'<p role="alert">'+esc(limit)+'</p>':''}
+ ${limit?'<p role="alert">'+esc(limit)+'</p>':''}${pendingApproval?'<p role="status">Luồng khởi tạo theo lô đã sẵn sàng. Chờ chủ xưởng xác nhận trước khi đưa dữ liệu thật lên Cloud.</p>':''}
  <label><input type="checkbox" id="deviceReviewAck"> Tôi xác nhận đúng sổ Preview và các lựa chọn; bản sao lưu đã lưu an toàn.</label>
- <button id="deviceReviewApply" class="btn primary device-main" ${!backupVerified||unresolved||limit?'disabled':''} onclick="applyDeviceReview()">${empty?'Đưa toàn bộ dữ liệu thiết bị lên Cloud':'Áp dụng đối chiếu theo lô'}</button><button class="btn" onclick="cancelDeviceReview()">Hủy · Giữ nguyên</button></section>`);
+ <button id="deviceReviewApply" class="btn primary device-main" ${!backupVerified||unresolved||limit||pendingApproval?'disabled':''} onclick="applyDeviceReview()">${empty?'Khởi tạo sổ Cloud từ thiết bị này':'Áp dụng đối chiếu theo lô'}</button><button class="btn" onclick="cancelDeviceReview()">Hủy · Giữ nguyên</button></section>`);
 }
 root.chooseDeviceRecord=(i,value)=>{if(!['local','remote',''].includes(value))return;choices[review.review.rows[i].key]=value;renderReview();};
 root.deviceReviewPage=step=>{page+=step;renderReview();};
@@ -65,15 +65,15 @@ root.applyDeviceReview=async()=>{
  if(!review||applyingReview)return;
  if(!backupVerified||!document.getElementById('deviceReviewAck')?.checked)return alert('Cần kiểm tra file sao lưu và xác nhận đúng sổ trước khi tiếp tục.');
  try{
-  const target=reviewTarget();RS.environment(review.snapshot);RS.capacity(review.snapshot,target);const warnings=reviewWarnings(target);if(warnings.length&&!document.getElementById('deviceDuplicateAck')?.checked)throw Error('Cần kiểm tra các nhóm nghi trùng trước khi áp dụng.');
+  const target=reviewTarget();RS.environment(review.snapshot);const initial=RS.empty(review.snapshot)&&!!initialStatus;if(!initial)RS.capacity(review.snapshot,target);const warnings=reviewWarnings(target);if(warnings.length&&!document.getElementById('deviceDuplicateAck')?.checked)throw Error('Cần kiểm tra các nhóm nghi trùng trước khi áp dụng.');
   RS.fresh(review,await ctx().store.read());await RS.verifyBackup(reviewBackup,reviewBackup);
   const s=TGSyncCore.summary(target);if(!confirm('Chỉ đồng bộ với Cloud Preview. Sau đối chiếu: '+s.customers+' khách, '+s.orders+' đơn, '+s.payments+' thanh toán; phải thu '+money(s.receivable)+', phải trả '+money(s.payable)+'. Đã giữ bản sao lưu hai phía. Xác nhận tiếp tục?'))return;
-  const expected=await RS.recordHash(target);applyingReview=true;closeModal(true);
+  if(initial){if(!initialStatus.released)throw Error('Chờ chủ xưởng xác nhận trước khi đưa dữ liệu thật lên Cloud.');applyingReview=true;closeModal(true);await getInitialClient().start(review,reviewBackup.reconciliationSHA256);review=null;return showInitialResult();}const expected=await RS.recordHash(target);applyingReview=true;closeModal(true);
   await ctx().engine.resolve(review,choices,{acknowledgeDuplicates:warnings.length>0});review=null;
   await ctx().engine.metaUpdate(m=>{m.pairingNeedsReview=false;m.reviewReceipt={summary:s,hash:expected};});
   reviewProgress(2,'Đã kiểm tra bản sao lưu và chuẩn bị dữ liệu an toàn.');
   await completeDeviceReview();
- }catch(e){alert(message(e));}finally{applyingReview=false;}
+ }catch(e){document.getElementById('tgReviewProgress')?.remove();const r=await ctx().store.read();if(r.meta.initialUpload?.status==='uploading')showInitialError(e);else alert(message(e));}finally{applyingReview=false;}
 };
 root.completeDeviceReview=async function(){
  try{
@@ -86,6 +86,13 @@ root.completeDeviceReview=async function(){
   document.getElementById('tgReviewProgress')?.remove();modal('Kết quả đối chiếu',`<p role="status"><b>${pass?'PASS · Số lượng, công nợ và nội dung từng bản ghi khớp hai phía.':'Chưa khớp kết quả dự kiến. Dừng để đối chiếu; không tự ghi đè.'}</b></p><progress max="4" value="4" aria-label="Tiến trình đồng bộ"></progress><h3>Dự kiến sau lựa chọn</h3>${summary(receipt.summary)}<div class="review-totals"><article><h3>Thiết bị này</h3>${summary(localSummary)}</article><article><h3>Cloud Preview</h3>${summary(remoteSummary)}</article></div><button class="btn" onclick="closeModal(true)">Đóng</button>`);
  }catch(e){document.getElementById('tgReviewProgress')?.remove();modal('Đồng bộ chưa hoàn tất',`<p role="alert">${esc(message(e))}</p><p>Dữ liệu và bản sao lưu vẫn được giữ. Không cần chọn lại hàng trăm bản ghi.</p><button class="btn primary" onclick="completeDeviceReview()">Thử gửi và kiểm tra lại</button><button class="btn" onclick="closeModal(true)">Đóng</button>`);}
 };
+
+function getInitialClient(){if(!initialClient)initialClient=new root.TGInitialCloud({...ctx(),environment:RS.environment,onProgress:(n,total,text)=>{reviewProgress(n,text+' · '+n+'/'+total+' lô');const el=document.querySelector('#tgReviewProgress progress');if(el)el.max=total;const box=document.getElementById('tgReviewProgress');if(box&&!document.getElementById('pauseInitialCloud')){const b=document.createElement('button');b.id='pauseInitialCloud';b.className='btn';b.textContent='Tạm dừng an toàn';b.onclick=()=>initialClient.pause();box.appendChild(b);}}});return initialClient;}
+function showInitialPaused(){modal('Khởi tạo sổ Cloud',`<p>Có phiên khởi tạo chưa hoàn tất. Các lô đã nhận được giữ; dữ liệu trên máy không thay đổi.</p><button class="btn primary" onclick="resumeInitialCloud()">Tiếp tục khởi tạo</button><button class="btn" onclick="closeModal(true)">Đóng</button>`);}
+function showInitialError(e){document.getElementById('tgReviewProgress')?.remove();modal('Khởi tạo đang tạm dừng',`<p role="alert">${esc(message(e))}</p><p>Không xóa dữ liệu hoặc tự bắt đầu lại.</p><button class="btn primary" onclick="resumeInitialCloud()">Tiếp tục khởi tạo</button><button class="btn" onclick="closeModal(true)">Đóng</button>`);}
+async function showInitialResult(){document.getElementById('tgReviewProgress')?.remove();const r=await ctx().store.read(),stats=root.TGInitialData.stats(r.main);modal('Khởi tạo sổ Cloud hoàn tất',`<p role="status">PASS · Toàn bộ bản ghi, hạng mục, kích thước và công nợ đã khớp với Cloud Preview.</p>${summary(stats.summary)}<p>${stats.items} hạng mục · ${stats.sizes} dòng kích thước. Dữ liệu gốc trên thiết bị được giữ nguyên.</p><button class="btn" onclick="closeModal(true)">Đóng</button>`);}
+root.resumeInitialCloud=async()=>{if(applyingReview)return;applyingReview=true;closeModal(true);try{await getInitialClient().run();await showInitialResult();}catch(e){showInitialError(e);}finally{applyingReview=false;}};
+
 root.cancelDeviceReview=()=>{if(applyingReview)return;ctx().engine.reviewing=false;review=null;reviewBackup=null;backupVerified=false;closeModal(true);};
 
 showAccessGate('Đang kiểm tra phiên xác minh…');
