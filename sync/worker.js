@@ -1,4 +1,4 @@
-import './safety.js';import '../reminder-history.js';import './core.js';
+import './safety.js';import '../reminder-history.js';import './core.js';import './pairing.js';
 const C=globalThis.TGSyncCore,ORIGINS=new Set(["https://tungcnc-congno.pages.dev"]);
 const enc=new TextEncoder(),hash=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s))),b=>b.toString(16).padStart(2,'0')).join('');
 // Initial bootstrap only, isolated D1, no partial business state or chunk uploads.
@@ -56,7 +56,7 @@ function deltaSql(kinds,appendChanges=null){
  UPDATE sync_state SET version=?,data=(SELECT data FROM candidate),versions=(SELECT versions FROM candidate),last_op=? WHERE id=1 AND version=? AND EXISTS(SELECT 1 FROM candidate WHERE length(CAST(data AS BLOB))<=5000000 AND length(CAST(data AS BLOB))+length(CAST(versions AS BLOB))+length(?)<=1900000)`;
 }
 function unhex(s){if(typeof s!=='string'||!/^([a-f0-9]{2})+$/.test(s))throw Error('Signature invalid');return Uint8Array.from(s.match(/../g),x=>parseInt(x,16))}
-export default {async fetch(request,env){const origin=request.headers.get('Origin'),url=new URL(request.url);const h={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin','X-Content-Type-Options':'nosniff'},out=(d,status=200)=>new Response(JSON.stringify(d),{status,headers:h}),rawOut=text=>new Response(text,{headers:h});if(!ORIGINS.has(origin))return out({error:'Origin not allowed'},403);Object.assign(h,{'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type, X-Device-Id, X-Time, X-Nonce, X-Signature'});if(request.method==='OPTIONS')return new Response(null,{status:204,headers:h});
+export default {async fetch(request,env){const origin=request.headers.get('Origin'),url=new URL(request.url);const h={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin','X-Content-Type-Options':'nosniff'},out=(d,status=200)=>new Response(JSON.stringify(d),{status,headers:h}),rawOut=text=>new Response(text,{headers:h});if(!ORIGINS.has(origin)&&origin!==env.PAIRING_ORIGIN)return out({error:'Origin not allowed'},403);Object.assign(h,{'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type, X-Device-Id, X-Time, X-Nonce, X-Signature'});if(request.method==='OPTIONS')return new Response(null,{status:204,headers:h});
 try{
  const raw=await limitedRequest(request);if(enc.encode(raw).length>1000000)return out({error:'Giao dịch vượt 1.000.000 byte; giữ nguyên hàng đợi, không chia nhỏ'},413);const now=Date.now();
  if(url.pathname==='/api/devices/register'&&request.method==='POST'){
@@ -72,7 +72,21 @@ try{
  const inserted=await env.DB.prepare('INSERT OR IGNORE INTO sync_nonces(device_id,nonce,at) VALUES(?,?,?)').bind(deviceId,nonce,now).run();if(!inserted.meta.changes)return out({error:'Replayed request'},401);
  if(url.pathname==='/api/device'&&request.method==='GET')return out({id:d.id,status:d.status});
  if(url.pathname==='/api/device/revoke'&&request.method==='POST'){await env.DB.prepare("UPDATE sync_devices SET status='revoked' WHERE id=?").bind(d.id).run();return out({status:'revoked'});}
+ if(env.ACCESS_AUTH_MODE==='true'&&env.ACCESS_IDENTITY){
+  if(url.pathname==='/api/access/authorize'&&request.method==='POST'){
+   if(d.status!=='pending'&&d.status!=='approved')return out({error:'Thiết bị đã bị thu hồi.'},401);
+   await env.DB.prepare("UPDATE sync_devices SET status='approved' WHERE id=? AND origin=? AND status='pending'").bind(d.id,origin).run();return out({status:'approved',id:d.id});
+  }
+  const actions={'/api/access/devices':'/api/pairing/devices','/api/access/rename':'/api/pairing/rename','/api/access/revoke':'/api/pairing/revoke','/api/access/presence':'/api/pairing/presence'};
+  if(actions[url.pathname]){const u=new URL(request.url);u.pathname=actions[url.pathname];return globalThis.TGDevicePairing.route({db:env.DB,request:new Request(u,{method:request.method,headers:request.headers}),raw,device:d,origin,now,out,hash});}
+ }
+ if(env.ENABLE_DEVICE_PAIRING==='true'){const result=await globalThis.TGDevicePairing.route({db:env.DB,request,raw,device:d,origin,now,out,hash,initialDevice:env.ENABLE_PREVIEW_INITIAL_DEVICE==='true'&&origin===env.PAIRING_ORIGIN&&!ORIGINS.has(origin)?{origin:env.INITIAL_DEVICE_ORIGIN,hash:env.INITIAL_DEVICE_GRANT_HASH,expires:Number(env.INITIAL_DEVICE_GRANT_EXPIRES)}:null});if(result)return result;}
  if(d.status!=='approved')return out({error:'Device awaits owner approval'},403);
+ if(env.INITIAL_CHUNKS_ENABLED==='true'){
+  if(/^\/api\/sync\/initial\/(status|begin|part|finish)$/.test(url.pathname))return globalThis.TGInitialUpload.route({db:env.DB,device:d,raw,path:url.pathname,method:request.method,out,release:env.INITIAL_CHUNKS_RELEASE});
+  if(url.pathname==='/api/sync/push'&&(await env.DB.prepare("SELECT 1 AS active FROM sync_initial_jobs WHERE id=1 AND status='uploading'").first()))return out({error:'Đang khởi tạo sổ Cloud. Tạm dừng gửi thay đổi thường.'},423);
+ }
+
  if(env.PUBLIC_INITIAL_BOOTSTRAP==='disabled'&&['/api/sync/bootstrap/status','/api/sync/bootstrap'].includes(url.pathname))return out({error:'Khởi tạo lần đầu chỉ qua kế hoạch owner-admin đã duyệt; không gửi snapshot lớn qua Worker Free'},403);
  if(url.pathname==='/api/sync/bootstrap/status'&&request.method==='GET'){
  if(env.INITIAL_BOOTSTRAP_TARGET!=='production-v23')return out({error:'Khởi tạo snapshot không được bật trên kho này'},403);
@@ -111,10 +125,10 @@ try{
  for(const c of op.changes){if(!C.kinds.includes(c.kind)||typeof c.id!=='string'||!c.id||c.id.length>250||!Number.isSafeInteger(c.baseVersion)||c.baseVersion<0||c.payload!==null&&(typeof c.payload!=='object'||Array.isArray(c.payload)||C.rid(c.payload)!==c.id))return out({error:'Invalid record'},400);const k=C.key(c.kind,c.id);if(seen.has(k))return out({error:'Duplicate record in transaction'},400);seen.add(k);if((versions[k]||0)!==c.baseVersion){const full=await env.DB.prepare(`SELECT r.value AS record FROM sync_state,json_each(data,'$.${c.kind}') r WHERE sync_state.id=1 AND ${sqlRecordId('r.value')}=? LIMIT 1`).bind(c.id).first();return out({status:'conflict',error:'Record version conflict',sequence:row.version,record:{kind:c.kind,id:c.id,version:versions[k]||0,server:full?JSON.parse(full.record):null,local:c.payload}},409);}}
  let next;try{next=C.validate(applyServer(state,op.changes));}catch(e){return out({status:'conflict',error:e.message,summary:C.summary(state)},409);}const appendOnly=op.changes.length<=15&&op.changes.every(c=>c.payload!==null&&!(versions[C.key(c.kind,c.id)]||0)&&['partners','orders','payments','audit','trash'].includes(c.kind));for(const c of op.changes)versions[C.key(c.kind,c.id)]=(versions[C.key(c.kind,c.id)]||0)+1;
  const saved={...op,changes:op.changes.map(c=>({...c,version:versions[C.key(c.kind,c.id)]}))};if(enc.encode(JSON.stringify(saved)+digest+d.id+op.operationId).length>1900000)return out({error:'Biên nhận vượt giới hạn dòng D1 an toàn; giữ nguyên hàng đợi'},413);
- const result=await env.DB.batch([env.DB.prepare(deltaSql([...new Set(op.changes.map(c=>c.kind))],appendOnly?op.changes:null)).bind(raw,JSON.stringify(versions),row.version,row.version+1,op.operationId,row.version,op.operationId),env.DB.prepare('INSERT INTO sync_operations(operation_id,device_id,payload_hash,sequence,body,at) SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM sync_state WHERE id=1 AND version=? AND last_op=?)').bind(op.operationId,d.id,digest,row.version+1,JSON.stringify(saved),now,row.version+1,op.operationId)]);
+ const result=await env.DB.batch([env.DB.prepare(deltaSql([...new Set(op.changes.map(c=>c.kind))],appendOnly?op.changes:null)+(env.INITIAL_CHUNKS_ENABLED==='true'?" AND NOT EXISTS(SELECT 1 FROM sync_initial_jobs WHERE id=1 AND status='uploading')":'')).bind(raw,JSON.stringify(versions),row.version,row.version+1,op.operationId,row.version,op.operationId),env.DB.prepare('INSERT INTO sync_operations(operation_id,device_id,payload_hash,sequence,body,at) SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM sync_state WHERE id=1 AND version=? AND last_op=?)').bind(op.operationId,d.id,digest,row.version+1,JSON.stringify(saved),now,row.version+1,op.operationId)]);
  if(result[0].meta.changes)return out({status:'accepted',sequence:row.version+1},201);
  const concurrent=await env.DB.prepare('SELECT payload_hash,sequence FROM sync_operations WHERE operation_id=?').bind(op.operationId).first();if(concurrent)return concurrent.payload_hash===digest?out({status:'duplicate',sequence:concurrent.sequence}):out({error:'Operation ID collision'},409);
- const current=await env.DB.prepare('SELECT version FROM sync_state WHERE id=1').first();if(current.version===row.version)return out({error:'Snapshot hoặc dòng D1 vượt giới hạn an toàn; giữ nguyên dữ liệu và hàng đợi'},413);
+ const current=await env.DB.prepare('SELECT version FROM sync_state WHERE id=1').first();if(current.version===row.version){if(env.INITIAL_CHUNKS_ENABLED==='true'&&await env.DB.prepare("SELECT 1 AS active FROM sync_initial_jobs WHERE id=1 AND status='uploading'").first())return out({error:'Đang khởi tạo sổ Cloud. Tạm dừng gửi thay đổi thường.'},423);return out({error:'Snapshot hoặc dòng D1 vượt giới hạn an toàn; giữ nguyên dữ liệu và hàng đợi'},413);}
  }
  return out({error:'Concurrent write; retry same operation'},503);
  }

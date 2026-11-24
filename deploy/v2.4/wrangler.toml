@@ -1,0 +1,25 @@
+name = "tungcnc-sync-v24-preview"
+main = "entry.js"
+compatibility_date = "2026-11-21"
+workers_dev = true
+[vars]
+PAIRING_ORIGIN = "https://feature-v2-4-device-pairing.tungcnc-congno.pages.dev"
+ACCESS_AUTH_MODE = "true"
+ACCESS_ISSUER = "https://hidden-forest-3b6f.cloudflareaccess.com"
+ACCESS_AUD = "f63fe15f86cb84c9c901b35fa1104f36d1b89d7b6a4518c785349f77a73d1bc8"
+ACCESS_OWNER_EMAIL = "ndtung.pc@gmail.com"
+PUBLIC_INITIAL_BOOTSTRAP = "disabled"
+INITIAL_CHUNKS_ENABLED = "true"
+INITIAL_CHUNKS_RELEASE = "approved"
+[[d1_databases]]
+binding = "DB"
+database_name = "tungcnc-sync-v23-staging"
+database_id = "49163cc1-a60d-49b1-9c93-da7a6f939977"
+# All queries are rewritten by entry.js to v24_sync_*; original tables are inaccessible.
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+[observability.logs]
+enabled = true
+invocation_logs = true
