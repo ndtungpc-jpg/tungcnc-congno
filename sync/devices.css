@@ -10,3 +10,5 @@
 @media(max-width:650px){#modal:has(.device-screen){padding:10px}#modal:has(.device-screen) .dialog{padding:18px;max-height:calc(100dvh - 24px);border-radius:18px}#modal:has(.device-screen) #modalTitle{font-size:20px}.device-code-boxes{gap:6px}.device-screen .device-code-boxes input{height:54px;font-size:26px}.device-card details[open]>.btn{min-width:110px;font-size:12px}.device-screen .device-card:has(details[open]){flex-wrap:wrap}.device-screen .device-card details[open]{width:100%;display:flex;flex-wrap:wrap;gap:8px}.device-screen .device-card details[open] summary{width:100%}.device-link-icon{margin:6px 0 10px}}
 
 .device-menu svg,.device-icon svg{display:block;width:32px;height:40px}.device-link-icon svg{width:160px;height:86px;max-width:100%}
+
+#modal .device-screen .device-setup-action{border:1px solid #e8c45a!important;color:#ffda70!important;background:transparent!important;font-weight:650}
