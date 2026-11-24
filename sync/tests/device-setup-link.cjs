@@ -1,0 +1,13 @@
+// Regression: update/reload and same-document links must not lose the owner grant.
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict'),{JSDOM}=require('jsdom');
+const source=fs.readFileSync('sync/devices-ui.js','utf8'),grant='a'.repeat(64),url='https://feature-v2-4-device-pairing.tungcnc-congno.pages.dev/';
+const memory=new Map(),storage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)};
+function load(hash='',blocked=false){const dom=new JSDOM('<h2 id="modalTitle"></h2><div id="modalBody"></div>',{url:url+hash,runScripts:'outside-only'}),w=dom.window;Object.defineProperty(w,'sessionStorage',{value:blocked?{getItem(){throw Error('blocked')},setItem(){throw Error('blocked')},removeItem(){throw Error('blocked')}}:storage});w.moreView=()=>'<div></div>';w.modal=(title,body)=>{w.document.getElementById('modalTitle').textContent=title;w.document.getElementById('modalBody').innerHTML=body};w.esc=s=>s;w.tgDeviceSync={store:{read:async()=>({meta:null})}};w.updateSyncHeader=()=>{};vm.runInContext(source,dom.getInternalVMContext());return w;}
+const button=w=>w.document.querySelector('[onclick="initializeFirstDevice()"]');
+(async()=>{let first=load('#setup='+grant);await first.showFirstDeviceSetup();assert(button(first));assert.equal(first.location.hash,'');const savedKey=[...memory.keys()][0];assert(savedKey);
+ let refreshed=load();await refreshed.showFirstDeviceSetup();assert(button(refreshed),'Reload/update must retain owner action after fragment is removed');
+ memory.clear();const existing=load();await existing.showFirstDeviceSetup();assert(!button(existing));existing.location.hash='setup='+grant;existing.dispatchEvent(new existing.HashChangeEvent('hashchange'));await new Promise(r=>setImmediate(r));assert(button(existing),'Opening owner link in an existing tab must enable continuation');
+ memory.clear();const blocked=load('#setup='+grant,true);await blocked.showFirstDeviceSetup();assert(button(blocked));assert(blocked.location.hash.includes('setup='),'Keep fragment if session storage is blocked');
+ memory.set(savedKey,JSON.stringify({grant,expiresAt:Date.now()-1}));const expired=load();await expired.showFirstDeviceSetup();assert(!button(expired),'Expired cached grant must not enable continuation');
+ memory.clear();const normal=load();await normal.showFirstDeviceSetup();assert(!button(normal),'Normal Preview must not create an owner grant');
+ console.log('PASS owner link: reload/update retains continuation, hash navigation works, blocked storage retains link, ordinary Preview gets no owner grant.');})().catch(e=>{console.error(e);process.exit(1)});
