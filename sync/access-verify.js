@@ -17,7 +17,7 @@ export async function verifyAccess(request,env,{fetcher=fetch,now=Date.now()}={}
  if(!Number.isFinite(claims.iat)||claims.iat>seconds+30)throw Error('Access issued time denied');
  if(claims.nbf!==undefined&&(!Number.isFinite(claims.nbf)||claims.nbf>seconds+30))throw Error('Access not-before denied');
  if(!/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(env.ACCESS_ISSUER)||!env.ACCESS_AUD)throw Error('Access not configured');
- if(!cached||cached.issuer!==env.ACCESS_ISSUER||now-loadedAt>300000){const response=await fetcher(env.ACCESS_ISSUER+'/cdn-cgi/access/certs',{redirect:'error'});if(!response.ok)throw Error('Access keys unavailable');const body=await response.json();if(!Array.isArray(body.keys)||body.keys.length>20)throw Error('Invalid Access keys');cached={issuer:env.ACCESS_ISSUER,keys:body.keys};loadedAt=now;}
+ if(!cached||cached.issuer!==env.ACCESS_ISSUER||now-loadedAt>300000){const response=await fetcher(env.ACCESS_ISSUER+'/cdn-cgi/access/certs',{redirect:'manual'});if(!response.ok)throw Error('Access keys unavailable');const body=await response.json();if(!Array.isArray(body.keys)||body.keys.length>20)throw Error('Invalid Access keys');cached={issuer:env.ACCESS_ISSUER,keys:body.keys};loadedAt=now;}
  const jwk=cached.keys.find(k=>k.kid===header.kid&&k.kty==='RSA'&&(!k.alg||k.alg==='RS256'));
  if(!jwk)throw Error('Unknown Access key');const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
  const signature=bytes(parts[2]);
