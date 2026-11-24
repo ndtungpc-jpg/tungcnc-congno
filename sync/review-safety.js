@@ -1,7 +1,7 @@
 (function(root){'use strict';
 const C=root.TGSyncCore,R=root.TGSyncReview,clone=x=>structuredClone(x);
-const identity={environment:'v24-preview',worker:'tungcnc-sync-v24-preview',ledger:'staging-v24-isolated'};
-function environment(snapshot){if(!snapshot?.environment||Object.entries(identity).some(([k,v])=>snapshot.environment[k]!==v))throw Error('Chưa xác minh đúng sổ Cloud Preview. Dừng, dữ liệu giữ nguyên.');return true;}
+const identity=root.TG_CLOUD_IDENTITY||{environment:'v24-preview',worker:'tungcnc-sync-v24-preview',ledger:'staging-v24-isolated'};
+function environment(snapshot){if(!snapshot?.environment||Object.entries(identity).some(([k,v])=>snapshot.environment[k]!==v))throw Error('Chưa xác minh đúng sổ Cloud của ứng dụng. Dừng, dữ liệu giữ nguyên.');return true;}
 function empty(snapshot){environment(snapshot);return snapshot.sequence===0&&snapshot.environment.operationCount===0&&snapshot.environment.lastOperation===null&&Object.keys(snapshot.versions).length===0&&C.isEmpty(snapshot.data);}
 function fresh(preview,current){if(current.meta.serial!==preview.serial||!C.same(current.main,preview.main))throw Error('Dữ liệu đã đổi sau đối chiếu. Mở lại đối chiếu và tạo bản sao lưu mới.');}
 function capacity(snapshot,target){environment(snapshot);C.validate(target);const changes=C.diff(snapshot.data,target,snapshot.versions);R.batches(snapshot.data,changes,c=>({schemaVersion:1,operationId:'00000000-0000-0000-0000-000000000000',deviceId:'00000000-0000-0000-0000-000000000000',occurredAt:'2026-11-24T00:00:00.000Z',changes:c}));return true;}

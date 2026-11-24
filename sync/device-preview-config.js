@@ -1,5 +1,9 @@
-// v2.4 isolated acceptance only. Never route Production to the preview D1.
-if(location.hostname==='feature-v2-4-device-pairing.tungcnc-congno.pages.dev')window.TG_DEVICE_PAIRING_API='https://tungcnc-sync-v24-preview.ndtung-pc.workers.dev';
+// Exact host routing. Production always keeps its existing Production ledger.
+const tgCloudTargets={
+ 'feature-v2-4-device-pairing.tungcnc-congno.pages.dev':{api:'https://tungcnc-sync-v24-preview.ndtung-pc.workers.dev',environment:'v24-preview',worker:'tungcnc-sync-v24-preview',ledger:'staging-v24-isolated'},
+ 'tungcnc-congno.pages.dev':{api:'https://tungcnc-sync-v23-prod.ndtung-pc.workers.dev',environment:'v24-production',worker:'tungcnc-sync-v23-prod',ledger:'production-existing'}
+};
+if(tgCloudTargets[location.hostname]){const {api,...identity}=tgCloudTargets[location.hostname];window.TG_DEVICE_PAIRING_API=api;window.TG_CLOUD_IDENTITY=Object.freeze(identity);}
 
 if(window.TG_DEVICE_PAIRING_API){
  window.TG_ACCESS_MODE=true;

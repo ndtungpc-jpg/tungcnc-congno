@@ -29,7 +29,7 @@ root.verifyAccessSession=async function(){if(loading)return;loading=true;try{
  await call('/api/access/authorize',{});await engine.metaUpdate(m=>{m.approved=true;m.error=null;});verified=true;hideGate();
  r=await store.read();if(r.meta.initialUpload?.status==='uploading')showInitialPaused();else if(r.meta.bootstrapPending)await reviewDeviceData(true);else {engine.reviewing=false;await engine.tick();}
  }catch(e){showAccessGate(message(e));}finally{if(ctx())ctx().engine.reviewing=false;loading=false;}};
-const RS=root.TGReviewSafety;
+const RS=root.TGReviewSafety,cloudLabel=root.TG_CLOUD_IDENTITY?.environment==='v24-production'?'Cloud chính thức':'Cloud Preview';
 let reviewBackup=null,backupVerified=false,applyingReview=false,initialStatus=null,initialClient=null;
 root.reviewDeviceData=async function(){
  const {engine}=ctx();if(applyingReview)return;
@@ -42,8 +42,8 @@ function reviewLimits(target){try{if(initialStatus&&RS.empty(review.snapshot)){T
 function renderReview(){
  const conflicts=review.review.rows.filter(r=>r.conflict),start=page*10,empty=RS.empty(review.snapshot),unresolved=conflicts.filter(r=>!choices[r.key]).length;
  const target=unresolved?null:reviewTarget(),limit=target?reviewLimits(target):'',pendingApproval=empty&&initialStatus&&!initialStatus.released;let warnings=[];if(target)warnings=reviewWarnings(target);
- modal('Đối chiếu trước đồng bộ',`<section class="device-screen"><p><b>Sổ Preview đã xác minh</b> · ${empty?'Sổ Cloud trống, chưa có lịch sử đồng bộ.':'Sổ Cloud đã có dữ liệu hoặc lịch sử. Không coi là sổ mới.'}</p>
- <div class="review-totals"><article><h3>Thiết bị này</h3>${summary(review.review.localSummary)}</article><article><h3>Cloud Preview</h3>${summary(review.review.remoteSummary)}</article></div>
+ modal('Đối chiếu trước đồng bộ',`<section class="device-screen"><p><b>${cloudLabel} đã xác minh</b> · ${empty?'Sổ Cloud trống, chưa có lịch sử đồng bộ.':'Sổ Cloud đã có dữ liệu hoặc lịch sử. Không coi là sổ mới.'}</p>
+ <div class="review-totals"><article><h3>Thiết bị này</h3>${summary(review.review.localSummary)}</article><article><h3>${cloudLabel}</h3>${summary(review.review.remoteSummary)}</article></div>
  <p>${review.review.rows.length-conflicts.length} khác biệt không xung đột được đối chiếu theo lô, giữ các bản ghi riêng. ${conflicts.length} xung đột cần chọn bản giữ.</p>
  ${conflicts.slice(start,start+10).map((r,j)=>{const i=review.review.rows.indexOf(r),record=r.local||r.remote;return `<label class="field device-difference"><b>${esc(record?.name||record?.title||record?.code||kindLabel[r.kind]||'Bản ghi')}</b><details><summary>So sánh nội dung</summary><b>Trên máy này</b>${comparison(r.local)}<b>Trên Cloud</b>${comparison(r.remote)}</details><select aria-label="Lựa chọn xung đột ${start+j+1}" onchange="chooseDeviceRecord(${i},this.value)"><option value="">Chưa chọn</option><option value="local" ${choices[r.key]==='local'?'selected':''}>Giữ bản trên máy này${r.local?'':' (không có bản ghi)'}</option><option value="remote" ${choices[r.key]==='remote'?'selected':''}>Giữ bản trên Cloud${r.remote?'':' (không có bản ghi)'}</option></select></label>`}).join('')}
  <div class="device-actions">${page?'<button class="btn" onclick="deviceReviewPage(-1)">Trang trước</button>':''}${start+10<conflicts.length?'<button class="btn" onclick="deviceReviewPage(1)">Trang sau</button>':''}</div>
@@ -52,7 +52,7 @@ function renderReview(){
  <p>${backupVerified?'Đã đọc kiểm tra file sao lưu, nội dung khớp hai phía.':'Bước 1: Tải bản sao lưu hai phía. Bước 2: Chọn lại file vừa lưu để kiểm tra.'}</p>
  <button class="btn device-main" onclick="backupDeviceReview()">Tải bản sao lưu an toàn</button>${reviewBackup?'<label class="field">Kiểm tra file sao lưu vừa lưu<input type="file" accept=".json,application/json" onchange="verifyDeviceReviewBackup(this.files[0])"></label>':''}
  ${limit?'<p role="alert">'+esc(limit)+'</p>':''}${pendingApproval?'<p role="status">Luồng khởi tạo theo lô đã sẵn sàng. Chờ chủ xưởng xác nhận trước khi đưa dữ liệu thật lên Cloud.</p>':''}
- <label><input type="checkbox" id="deviceReviewAck"> Tôi xác nhận đúng sổ Preview và các lựa chọn; bản sao lưu đã lưu an toàn.</label>
+ <label><input type="checkbox" id="deviceReviewAck"> Tôi xác nhận đúng sổ ${cloudLabel} và các lựa chọn; bản sao lưu đã lưu an toàn.</label>
  <button id="deviceReviewApply" class="btn primary device-main" ${!backupVerified||unresolved||limit||pendingApproval?'disabled':''} onclick="applyDeviceReview()">${empty?'Khởi tạo sổ Cloud từ thiết bị này':'Áp dụng đối chiếu theo lô'}</button><button class="btn" onclick="cancelDeviceReview()">Hủy · Giữ nguyên</button></section>`);
 }
 root.chooseDeviceRecord=(i,value)=>{if(!['local','remote',''].includes(value))return;choices[review.review.rows[i].key]=value;renderReview();};
@@ -67,7 +67,7 @@ root.applyDeviceReview=async()=>{
  try{
   const target=reviewTarget();RS.environment(review.snapshot);const initial=RS.empty(review.snapshot)&&!!initialStatus;if(!initial)RS.capacity(review.snapshot,target);const warnings=reviewWarnings(target);if(warnings.length&&!document.getElementById('deviceDuplicateAck')?.checked)throw Error('Cần kiểm tra các nhóm nghi trùng trước khi áp dụng.');
   RS.fresh(review,await ctx().store.read());await RS.verifyBackup(reviewBackup,reviewBackup);
-  const s=TGSyncCore.summary(target);if(!confirm('Chỉ đồng bộ với Cloud Preview. Sau đối chiếu: '+s.customers+' khách, '+s.orders+' đơn, '+s.payments+' thanh toán; phải thu '+money(s.receivable)+', phải trả '+money(s.payable)+'. Đã giữ bản sao lưu hai phía. Xác nhận tiếp tục?'))return;
+  const s=TGSyncCore.summary(target);if(!confirm('Chỉ đồng bộ với '+cloudLabel+'. Sau đối chiếu: '+s.customers+' khách, '+s.orders+' đơn, '+s.payments+' thanh toán; phải thu '+money(s.receivable)+', phải trả '+money(s.payable)+'. Đã giữ bản sao lưu hai phía. Xác nhận tiếp tục?'))return;
   if(initial){if(!initialStatus.released)throw Error('Chờ chủ xưởng xác nhận trước khi đưa dữ liệu thật lên Cloud.');applyingReview=true;closeModal(true);await getInitialClient().start(review,reviewBackup.reconciliationSHA256);review=null;return showInitialResult();}const expected=await RS.recordHash(target);applyingReview=true;closeModal(true);
   await ctx().engine.resolve(review,choices,{acknowledgeDuplicates:warnings.length>0});review=null;
   await ctx().engine.metaUpdate(m=>{m.pairingNeedsReview=false;m.reviewReceipt={summary:s,hash:expected};});
@@ -83,7 +83,7 @@ root.completeDeviceReview=async function(){
   const remote=await engine.call(r.meta,'/api/sync/snapshot');RS.environment(remote);TGSyncCore.validate(remote.data);
   const localHash=await RS.recordHash(r.main),remoteHash=await RS.recordHash(remote.data),localSummary=TGSyncCore.summary(r.main),remoteSummary=TGSyncCore.summary(remote.data);
   const pass=localHash===receipt.hash&&remoteHash===receipt.hash&&TGSyncCore.same(localSummary,receipt.summary)&&TGSyncCore.same(remoteSummary,receipt.summary);
-  document.getElementById('tgReviewProgress')?.remove();modal('Kết quả đối chiếu',`<p role="status"><b>${pass?'PASS · Số lượng, công nợ và nội dung từng bản ghi khớp hai phía.':'Chưa khớp kết quả dự kiến. Dừng để đối chiếu; không tự ghi đè.'}</b></p><progress max="4" value="4" aria-label="Tiến trình đồng bộ"></progress><h3>Dự kiến sau lựa chọn</h3>${summary(receipt.summary)}<div class="review-totals"><article><h3>Thiết bị này</h3>${summary(localSummary)}</article><article><h3>Cloud Preview</h3>${summary(remoteSummary)}</article></div><button class="btn" onclick="closeModal(true)">Đóng</button>`);
+  document.getElementById('tgReviewProgress')?.remove();modal('Kết quả đối chiếu',`<p role="status"><b>${pass?'PASS · Số lượng, công nợ và nội dung từng bản ghi khớp hai phía.':'Chưa khớp kết quả dự kiến. Dừng để đối chiếu; không tự ghi đè.'}</b></p><progress max="4" value="4" aria-label="Tiến trình đồng bộ"></progress><h3>Dự kiến sau lựa chọn</h3>${summary(receipt.summary)}<div class="review-totals"><article><h3>Thiết bị này</h3>${summary(localSummary)}</article><article><h3>${cloudLabel}</h3>${summary(remoteSummary)}</article></div><button class="btn" onclick="closeModal(true)">Đóng</button>`);
  }catch(e){document.getElementById('tgReviewProgress')?.remove();modal('Đồng bộ chưa hoàn tất',`<p role="alert">${esc(message(e))}</p><p>Dữ liệu và bản sao lưu vẫn được giữ. Không cần chọn lại hàng trăm bản ghi.</p><button class="btn primary" onclick="completeDeviceReview()">Thử gửi và kiểm tra lại</button><button class="btn" onclick="closeModal(true)">Đóng</button>`);}
 };
 
