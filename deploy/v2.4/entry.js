@@ -9,5 +9,12 @@ export default {async fetch(request,env){
  const path=new URL(request.url).pathname;
  if(path==='/api/access/session'&&request.method==='GET')return new Response(JSON.stringify({verified:true,email:identity.email,expiresAt:identity.expiresAt}),{headers});
  if(!/^\/api\/(devices\/register|device(?:\/revoke)?|access\/(authorize|devices|rename|revoke|presence)|sync\/(snapshot|status|pull|push))$/.test(path))return new Response(JSON.stringify({error:'Not found'}),{status:404,headers});
- return runtime.fetch(request,{...env,ACCESS_IDENTITY:identity,DB:previewDB(env.DB)});
+ const db=previewDB(env.DB),response=await runtime.fetch(request,{...env,ACCESS_IDENTITY:identity,DB:db});
+ // Attest only after the normal device authorization succeeds. The binding is
+ // pinned in wrangler.toml and checked against live settings before deployment.
+ if(path==='/api/sync/snapshot'&&request.method==='GET'&&response.ok){
+  const snapshot=await response.json(),state=await db.prepare('SELECT last_op,(SELECT COUNT(*) FROM sync_operations) AS operation_count FROM sync_state WHERE id=1').first();
+  return new Response(JSON.stringify({...snapshot,environment:{environment:'v24-preview',worker:'tungcnc-sync-v24-preview',ledger:'staging-v24-isolated',operationCount:state.operation_count,lastOperation:state.last_op}}),{headers});
+ }
+ return response;
 }};
