@@ -41,7 +41,7 @@ function customerOrdersView(pid,orders){
 }
 const workshopCustomerView=customerDetailView,workshopSupplierView=supplierDetailView;
 customerDetailView=pid=>{const p=partner(pid);if(!p)return workshopCustomerView(pid);const os=state.orders.filter(o=>o.partnerId===pid);return profileInfo(p)+`<div class="panel"><h2>${esc(p.name)}</h2><p>Còn phải thu: <b>${money(os.reduce((s,o)=>s+balance(o),0))}</b></p><div class="actions"><button class="btn" onclick="statement('${jsid(pid)}')">Bảng đối chiếu</button><button class="btn" onclick="sendDebtReminder('${jsid(pid)}')">Nhắc nợ</button><button class="btn" onclick="formMultiPaymentFor('${jsid(pid)}')">Thu tiền</button></div>${customerOrdersView(pid,os)}</div>${customerPaymentsView(pid)}`};
-supplierDetailView=pid=>{const p=partner(pid);return p?profileInfo(p)+workshopSupplierView(pid):workshopSupplierView(pid)};
+supplierDetailView=pid=>{const p=partner(pid),view=workshopSupplierView(pid);return p?profileInfo(p)+view.replace('<div class="actions">',`<div class="actions"><button type="button" class="btn primary" onclick="formSupplierOrder('${jsid(pid)}')">+ Nhập hàng</button>`):view};
 const workshopFormOrder=formOrder;
 formOrder=oid=>{if(oid&&partner(order(oid)?.partnerId)?.type==='supplier')return formSupplierOrder('',oid);return workshopFormOrder(oid)};
 const workshopOrderDetails=viewOrderDetails;
