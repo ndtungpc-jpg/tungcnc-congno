@@ -10,7 +10,7 @@ ACCESS_AUD = "f63fe15f86cb84c9c901b35fa1104f36d1b89d7b6a4518c785349f77a73d1bc8"
 ACCESS_OWNER_EMAIL = "ndtung.pc@gmail.com"
 PUBLIC_INITIAL_BOOTSTRAP = "disabled"
 INITIAL_CHUNKS_ENABLED = "true"
-INITIAL_CHUNKS_RELEASE = "awaiting-owner"
+INITIAL_CHUNKS_RELEASE = "approved"
 [[d1_databases]]
 binding = "DB"
 database_name = "tungcnc-sync-v23-staging"
