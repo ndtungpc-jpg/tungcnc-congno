@@ -4,7 +4,7 @@ let activeTab='devices',loading=false,review=null,choices={},page=0,presenceAt=0
 const ctx=()=>root.tgDeviceSync;
 const summary=s=>`<p>Khách ${s.customers} · NCC ${s.suppliers} · Đơn ${s.orders} · Thanh toán ${s.payments}</p><p>Phải thu <b>${money(s.receivable)}</b> · Phải trả <b>${money(s.payable)}</b></p>`;
 const comparison=record=>record?`<p>${[record.name,record.code,record.title,record.date,record.note].filter(Boolean).map(esc).join(' · ')}${typeof record.amount==='number'?' · '+money(record.amount):''}</p>`:'<p>Không có bản ghi</p>';
-const message=e=>e.status===401?'Cần xác minh Gmail hoặc thiết bị đã bị thu hồi. Dữ liệu trên máy vẫn giữ nguyên.':e.message||'Chưa kết nối được máy chủ. Dữ liệu trên máy vẫn giữ nguyên.';
+const message=e=>e.status===401?(root.TG_ACCESS_SESSION_SEEN?'Phiên xác minh không còn hợp lệ. Vui lòng xác minh Gmail lại.':'Vui lòng xác minh Gmail để bắt đầu sử dụng trên thiết bị này.'):e.message||'Chưa kết nối được máy chủ. Dữ liệu trên máy vẫn giữ nguyên.';
 const time=t=>t?new Date(t).toLocaleString('vi-VN'):'Chưa đồng bộ';
 const call=async(path,body)=>{const {meta}=await ctx().store.read();return ctx().engine.call(meta,path,body===undefined?{}:{method:'POST',body});};
 root.showAccessGate=function(text='Xác minh Gmail để sử dụng sổ công nợ trên thiết bị này.'){
@@ -22,7 +22,7 @@ root.syncDevicesNow=async()=>{await ctx().engine.tick();return showDeviceManager
 async function waitForStore(){for(let i=0;i<100;i++){try{return await ctx().store.read();}catch{await new Promise(resolve=>setTimeout(resolve,100));}}throw Error('Chưa mở được kho dữ liệu trên máy. Dữ liệu chưa thay đổi.');}
 root.verifyAccessSession=async function(){if(loading)return;loading=true;try{
  const response=await root.tgAccessFetch(root.TG_DEVICE_PAIRING_API+'/api/access/session');if(!response.ok)throw Error('Chưa xác minh được phiên.');const session=await response.json();if(!session.verified||session.email!=='ndtung.pc@gmail.com'||!Number.isFinite(session.expiresAt)||session.expiresAt<=Date.now())throw Error('Phiên không hợp lệ.');
- expiresAt=session.expiresAt;let r=await waitForStore();const {engine,store}=ctx();engine.reviewing=true;
+ root.TG_ACCESS_SESSION_SEEN=true;expiresAt=session.expiresAt;let r=await waitForStore();const {engine,store}=ctx();engine.reviewing=true;
  if(!r.meta?.enabled)await engine.enable(/Android/i.test(navigator.userAgent)?'S24 Ultra':'PC Xưởng');
  r=await store.read();if(!r.meta.approved)await engine.metaUpdate(m=>{m.bootstrapPending=true;m.pairingNeedsReview=true;});
  r=await store.read();if(!r.meta.registered){await engine.call(r.meta,'/api/devices/register',{method:'POST',body:{id:r.meta.deviceId,label:r.meta.label,publicJwk:r.meta.publicJwk}});await engine.metaUpdate(m=>m.registered=true);}

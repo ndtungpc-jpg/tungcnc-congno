@@ -7,7 +7,7 @@ if(window.TG_DEVICE_PAIRING_API){
   const u=new URL(url,location.origin);
   if(u.origin!==window.TG_DEVICE_PAIRING_API)throw Error('Địa chỉ đồng bộ không hợp lệ.');
   const response=await fetch(u.pathname+u.search,{...options,credentials:'same-origin',redirect:'manual'});
-  if(response.type==='opaqueredirect'||response.status===401||response.status===403){window.showAccessGate?.('Phiên đã hết hạn hoặc quyền đã bị thu hồi. Xác minh Gmail để tiếp tục đồng bộ.');throw Object.assign(Error('Cần xác minh Gmail lại trước khi đồng bộ. Dữ liệu trên máy vẫn giữ nguyên.'),{status:401});}
+  if(response.type==='opaqueredirect'||response.status===401||response.status===403){window.showAccessGate?.(window.TG_ACCESS_SESSION_SEEN?'Phiên xác minh không còn hợp lệ. Xác minh Gmail lại để tiếp tục đồng bộ.':'Vui lòng xác minh Gmail để bắt đầu sử dụng trên thiết bị này.');throw Object.assign(Error('Cần xác minh Gmail lại trước khi đồng bộ. Dữ liệu trên máy vẫn giữ nguyên.'),{status:401});}
   return response;
  };
 }
