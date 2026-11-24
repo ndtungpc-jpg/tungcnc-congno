@@ -1,0 +1,18 @@
+// Access JWT verification is mandatory even when called outside the Pages edge.
+let cached=null,loadedAt=0;
+const decode=s=>JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))));
+export async function verifyAccess(request,env,{fetcher=fetch,now=Date.now()}={}){
+ const token=request.headers.get('Cf-Access-Jwt-Assertion');
+ if(!token||token.length>16384)throw Error('Access required');
+ const parts=token.split('.');if(parts.length!==3)throw Error('Invalid token');
+ const header=decode(parts[0]),claims=decode(parts[1]),seconds=now/1000;
+ if(header.alg!=='RS256'||typeof header.kid!=='string'||header.kid.length>200)throw Error('Invalid signature algorithm');
+ if(claims.iss!==env.ACCESS_ISSUER||!(Array.isArray(claims.aud)?claims.aud:[claims.aud]).includes(env.ACCESS_AUD)||claims.email!==env.ACCESS_OWNER_EMAIL||typeof claims.sub!=='string'||!claims.sub||claims.type!=='app'||!Number.isFinite(claims.exp)||claims.exp<=seconds||!Number.isFinite(claims.iat)||claims.iat>seconds+30||(claims.nbf!==undefined&&(!Number.isFinite(claims.nbf)||claims.nbf>seconds+30)))throw Error('Access identity denied');
+ if(!/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(env.ACCESS_ISSUER)||!env.ACCESS_AUD)throw Error('Access not configured');
+ if(!cached||cached.issuer!==env.ACCESS_ISSUER||now-loadedAt>300000){const response=await fetcher(env.ACCESS_ISSUER+'/cdn-cgi/access/certs',{redirect:'error'});if(!response.ok)throw Error('Access keys unavailable');const body=await response.json();if(!Array.isArray(body.keys)||body.keys.length>20)throw Error('Invalid Access keys');cached={issuer:env.ACCESS_ISSUER,keys:body.keys};loadedAt=now;}
+ const jwk=cached.keys.find(k=>k.kid===header.kid&&k.kty==='RSA'&&(!k.alg||k.alg==='RS256'));
+ if(!jwk)throw Error('Unknown Access key');const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
+ const signature=Uint8Array.from(atob(parts[2].replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+ if(!await crypto.subtle.verify('RSASSA-PKCS1-v1_5',key,signature,new TextEncoder().encode(parts[0]+'.'+parts[1])))throw Error('Invalid Access signature');
+ return {email:claims.email,subject:claims.sub,expiresAt:claims.exp*1000};
+}

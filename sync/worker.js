@@ -72,6 +72,14 @@ try{
  const inserted=await env.DB.prepare('INSERT OR IGNORE INTO sync_nonces(device_id,nonce,at) VALUES(?,?,?)').bind(deviceId,nonce,now).run();if(!inserted.meta.changes)return out({error:'Replayed request'},401);
  if(url.pathname==='/api/device'&&request.method==='GET')return out({id:d.id,status:d.status});
  if(url.pathname==='/api/device/revoke'&&request.method==='POST'){await env.DB.prepare("UPDATE sync_devices SET status='revoked' WHERE id=?").bind(d.id).run();return out({status:'revoked'});}
+ if(env.ACCESS_AUTH_MODE==='true'&&env.ACCESS_IDENTITY){
+  if(url.pathname==='/api/access/authorize'&&request.method==='POST'){
+   if(d.status!=='pending'&&d.status!=='approved')return out({error:'Thiết bị đã bị thu hồi.'},401);
+   await env.DB.prepare("UPDATE sync_devices SET status='approved' WHERE id=? AND origin=? AND status='pending'").bind(d.id,origin).run();return out({status:'approved',id:d.id});
+  }
+  const actions={'/api/access/devices':'/api/pairing/devices','/api/access/rename':'/api/pairing/rename','/api/access/revoke':'/api/pairing/revoke','/api/access/presence':'/api/pairing/presence'};
+  if(actions[url.pathname]){const u=new URL(request.url);u.pathname=actions[url.pathname];return globalThis.TGDevicePairing.route({db:env.DB,request:new Request(u,{method:request.method,headers:request.headers}),raw,device:d,origin,now,out,hash});}
+ }
  if(env.ENABLE_DEVICE_PAIRING==='true'){const result=await globalThis.TGDevicePairing.route({db:env.DB,request,raw,device:d,origin,now,out,hash,initialDevice:env.ENABLE_PREVIEW_INITIAL_DEVICE==='true'&&origin===env.PAIRING_ORIGIN&&!ORIGINS.has(origin)?{origin:env.INITIAL_DEVICE_ORIGIN,hash:env.INITIAL_DEVICE_GRANT_HASH,expires:Number(env.INITIAL_DEVICE_GRANT_EXPIRES)}:null});if(result)return result;}
  if(d.status!=='approved')return out({error:'Device awaits owner approval'},403);
  if(env.PUBLIC_INITIAL_BOOTSTRAP==='disabled'&&['/api/sync/bootstrap/status','/api/sync/bootstrap'].includes(url.pathname))return out({error:'Khởi tạo lần đầu chỉ qua kế hoạch owner-admin đã duyệt; không gửi snapshot lớn qua Worker Free'},403);
