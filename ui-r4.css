@@ -144,3 +144,5 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
  .r4-order .r4-money small{font-size:10px}
  .r4-order-tabs button{min-height:40px;font-size:12px}
 }
+
+.r4-supplier-entry{padding:8px 10px}.r4-supplier-entry .btn{min-height:44px}
