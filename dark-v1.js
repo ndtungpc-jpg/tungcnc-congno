@@ -7,9 +7,9 @@ let version='';
 function header(){const h=document.querySelector('body > header');if(!h)return;
  let brand=h.querySelector('.dark-v1-brand');if(!brand){brand=document.createElement('div');brand.className='dark-v1-brand';brand.innerHTML='<img src="/icons/quan-ly-cong-no-192.png" alt="Logo TG"><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ</small></div>';h.querySelector(':scope > div')?.replaceWith(brand);}
  brand.querySelector('small').textContent='Sổ công nợ'+(version?' · v'+version:'');
- let actions=h.querySelector('.dark-v1-header-actions');if(!actions){actions=document.createElement('div');actions.className='dark-v1-header-actions';actions.innerHTML='<button type="button" class="dark-v1-header-button" aria-label="Tìm kiếm khách hàng" onclick="darkV1Search()">'+icons.search+'</button><button type="button" class="dark-v1-header-button" aria-label="Thông báo báo giá" onclick="tab(\'quote-inbox\')">'+icons.bell+'<span id="darkV1NoticeCount"></span></button>';h.appendChild(actions);}
+ let actions=h.querySelector('.dark-v1-header-actions');if(!actions){actions=document.createElement('div');actions.className='dark-v1-header-actions';actions.innerHTML='<button type="button" class="dark-v1-header-button" aria-label="Tìm kiếm khách hàng" onclick="darkV1Search()">'+icons.search+'</button><button type="button" class="dark-v1-header-button" aria-label="Thông báo báo giá" onclick="tab(\'quote-inbox\')">'+icons.bell+'<span id="quoteInboxCount"></span></button>';h.appendChild(actions);}
  const sync=document.getElementById('headerSync');if(sync&&sync.parentElement!==actions)actions.appendChild(sync);
- const count=quoteInboxPendingCount(),badge=document.getElementById('darkV1NoticeCount');badge.textContent=count===null?'!':count||'';badge.hidden=count===0;
+ const count=quoteInboxPendingCount(),badge=document.getElementById('quoteInboxCount');badge.textContent=count===null?'!':count||'';badge.hidden=count===0;
 }
 function dashboard(){document.body.classList.toggle('dark-v1-home',current==='dashboard');header();if(current!=='dashboard')return;
  const home=document.querySelector('.pilot-dashboard');if(!home)return;home.querySelector('.pilot-heading')?.remove();home.querySelector('.pilot-primary-actions')?.remove();home.querySelector('.pilot-footnote')?.remove();
