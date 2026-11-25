@@ -15,3 +15,6 @@ body[data-theme=light] .dark-v1-quick button{background:var(--panel);color:var(-
 body.ui-r4.dark-v1-home:not([data-theme=light])>header{background:#031522;border-bottom:1px solid #233f52}.dark-v1-home:not([data-theme=light]) .pilot-stats .stat>span{color:#f2f7fb!important}
 
 .dark-v1-home .pilot-stats .r4-stat-icon svg{width:30px;height:30px}
+body.ui-r4.dark-v1-home:not([data-theme=light]) .dark-v1-quick,body.ui-r4.dark-v1-home:not([data-theme=light]) .recent-orders{background:#071a27;border-color:#385164}
+body.ui-r4.dark-v1-home .recent-orders .r4-open{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}body.ui-r4.dark-v1-home .recent-orders .r4-body{grid-column:1;min-width:0;width:auto}body.ui-r4.dark-v1-home .recent-orders .r4-money{grid-column:2;min-width:0}body.ui-r4.dark-v1-home .recent-orders .r4-chevron{display:none}body.ui-r4.dark-v1-home .recent-orders .r4-order-meta{display:block!important;white-space:normal;overflow-wrap:anywhere}body.ui-r4.dark-v1-home .recent-orders .r4-body strong{-webkit-line-clamp:2;white-space:normal}
+@media(max-width:420px){body.ui-r4.dark-v1-home .recent-orders .r4-open{gap:8px}body.ui-r4.dark-v1-home .recent-orders .r4-money{max-width:142px}}
