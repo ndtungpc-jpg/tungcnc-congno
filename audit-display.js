@@ -25,7 +25,7 @@ function project(a,source){
  }
  visit(a.before,a.after);
  const amount=record.amount!==''&&record.amount!=null&&Number.isFinite(Number(record.amount))?Number(record.amount):null;
- return {partner:clean(p?.name)||'Đối tượng không còn trong sổ',description:clean(record.title||record.note||record.method||record.summary).replace(/JSON/gi,'dữ liệu'),amount,materials:Array.isArray(record.purchaseItems)?record.purchaseItems:[],tone:a.kind==='payments'?(supplier?'expense':'receipt'):supplier?'intake':'order',action:a.action==='import'?verb:verb+' '+kind.toLocaleLowerCase('vi-VN'),kind,object,at:when(a.at),editing,deleted:a.action==='delete',rows};
+ return {partner:clean(p?.name)||'Đối tượng không còn trong sổ',description:clean(record.title||record.note||record.method||record.summary).replace(/JSON/gi,'dữ liệu'),amount,materials:Array.isArray(record.purchaseItems)?record.purchaseItems:[],tone:a.kind==='payments'?(supplier?'expense':'receipt'):supplier?'intake':'order',action:a.action==='import'?verb:a.action==='create'&&a.kind==='orders'&&supplier?'Nhập hàng NCC':a.action==='create'&&a.kind==='payments'?(supplier?'Chi tiền NCC':'Thu tiền khách'):verb+' '+kind.toLocaleLowerCase('vi-VN'),kind,object,at:when(a.at),editing,deleted:a.action==='delete',rows};
 }
 root.TGAuditDisplay={project};if(typeof module!=='undefined')module.exports=root.TGAuditDisplay;
 })(globalThis);
