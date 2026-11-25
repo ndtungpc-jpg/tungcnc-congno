@@ -12,3 +12,15 @@
 
 .supplier-material header{position:static;top:auto;background:transparent;padding:0 0 10px;border-bottom:1px solid #354653;box-shadow:none}.supplier-material header b,.supplier-material header strong{font-size:15px;line-height:1.4}.supplier-summary h3{font-size:18px}
 .ui-r4 .supplier-material header{position:static;background:transparent;padding:0 0 10px;min-height:0}.ui-r4 .supplier-material header b,.ui-r4 .supplier-material header strong{font-size:15px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}.ui-r4 .supplier-material header b{min-width:0}
+/* Theme-aware supplier/audit surfaces; follows the existing appearance preference. */
+body{--ncc-intake:#6ee4ed;--ncc-paid:#6be6ac;--ncc-due:#ff9696}
+body[data-theme=light]{--ncc-intake:#087586;--ncc-paid:#127259;--ncc-due:#b32736}
+body[data-theme] .supplier-invoice-card,body[data-theme] .supplier-summary,body[data-theme] .supplier-note,body[data-theme] .supplier-material,body[data-theme] .supplier-payment-card{background:var(--panel);color:var(--fg);border-color:var(--border)}
+body[data-theme] .supplier-totals,body[data-theme] .supplier-totals>div,body[data-theme] .supplier-tabs,body[data-theme] .supplier-financial-row,body[data-theme] .supplier-invoice-total,body[data-theme] .supplier-material header,body[data-theme] .audit-summary,body[data-theme] .audit-total,body[data-theme] .audit-row,body[data-theme] .audit-change,body[data-theme] .audit-allocation{border-color:var(--border)}
+body[data-theme] .supplier-totals span,body[data-theme] .supplier-invoice-content>small,body[data-theme] .supplier-material dt,body[data-theme] .supplier-payment-card small,body[data-theme] .audit-row small{color:var(--muted)}
+body[data-theme] .supplier-tabs button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);box-shadow:inset 0 -3px var(--link)}
+body[data-theme] .supplier-invoice-total strong,body[data-theme] .supplier-material header strong,body[data-theme] .audit-total b,body[data-theme] .intake .audit-row-money b,body[data-theme] #supplierLineTotal{color:var(--ncc-intake)}
+body[data-theme] .supplier-totals>div:nth-child(2) b,body[data-theme] .receipt .audit-row-money b{color:var(--ncc-paid)}
+body[data-theme] .supplier-totals>div:last-child b,body[data-theme] .supplier-payable,body[data-theme] .expense .audit-row-money b{color:var(--ncc-due)}
+body[data-theme] #supplierLines output{background:var(--bg);color:var(--fg);border:1px solid var(--border)}
+.audit-row:focus-visible,.supplier-invoice-card:focus-visible,.supplier-tabs button:focus-visible{outline:3px solid var(--link,#6bd5f1);outline-offset:2px}
