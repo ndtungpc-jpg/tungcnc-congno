@@ -24,3 +24,5 @@ body[data-theme] .supplier-totals>div:nth-child(2) b,body[data-theme] .receipt .
 body[data-theme] .supplier-totals>div:last-child b,body[data-theme] .supplier-payable,body[data-theme] .expense .audit-row-money b{color:var(--ncc-due)}
 body[data-theme] #supplierLines output{background:var(--bg);color:var(--fg);border:1px solid var(--border)}
 .audit-row:focus-visible,.supplier-invoice-card:focus-visible,.supplier-tabs button:focus-visible{outline:3px solid var(--link,#6bd5f1);outline-offset:2px}
+body[data-theme] .supplier-material header,body[data-theme] .supplier-material header b{color:var(--fg)}
+body[data-theme] .supplier-trash{color:var(--ncc-due)!important}
