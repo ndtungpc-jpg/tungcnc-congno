@@ -8,7 +8,7 @@ const {c,run,document}=new Function('require','__dirname',prefix+';return {c,run
  c.URL.createObjectURL=()=> 'blob:test';c.URL.revokeObjectURL=()=>{};
  const png=new Blob(['exact-png-export'],{type:'image/png'});c.reportPNG=async()=>png;
  c.previewReport('c','orders');assert(document.querySelector('[onclick^="r42CopyReport"]'));
- await c.r42PreviewReport('c');const buttons=[...document.querySelectorAll('.r42-view-footer button')];assert.deepEqual(buttons.map(b=>b.textContent),['Chia sẻ Zalo/SMS','Tải ảnh','Sao chép']);
+ await c.r42PreviewReport('c');const buttons=[...document.querySelectorAll('.r42-view-footer button[onclick="r42SharePNG()"],.r42-view-footer button[onclick="r42DownloadPNG()"],.r42-view-footer button[onclick="r42CopyPNG()"]')];assert.deepEqual(buttons.map(b=>b.textContent),['Chia sẻ Zalo/SMS','Tải ảnh','Sao chép']);
  let item,writes=0,shareCalls=0,downloads=0,release,reject;
  c.isSecureContext=true;c.ClipboardItem=class{constructor(data){this.data=data;item=this}static supports(t){return t==='image/png'}};
  c.navigator.clipboard.write=()=>{writes++;return new Promise((ok,no)=>{release=ok;reject=no})};c.navigator.share=async()=>shareCalls++;c.download=async()=>{downloads++;return {requested:true}};

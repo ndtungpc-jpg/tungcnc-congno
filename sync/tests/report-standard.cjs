@@ -6,7 +6,7 @@ document.createElement=(tag,...args)=>{if(tag!=='canvas')return oldCreate(tag,..
 (async()=>{
  await run('init()');const source=JSON.parse(fs.readFileSync(process.argv[2])).data,orders=[10127,10128,10129,10130,10131,10132].map(line=>source.orders.find(o=>o.legacyLine===line));assert(orders.every(Boolean));
  const originalPartner=source.partners.find(p=>p.id===orders[0].partnerId);console.log('source contacts present:',Object.keys(originalPartner).filter(k=>['name','phone','address','email','zalo','website'].includes(k)));
- c.fixture={schemaVersion:2,revision:0,partners:[originalPartner],orders,payments:source.payments.filter(p=>orders.some(o=>o.id===p.orderId)),audit:[],trash:[],recovery:[],reminderEvents:[]};run('state=structuredClone(fixture)');const before=run('JSON.stringify(state)'),pid=originalPartner.id,output=path.resolve(__dirname,'../../../report-compact-artifacts');fs.mkdirSync(output,{recursive:true});
+ c.fixture={schemaVersion:2,revision:0,partners:[originalPartner],orders,payments:source.payments.filter(p=>orders.some(o=>o.id===p.orderId)),audit:[],trash:[],recovery:[],reminderEvents:[]};run('state=structuredClone(fixture)');const before=run('JSON.stringify(state)'),pid=originalPartner.id,output=path.resolve(__dirname,process.env.REPORT_ARTIFACT_DIR||'../../../report-editor-artifacts');fs.mkdirSync(output,{recursive:true});
  c.jspdf=require(path.join(__dirname,'../../vendor/jspdf.umd.min.js'));
  for(const orientation of ['portrait','landscape']){
   c.setReportOrientation(orientation);assert.equal(c.reportOrientation(),orientation);
