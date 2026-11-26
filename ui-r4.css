@@ -146,3 +146,13 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
 }
 
 .r4-supplier-entry{padding:8px 10px}.r4-supplier-entry .btn{min-height:44px}
+
+/* Keep the original customer/date metadata line; only the name gains navigation. */
+.r4-order-meta>.r4-order-customer{display:inline;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;line-height:inherit;text-align:inherit;white-space:inherit;text-decoration:none;cursor:pointer}
+.r4-order-meta>.r4-order-customer:focus-visible{outline:1px solid currentColor;outline-offset:1px}
+
+/* Customer/date contrast only; preserve geometry and light-theme readability. */
+.ui-r4 .r4-body>.r4-order-meta{color:#9CA3AF;font-weight:400}
+.ui-r4 .r4-order-meta>.r4-order-customer{color:#C5CAD2;font-weight:500}
+.ui-r4[data-theme=light] .r4-order-meta{color:#626b79}
+.ui-r4[data-theme=light] .r4-order-meta>.r4-order-customer{color:#454e5c}
