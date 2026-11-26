@@ -146,3 +146,7 @@ body.ui-r4:not([data-theme=light]):not([data-theme=moss]):not([data-theme=mono])
 }
 
 .r4-supplier-entry{padding:8px 10px}.r4-supplier-entry .btn{min-height:44px}
+
+/* Keep the original customer/date metadata line; only the name gains navigation. */
+.r4-order-meta>.r4-order-customer{display:inline;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;line-height:inherit;text-align:inherit;white-space:inherit;text-decoration:none;cursor:pointer}
+.r4-order-meta>.r4-order-customer:focus-visible{outline:1px solid currentColor;outline-offset:1px}
