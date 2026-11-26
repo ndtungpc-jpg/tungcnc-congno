@@ -32,17 +32,18 @@ function reportQuantity(x,item=false){
 }
 function reportOrderRows(d){return d.orders.flatMap(o=>{
  const items=o.quoteItems?.length?o.quoteItems:o.purchaseItems?.length?o.purchaseItems:null;
- const quantity=x=>reportQuantity(x,!!items);
+ const quantity=x=>reportQuantity(x,!!items).split('\n')[0];
+ const annotation=x=>{const warning=reportQuantity(x,!!items).split('\n').slice(1).join('; ');return warning?'\n['+warning+']':''};
  const price=x=>x.unitPrice==null||x.unitPrice===''?'—':money(x.unitPrice);
- if(!items)return [[date(o.created),o.title||o.code||'Đơn hàng',quantity(o),price(o),money(o.amount)]];
+ if(!items)return [[date(o.created),(o.title||o.code||'Đơn hàng')+annotation(o),quantity(o),price(o),money(o.amount)]];
  // Parent amount is authoritative. Children are descriptive and are never added to gross again.
  const rows=[[date(o.created),[o.code,o.title].filter(Boolean).join(' · '),'—','—','']];
- for(const [i,x] of items.entries())rows.push(['', '  '+(i+1)+'. '+[x.name,x.core,x.finish].filter(Boolean).join(' / ')+(x.sizes?.length?'\n'+x.sizes.map(z=>[z.widthMm,z.heightMm].filter(v=>v!==''&&v!=null).join(' × ')+' mm · SL '+(z.count??1)).join('; '):''),quantity(x),price(x),x.amount==null?'—':money(x.amount)]);
+ for(const [i,x] of items.entries())rows.push(['', '  '+(i+1)+'. '+[x.name,x.core,x.finish].filter(Boolean).join(' / ')+(x.sizes?.length?'\n'+x.sizes.map(z=>[z.widthMm,z.heightMm].filter(v=>v!==''&&v!=null).join(' × ')+' mm · SL '+(z.count??1)).join('; '):'')+annotation(x),quantity(x),price(x),x.amount==null?'—':money(x.amount)]);
  rows.push(['','Tổng đơn (đã gồm điều chỉnh)','—','—',money(o.amount)]);return rows;
  });}
 function reportPaymentRows(d){const groups=typeof paymentGroups==='function'?paymentGroups({...state,payments:d.payments}):d.payments.map(p=>({rows:[p]}));return groups.sort((a,b)=>comparePaymentDates(a.rows[0],b.rows[0])).map(g=>{const p=g.rows[0];return [paymentDateLabel(p),friendlyPaymentNote(p),p.method||'Chưa rõ',money(g.rows.reduce((n,p)=>n+p.amount,0))]})}
 function reportSections(d){return [{title:'I. Chi tiết đơn hàng',headers:['Ngày','Nội dung/Hạng mục','Khối lượng/ĐVT','Đơn giá','Thành tiền'],rows:reportOrderRows(d),widths:[22,65,31,29,35],right:[2,3,4]},...(d.kind==='debt'?[{title:'II. Lịch sử thanh toán',headers:['Ngày','Nội dung','Hình thức','Số tiền'],rows:reportPaymentRows(d),widths:[27,86,32,37],right:[3]}]:[])]}
-function reportSummary(d){return d.kind==='debt'?[['Tổng đơn hàng',money(d.gross)],['Tổng thanh toán',money(d.received)],['TỔNG CÒN PHẢI THANH TOÁN',money(d.remaining)]]:[['Số đơn hàng',String(d.orders.length)],['TỔNG GIÁ TRỊ ĐƠN HÀNG',money(d.gross)]]}
+function reportSummary(d){return d.kind==='debt'?[['Tổng đơn hàng',money(d.gross)],['Tổng thanh toán',money(d.received)],['TỔNG CÒN PHẢI THANH TOÁN',money(d.remaining)]]:[['TỔNG GIÁ TRỊ ĐƠN HÀNG',money(d.gross)]]}
 function reportHTML(d){return `<div class="report-paper"><h2>${reportTitle(d.kind)}</h2><p>${esc(d.pt.name)} · Ngày lập ${date(today())}</p>${reportSections(d).map(s=>`<h3>${s.title}</h3>${table(s.headers,s.rows.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x).replaceAll('\n','<br>')+'</td>').join('')+'</tr>').join(''))}`).join('')}<h3>${d.kind==='debt'?'III. Tổng kết':'II. Tổng kết'}</h3>${reportSummary(d).map((x,i)=>`<p class="${i===reportSummary(d).length-1?'report-total':''}">${esc(x[0])}: <b>${esc(x[1])}</b></p>`).join('')}</div>`}
 let reportPreview=null;
 function previewReport(pid,kind='debt'){try{const d=reportData(pid,kind);if(!d)return;reportPreview={pid,kind:d.kind};modal(d.kind==='orders'?'Bảng thống kê đơn hàng':'Bảng đối chiếu công nợ',`<div class="statement-top"><span>Không phân bổ lại thanh toán hoặc thay đổi số liệu.</span><button class="btn" aria-label="Đóng báo cáo" onclick="closeModal()">Đóng</button></div>${reportHTML(d)}<div class="statement-actions"><button class="btn" onclick="exportCustomerImage('${jsid(pid)}','${d.kind}')">Xuất PNG</button><button class="btn" onclick="exportReportExcel('${jsid(pid)}','${d.kind}')">Xuất Excel</button><button class="btn" onclick="exportReportPDF('${jsid(pid)}','${d.kind}')">Xuất PDF A4</button>${d.pt.type==='customer'?`<button class="btn" onclick="sendDebtReminder('${jsid(pid)}')">Nhắc nợ</button>`:''}</div>`);document.querySelector('.dialog')?.classList.add('statement-dialog')}catch(e){alert('Chưa mở báo cáo: '+e.message)}}
