@@ -57,7 +57,7 @@ function reportHTML(d){const rows=reportRows(d),headers=reportSections(d)[0].hea
 // Same fixed anchors and drawing operations for preview PNGs and A4 landscape PDF.
 function reportLayout(d){
  const rawRows=reportRows(d);
- const w=2060,h=1600,pad=48,padding=REPORT_COLUMNS.padding,inner=w-pad*2,right=w-pad-padding,bodySize=34,lineH=44,maxRows=rawRows.length>10&&rawRows.length%10>0&&rawRows.length%10<3?8:10,bodyBottom=1210,pages=[];const cv=document.createElement('canvas'),ctx=cv.getContext('2d');if(!ctx)throw Error('Không hỗ trợ canvas');
+ const w=1960,h=1600,pad=48,padding=REPORT_COLUMNS.padding,inner=w-pad*2,right=w-pad-padding,bodySize=34,lineH=44,maxRows=rawRows.length>10&&rawRows.length%10>0&&rawRows.length%10<3?8:10,bodyBottom=1210,pages=[];const cv=document.createElement('canvas'),ctx=cv.getContext('2d');if(!ctx)throw Error('Không hỗ trợ canvas');
  const widths=REPORT_COLUMNS.widths.map(p=>p/100*inner),x=[pad];for(const width of widths)x.push(x.at(-1)+width);
  const wrap=(value,width,size=bodySize,bold=false)=>{ctx.font=(bold?'600 ':'400 ')+size+'px Arial';const out=[];for(const paragraph of String(value??'').split('\n')){let line='';for(const word of paragraph.split(/\s+/)){if(ctx.measureText(line?(line+' '+word):word).width<=width){line=line?line+' '+word:word;continue}if(line){out.push(line);line=''}for(const ch of word){if(line&&ctx.measureText(line+ch).width>width){out.push(line);line=ch}else line+=ch;}}out.push(line);}return out;};
  let page,ops,y,count=0;const rect=(xx,yy,ww,hh,color)=>ops.push({kind:'rect',x:xx,y:yy,w:ww,h:hh,color});const text=(value,xx,yy,size=bodySize,bold=false,align='left',color=REPORT_COLORS.ink)=>ops.push({kind:'text',value:String(value),x:xx,y:yy,size,bold,align,color});
