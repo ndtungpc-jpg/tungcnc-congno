@@ -69,7 +69,6 @@ function reportLayout(d){
   let at=0,totalLines=Math.max(...row.lines.map(v=>v.length));const continuedOrder=!row.blockStart&&count===0;
   while(at<totalLines){let capacity=Math.floor((bodyBottom-y-18)/lineH);if(capacity<1){page.bodyEnd=y;start();capacity=Math.floor((bodyBottom-y-18)/lineH);}const take=Math.min(totalLines-at,capacity),height=take*lineH+18;
    if(row.type==='payment')rect(pad,y,inner,height,REPORT_COLORS.paid);else if(row.number%2===0)rect(pad,y,inner,height,REPORT_COLORS.stripe);
-   if(row.blockStart&&count&&row.type!=='payment')rect(pad,y,inner,2,REPORT_COLORS.line);
    const tone=row.type==='payment'?REPORT_COLORS.green:REPORT_COLORS.ink;
    row.lines.forEach((ls,col)=>{const values=ls.slice(at,at+take);values.forEach((v,j)=>text(v,col===0?x[col]+widths[col]/2:col>=3?x[col+1]-padding:x[col]+padding,y+35+j*lineH,bodySize,row.type==='payment',col===0?'center':col>=3?'right':'left',tone));});
    if((continuedOrder||at>0)&&row.type!=='payment')text('(tiếp theo)',x[2]+padding,y+height-5,22,false,'left',REPORT_COLORS.navy);
