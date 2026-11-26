@@ -44,8 +44,8 @@ function reportOrderRows(d){return d.orders.flatMap(o=>{
 function reportPaymentRows(d){const groups=typeof paymentGroups==='function'?paymentGroups({...state,payments:d.payments}):d.payments.map(p=>({rows:[p]}));return groups.sort((a,b)=>comparePaymentDates(a.rows[0],b.rows[0])).map(g=>{const p=g.rows[0];return [paymentDateLabel(p),friendlyPaymentNote(p),p.method||'Chưa rõ',money(g.rows.reduce((n,p)=>n+p.amount,0))]})}
 function reportSections(d){const wide=d.orientation==='landscape';return [{title:'I. CHI TIẾT ĐƠN HÀNG',headers:['Ngày','Nội dung/Hạng mục','Khối lượng/ĐVT','Đơn giá','Thành tiền'],rows:reportOrderRows(d),widths:wide?[13,41,16,14,16]:[14,36,18,16,16],right:[2,3,4]},...(d.kind==='debt'?[{title:'II. LỊCH SỬ THANH TOÁN',headers:['Ngày','Nội dung','Số tiền'],rows:reportPaymentRows(d).map(r=>[r[0],[r[1],r[2]==='Chưa rõ'?'':r[2]].filter(Boolean).join(' · '),r[3]]),widths:wide?[13,71,16]:[14,64,22],right:[2]}]:[])]}
 function reportSummary(d){return d.kind==='debt'?[['Tổng giá trị đơn hàng',money(d.gross)],['Tổng thanh toán',money(d.received)],['TỔNG CÒN PHẢI THANH TOÁN',money(d.remaining)]]:[['TỔNG GIÁ TRỊ ĐƠN HÀNG',money(d.gross)]]}
-function reportOrientation(){try{return localStorage.getItem('tg-report-orientation')==='landscape'?'landscape':'portrait'}catch{return 'portrait'}}
-function setReportOrientation(value){try{localStorage.setItem('tg-report-orientation',value==='landscape'?'landscape':'portrait')}catch{}}
+function reportOrientation(){try{return localStorage.getItem('tg-report-orientation')==='portrait'?'portrait':'landscape'}catch{return 'landscape'}}
+function setReportOrientation(value){try{localStorage.setItem('tg-report-orientation',value==='portrait'?'portrait':'landscape')}catch{}}
 function reportContacts(d){return [[d.pt.type==='supplier'?'Nhà cung cấp':'Khách hàng',d.pt.name],['Điện thoại',d.pt.phone],['Địa chỉ',d.pt.address],['Email',d.pt.email],['Zalo',d.pt.zalo],['Website',d.pt.website],['Ngày lập',date(today())]].filter(([,v])=>v!=null&&String(v).trim()).map(([k,v])=>[k,String(v)]);}
 function reportHTML(d){return `<div class="report-paper report-standard report-${d.orientation||'portrait'}"><b class="report-brand">TÙNG GIANG CNC</b><h2>${reportTitle(d.kind)}</h2><dl class="report-contacts">${reportContacts(d).map(([k,v])=>`<div><dt>${esc(k)}:</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${reportSections(d).map(s=>`<h3>${s.title}</h3><table><colgroup>${s.widths.map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${s.headers.map((v,i)=>`<th class="${s.right.includes(i)?'report-numeric':''}">${esc(v)}</th>`).join('')}</tr></thead><tbody>${s.rows.length?s.rows.map(row=>'<tr>'+row.map((v,i)=>`<td class="${s.right.includes(i)?'report-numeric':''}">${esc(v).replaceAll('\n','<br>')}</td>`).join('')+'</tr>').join(''):`<tr><td colspan="${s.headers.length}">Chưa có dữ liệu</td></tr>`}</tbody></table>`).join('')}${d.kind==='debt'?'<h3>III. TỔNG KẾT</h3>':''}<div class="report-summary">${reportSummary(d).map((x,i)=>`<div class="${i===reportSummary(d).length-1?'report-total':''}"><b>${esc(x[0])}</b><strong>${esc(x[1])}</strong></div>`).join('')}</div></div>`}
 let reportPreview=null;
@@ -60,10 +60,10 @@ function exportReportExcel(pid,kind){try{const d=reportData(pid,kind);if(!d)retu
  rows.push([]);if(d.kind==='debt')rows.push(['III. TỔNG KẾT']);for(const row of reportSummary(d)){rightCells.push([rows.length,1]);rows.push(row);}
  excelFile(reportName(d,'xlsx'),rows,{sheetName:d.kind==='debt'?'Đối chiếu':'Thống kê',widths:[29,85,32,32,36],rightCells})}catch(e){alert(e.message)}}
 // One drawing plan for PNG and vector PDF; only layout changes between orientations.
-function reportLayout(d){
- const landscape=d.orientation==='landscape',w=landscape?2263:1600,h=landscape?1600:2263,pad=60,inner=w-2*pad,bottom=h-pad-42;
+function reportLayout(d,format='pdf'){
+ const landscape=d.orientation==='landscape',w=landscape?2263:1600,h=landscape?1600:2263,pad=60,inner=w-2*pad,bottom=format==='png'?Infinity:h-pad-42;
  const cv=document.createElement('canvas'),ctx=cv.getContext('2d');if(!ctx)throw Error('Không hỗ trợ canvas');
- const palette={navy:'#0c2242',blue:'#225b91',section:'#dce7f3',head:'#eef1f5',stripe:'#f6f7f9',total:'#d5e5f7',ink:'#151b24'};
+ const palette={navy:'#0c2242',blue:'#225b91',section:'#edf2f7',head:'#f3f4f6',stripe:'#fafbfc',total:'#e6eff9',ink:'#151b24'};
  let ops=[],pages=[],y=pad;
  const rect=(x,yy,width,height,color)=>ops.push({kind:'rect',x,y:yy,w:width,h:height,color});
  const text=(value,x,yy,size=34,bold=false,align='left',color=palette.ink)=>ops.push({kind:'text',value:String(value),x,y:yy,size,bold,align,color});
@@ -95,11 +95,12 @@ function reportLayout(d){
  const summary=reportSummary(d),summaryHeight=(d.kind==='debt'?76:0)+summary.length*82+20;if(y+summaryHeight>bottom)page();
  if(d.kind==='debt'){rect(pad,y,inner,58,palette.section);text('III. TỔNG KẾT',pad+18,y+39,31,true,'left',palette.navy);y+=76;}
  for(const [i,[label,value]] of summary.entries()){const last=i===summary.length-1;if(last)rect(pad,y,inner,88,palette.total);const maxLabel=inner*.63,ls=wrap(label,maxLabel,last?29:27,true);const height=Math.max(last?88:75,ls.length*36+26);if(last&&height>88)rect(pad,y,inner,height,palette.total);ls.forEach((line,j)=>text(line,pad+18,y+43+j*36,last?29:27,true,'left',last?palette.navy:palette.ink));text(value,w-pad-18,y+48,last?44:32,true,'right',last?palette.navy:palette.ink);y+=height;}
+ if(format==='png')return {w,h:Math.ceil(y+32),pages:[ops]};
  pages.push(ops);pages.forEach((p,i)=>p.push({kind:'text',value:pages.length>1?'Trang '+(i+1)+' / '+pages.length:'',x:w-pad,y:h-30,size:20,bold:false,align:'right',color:palette.navy}));return {w,h,pages};
 }
 async function reportPNG(d){
- const plan=reportLayout(d),cv=document.createElement('canvas');cv.width=plan.w;cv.height=plan.h*plan.pages.length;if(cv.height>30000)throw Error('Bảng quá dài cho một ảnh. Hãy xuất PDF/Excel.');const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
- plan.pages.forEach((page,i)=>{for(const op of page){ctx.fillStyle=op.color;if(op.kind==='rect')ctx.fillRect(op.x,op.y+i*plan.h,op.w,op.h);else{ctx.font=(op.bold?'700 ':'400 ')+op.size+'px Arial';ctx.textAlign=op.align;ctx.fillText(op.value,op.x,op.y+i*plan.h);}}});
+ const plan=reportLayout(d,'png'),cv=document.createElement('canvas');cv.width=plan.w;cv.height=plan.h*plan.pages.length;if(cv.height>30000)throw Error('Bảng quá dài cho một ảnh. Hãy xuất PDF/Excel.');const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+ plan.pages.forEach((page,i)=>{for(const op of page){ctx.fillStyle=op.color;if(op.kind==='rect')ctx.fillRect(op.x,op.y+i*plan.h,op.w,op.h);else{ctx.font=(op.bold?'600 ':'400 ')+op.size+'px Arial';ctx.textAlign=op.align;ctx.fillText(op.value,op.x,op.y+i*plan.h);}}});
  return new Promise((resolve,reject)=>cv.toBlob(blob=>blob?resolve(blob):reject(Error('Không tạo được PNG')),'image/png'));
 }
 exportCustomerImage=async(pid,kind='debt',fileName)=>{try{const d=reportData(pid,kind);if(d)await download(fileName||reportName(d,'png'),await reportPNG(d),'image/png')}catch(e){alert(e.message)}};
