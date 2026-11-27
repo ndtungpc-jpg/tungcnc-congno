@@ -9,7 +9,7 @@ const time=t=>t?new Date(t).toLocaleString('vi-VN'):'Chưa đồng bộ';
 const call=async(path,body)=>{const {meta}=await ctx().store.read();return ctx().engine.call(meta,path,body===undefined?{}:{method:'POST',body});};
 root.showAccessGate=function(text='Xác minh Gmail để sử dụng sổ công nợ trên thiết bị này.'){
  verified=false;let gate=document.getElementById('tgAccessGate');if(!gate){gate=document.createElement('section');gate.id='tgAccessGate';document.body.appendChild(gate);}
- gate.innerHTML=`<div class="access-card"><img src="/icons/quan-ly-cong-no-192.png" alt="Logo TG"><h1>TÙNG GIANG CNC</h1><p class="access-subtitle">Quản lý công nợ</p><h2>Xác minh tài khoản</h2><p role="status">${esc(text)}</p><a class="access-login" href="/auth">Xác minh bằng Gmail</a><small>Chỉ cho phép tài khoản chủ xưởng<br>ndtung.pc@gmail.com</small><p class="access-note">Dữ liệu trên thiết bị được giữ nguyên.</p></div>`;
+ gate.innerHTML=`<div class="access-card"><img src="/icons/quan-ly-cong-no-192.png?v=tg-logo-20261127" alt="Logo TG"><h1>TÙNG GIANG CNC</h1><p class="access-subtitle">Quản lý công nợ</p><h2>Xác minh tài khoản</h2><p role="status">${esc(text)}</p><a class="access-login" href="/auth">Xác minh bằng Gmail</a><small>Chỉ cho phép tài khoản chủ xưởng<br>ndtung.pc@gmail.com</small><p class="access-note">Dữ liệu trên thiết bị được giữ nguyên.</p></div>`;
 };
 function hideGate(){document.getElementById('tgAccessGate')?.remove();}
 const oldMore=moreView;moreView=()=>oldMore().replace('</div></div>','<button class="btn device-menu" onclick="showDeviceManager()"><span><b>Thiết bị & Đồng bộ</b><small>Phiên xác minh và quản lý thiết bị</small></span><span>›</span></button></div></div>');

@@ -5,7 +5,7 @@ const icons={search:svg('<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>')
 let version='';
 root.overviewV11Search=()=>{tab('customers');uiR4Set('search',true);document.getElementById('r4Search')?.focus();};
 function decorate(){const h=document.querySelector('body>header');if(!h)return;
- let brand=h.querySelector('.ov11-brand');if(!brand){brand=document.createElement('div');brand.className='ov11-brand';brand.innerHTML='<img src="/icons/quan-ly-cong-no-192.png" alt="Logo TG"><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ</small></div>';h.querySelector(':scope>div')?.replaceWith(brand);}
+ let brand=h.querySelector('.ov11-brand');if(!brand){brand=document.createElement('div');brand.className='ov11-brand';brand.innerHTML='<img src="/icons/quan-ly-cong-no-192.png?v=tg-logo-20261127" alt="Logo TG"><div><b>TÙNG GIANG CNC</b><small>Sổ công nợ</small></div>';h.querySelector(':scope>div')?.replaceWith(brand);}
  brand.querySelector('small').textContent='Sổ công nợ'+(version?' · v'+version:'')+' · Đồng bộ dữ liệu';
  let actions=h.querySelector('.ov11-header-actions');if(!actions){actions=document.createElement('div');actions.className='ov11-header-actions';actions.innerHTML='<button class="ov11-header-button" type="button" aria-label="Tìm kiếm khách hàng" onclick="overviewV11Search()">'+icons.search+'</button><button class="ov11-header-button" type="button" aria-label="Thông báo báo giá" onclick="tab(\'quote-inbox\')">'+icons.bell+'<span id="quoteInboxCount" aria-live="polite"></span></button>';h.appendChild(actions);}
  const sync=document.getElementById('headerSync');if(sync&&sync.parentElement!==actions)actions.appendChild(sync);
